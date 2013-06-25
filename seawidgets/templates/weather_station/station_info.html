@@ -1,0 +1,45 @@
+{% extends "layout-empty.html" %}
+{% load i18n %}
+{% load staticfiles %}
+
+{% block title %}Station info: {{ location }}{% endblock %}
+
+{% block content %}
+<header>
+<div class="container">
+</div>  
+</header>
+<section>
+  <div class="container"> 
+    <h1>{{ location_info.name }}</h1>    
+    <div class="row">
+      <div class="span6">
+        {% for variable in data %}
+        <div class="well">
+            <h2>{{ variable.display_name }}</h2>
+            <p>Current: {{ variable.current.value }} {{ variable.inputUnits }} (at {{ variable.current.time }})</p>
+            <p>Min: {{ variable.min.value }} {{ variable.inputUnits }} (at {{ variable.min.time }})</p>
+            <p>Max: {{ variable.max.value }} {{ variable.inputUnits }} (at {{ variable.max.time }})</p>
+        </div>
+        {% endfor %}
+      </div>
+      <div class="span6">
+          <img src="http://maps.googleapis.com/maps/api/staticmap?size=430x300&maptype=terrain&markers=color:blue%7C{{ location_info.position }}&sensor=false&zoom=10" title="{{ location_info.name }}" />
+
+      </div>
+
+    </div>
+  </div>
+</section>
+<footer>
+  <div class="container">  
+    <div class="pull-right">
+      SOCIB - 2013
+    </div>
+  </div>
+</footer>
+
+{% endblock content %}
+
+{% block page_js %}
+{% endblock page_js %}

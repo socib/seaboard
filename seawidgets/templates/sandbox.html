@@ -1,0 +1,44 @@
+{% extends "layout-empty.html" %}
+{% load i18n %}
+{% load staticfiles %}
+
+{% block title %}Sandbox: {{ location }}{% endblock %}
+
+{% block content %}
+<section class="status">
+  <div class="container"> 
+    <h1 class="section">Status</h1> 
+    <div class="row">
+      <div class="span8 rowspan6">
+        <div data-id="beamon" data-view="Beamon" data-title="Beach monitoring" data-location="{{ location.zone.code }}" data-type="latest"  data-cameras="{{ location.latest_cameras }}"></div>
+      </div>        
+    </div>
+  </div>
+</section>
+<section class="status">
+  <div class="container"> 
+    <h1 class="section">Tweets</h1> 
+    <div class="row">
+      <div class="span8 rowspan6">
+        <iframe src="http://visibletweets.com/#query=socib_icts&animation=1" width="100%" height="100%"/>
+      </div>        
+    </div>
+  </div>
+</section>
+
+
+
+
+{% endblock content %}
+
+{% block page_js %}
+<script src="{% static "js/jquery.backstretch.js" %}" ></script>
+<script src="{% static "widgets/text/text.js" %}" ></script>
+<script src="{% static "widgets/clock/clock.js" %}" ></script>
+<script src="{% static "widgets/beamon/beamon.js" %}" ></script>
+<script src="{% static "js/modernizr.custom.js" %}"></script>
+<script src="{% static "js/jquery.bookblock.js" %}"></script>
+<script src="{% static "widgets/weather_station/weather_station.js" %}" ></script>
+<script src="{% static "widgets/weather_station_variable/weather_station_variable.js" %}" ></script>
+<script src="{% static "js/seawidgets.application.js" %}" ></script>
+{% endblock page_js %}

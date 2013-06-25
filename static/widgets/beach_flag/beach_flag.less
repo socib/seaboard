@@ -1,0 +1,47 @@
+@bf-widgetBgcolor:  #4ba5dc;
+@bf-widgetColor:  #333;
+
+.widget-beach-flag{
+  background-color: @bf-widgetBgcolor;
+  color: @bf-widgetColor;
+  position: relative;    
+  
+  .boxToma.estPermitido {
+    .boxTopToma, .boxBotToma{background-color:#66b822;}
+    .boxTopToma{background-image:url(/static/widgets/beach_flag/images/top_bano_permitido.gif);}
+    .boxImgToma{background-image:url(/static/widgets/beach_flag/images/bano_permitido.gif);}
+  }
+    
+  .boxToma.estLimitaciones {
+     .boxTopToma, .boxBotToma{background-color:#fdf109;}
+     .boxTopToma{background-image:url(/static/widgets/beach_flag/images/top_bano_limitaciones.gif);}
+     .boxImgToma{background-image:url(/static/widgets/beach_flag/images/bano_limitaciones.gif);}
+  }
+  .boxToma.estPeligroso {
+     .boxTopToma, .boxBotToma{background-color:#ff4242;}
+     .boxTopToma{background-image:url(/static/widgets/beach_flag/images/top_bano_peligroso.gif);}
+     .boxImgToma{background-image:url(/static/widgets/beach_flag/images/bano_peligroso.gif);}
+  }
+
+  .boxToma.estAusente {
+     .boxTopToma, .boxBotToma{background-color:#f7a433; }  
+     .boxTopToma{background-image:url(/static/widgets/beach_flag/images/top_bano_ausente.gif);}
+     .boxImgToma{background-image:url(/static/widgets/beach_flag/images/bano_soc_ausente.gif);}
+   }
+
+  .boxTopToma{
+    background-position: left top;
+    background-repeat: no-repeat;        
+    height: 20px; 
+  }
+
+  .boxImgToma {
+    background-position: center top;
+    background-repeat: no-repeat;
+    width: 100%;
+    height: 105px;
+    position:relative;    
+  }
+
+}
+

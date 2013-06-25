@@ -1,0 +1,147 @@
+{% extends "layout.html" %}
+{% load i18n %}
+{% load staticfiles %}
+
+{% block title %}My super sweet dashboard: {{ location }}{% endblock %}
+{% block content_title %}My super sweet dashboard {{ location }}{% endblock %}
+
+{% block content %}
+<div class="gridster">
+  <ul>
+    <li data-row="1" data-col="1" data-sizex="6" data-sizey="1" class="image">
+      <img src="http://www.socib.es/stylesheets/images/logo-Socib.png" />
+      <img src="http://www.socib.es/files/images_logos/logo_ministerio.png" />
+      <!-- div data-id="synergy1" data-view="Text" data-title="1" data-min="0" data-max="100"></div -->
+    </li>
+    <li data-row="1" data-col="1" data-sizex="3" data-sizey="1" class="image">      
+      <div data-id="synergy2" data-view="Text" data-title="2" data-min="0" data-max="100"></div>
+    </li>
+    <li data-row="1" data-col="1" data-sizex="1" data-sizey="1">
+      <div data-id="synergy3" data-view="Text" data-title="3" data-min="0" data-max="100"></div>
+    </li>
+    <li data-row="1" data-col="1" data-sizex="1" data-sizey="1">
+      <div data-id="synergy4" data-view="Text" data-title="4" data-min="0" data-max="100"></div>
+    </li>
+    <li data-row="1" data-col="1" data-sizex="1" data-sizey="1">
+      <div data-id="synergy5" data-view="Text" data-title="5" data-min="0" data-max="100"></div>
+    </li>
+    <li data-row="1" data-col="1" data-sizex="4" data-sizey="1">
+      <div data-id="synergy6" data-view="Text" data-title="6" data-min="0" data-max="100"></div>
+    </li>
+    <li data-row="1" data-col="1" data-sizex="8" data-sizey="4">
+      <div data-id="beamon2" data-view="Beamon" data-title="Hello" data-location="{{ location }}" data-camera="c02"></div>
+    </li>    
+    <!-- li data-row="1" data-col="1" data-sizex="8" data-sizey="4">
+      <div data-id="beamon" data-view="Beamon" data-title="Hello" data-location="{{ location }}"></div>
+    </li-->
+
+    <li data-row="1" data-col="1" data-sizex="4" data-sizey="2">
+      <div data-id="synergy7" data-view="Text" data-title="7" data-min="0" data-max="100"></div>
+    </li>
+    <li data-row="1" data-col="1" data-sizex="4" data-sizey="4">
+      <div data-id="clock1" data-view="Clock" data-title="Synergy" data-min="0" data-max="100"></div>
+    </li>
+    <li data-row="1" data-col="1" data-sizex="1" data-sizey="1">
+      <div data-id="synergy8" data-view="Text" data-title="8" data-min="0" data-max="100"></div>
+    </li>
+    <li data-row="1" data-col="1" data-sizex="1" data-sizey="1">
+      <div data-id="synergy9" data-view="Text" data-title="9" data-min="0" data-max="100"></div>
+    </li>
+    <li data-row="1" data-col="1" data-sizex="1" data-sizey="1">
+      <div data-id="synergy10" data-view="Text" data-title="10" data-min="0" data-max="100"></div>
+    </li>
+    <li data-row="1" data-col="1" data-sizex="1" data-sizey="1">
+      <div data-id="synergy11" data-view="Text" data-title="11" data-min="0" data-max="100"></div>
+    </li>
+    <li data-row="1" data-col="1" data-sizex="4" data-sizey="4">
+      <div data-id="synergy12" data-view="Text" data-title="12" data-min="0" data-max="100"></div>
+    </li>
+    <li data-row="1" data-col="1" data-sizex="4" data-sizey="7">
+      <div data-id="buzzwords13" data-view="Text" data-title="13" data-moreinfo="# of times said around the office"></div>
+    </li>
+
+    <li data-row="1" data-col="1" data-sizex="4" data-sizey="3">
+      <div data-id="clock2" data-view="Clock" data-title="clock" data-min="0" data-max="100"></div>
+    </li>
+    <li data-row="1" data-col="1" data-sizex="5" data-sizey="3">
+      <!-- div data-id="buzzwords14" data-view="Text" data-unordered="true" data-title="14" data-moreinfo="# of times said around the office"></div-->
+      <iframe src="http://player.vimeo.com/video/55355735?autoplay=0&amp;loop=1" width="100%" height="100%" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+
+    </li>
+
+
+    <li data-row="1" data-col="1" data-sizex="6" data-sizey="3">
+      <div data-id="buzzwords15" data-view="Text" data-unordered="true" data-title="15" data-moreinfo="# of times said around the office"></div>
+    </li>
+    <li data-row="1" data-col="1" data-sizex="1" data-sizey="1">
+      <div data-id="synergy16" data-view="Text" data-title="16" data-min="0" data-max="100"></div>
+    </li>
+    <li data-row="1" data-col="1" data-sizex="1" data-sizey="1">
+      <div data-id="synergy17" data-view="Text" data-title="17" data-min="0" data-max="100"></div>
+    </li>
+    <li data-row="1" data-col="1" data-sizex="1" data-sizey="1">
+      <div data-id="synergy18" data-view="Text" data-title="18" data-min="0" data-max="100"></div>
+    </li>
+    <li data-row="1" data-col="1" data-sizex="1" data-sizey="1">
+      <div data-id="synergy19" data-view="Text" data-title="19" data-min="0" data-max="100"></div>
+    </li>
+
+    <li data-row="1" data-col="1" data-sizex="1" data-sizey="1">
+      <div data-id="synergy20" data-view="Text" data-title="20" data-min="0" data-max="100"></div>
+    </li>
+    <li data-row="1" data-col="1" data-sizex="1" data-sizey="1">
+      <div data-id="synergy21" data-view="Text" data-title="21" data-min="0" data-max="100"></div>
+    </li>
+    <li data-row="1" data-col="1" data-sizex="1" data-sizey="1">
+      <div data-id="synergy22" data-view="Text" data-title="22" data-min="0" data-max="100"></div>
+    </li>
+    <li data-row="1" data-col="1" data-sizex="1" data-sizey="1">
+      <div data-id="synergy23" data-view="Text" data-title="23" data-min="0" data-max="100"></div>
+    </li>
+    <li data-row="1" data-col="1" data-sizex="1" data-sizey="1">
+      <div data-id="synergy24" data-view="Text" data-title="24" data-min="0" data-max="100"></div>
+    </li>
+    <li data-row="1" data-col="1" data-sizex="1" data-sizey="1">
+      <div data-id="synergy25" data-view="Text" data-title="25" data-min="0" data-max="100"></div>
+    </li>
+    <li data-row="1" data-col="1" data-sizex="1" data-sizey="1">
+      <div data-id="synergy26" data-view="Text" data-title="26" data-min="0" data-max="100"></div>
+    </li>
+    <li data-row="1" data-col="1" data-sizex="1" data-sizey="1">
+      <div data-id="synergy27" data-view="Text" data-title="27" data-min="0" data-max="100"></div>
+    </li>
+
+    <li data-row="1" data-col="1" data-sizex="1" data-sizey="1">
+      <div data-id="synergy28" data-view="Text" data-title="28" data-min="0" data-max="100"></div>
+    </li>
+    <li data-row="1" data-col="1" data-sizex="1" data-sizey="1">
+      <div data-id="synergy29" data-view="Text" data-title="29" data-min="0" data-max="100"></div>
+    </li>
+    <li data-row="1" data-col="1" data-sizex="1" data-sizey="1">
+      <div data-id="synergy30" data-view="Text" data-title="30" data-min="0" data-max="100"></div>
+    </li>
+    <li data-row="1" data-col="1" data-sizex="1" data-sizey="1">
+      <div data-id="synergy31" data-view="Text" data-title="31" data-min="0" data-max="100"></div>
+    </li>
+
+
+
+  </ul>
+</div>
+{% endblock content %}
+
+{% block page_js %}
+
+<link href="{% static "css/seawidgets.css" %}" rel="stylesheet">
+<link href="{% static "js/PikaChoose/pikachoose.css" %}" rel="stylesheet">
+
+
+<script src="{% static "js/PikaChoose/jquery.jcarousel.min.js" %}" ></script>
+<script src="{% static "js/PikaChoose/jquery.pikachoose.min.js" %}" ></script>
+<script src="{% static "js/jquery.backstretch.js" %}" ></script>
+<script src="{% static "widgets/text/text.js" %}" ></script>
+<script src="{% static "widgets/clock/clock.js" %}" ></script>
+<script src="{% static "widgets/beamon/beamon.js" %}" ></script>
+<script src="{% static "js/seawidgets.application.js" %}" ></script>
+<!-- script src="{% static "js/seawidgets.index.js" %}" ></script -->
+{% endblock page_js %}
