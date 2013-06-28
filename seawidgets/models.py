@@ -48,6 +48,7 @@ class Location(models.Model):
     timelapse_cameras = models.CharField(_('timelapse cameras'), max_length=50, blank=True)
     latest_cameras = models.CharField(_('latest cameras'), max_length=50, blank=True)
     rss_url = models.CharField(_('RSS url'), max_length=250, blank=True)
+    dash_template = models.CharField(_('Dash template'), max_length=100, blank=True)
 
 
     date_added = models.DateTimeField(_('date added'), auto_now_add=True)

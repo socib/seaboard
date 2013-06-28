@@ -36,9 +36,12 @@ def dash(request,zone_code='socib',location_code='',template='dash.html'):
         location_code = zone_code
 
     try:
-        location = Location.objects.get(code__iexact=location_code)
+        location = Location.objects.get(code__iexact=location_code)        
         if len(location.location) == 0:
             location.location = location.zone.latlong
+
+        if len(location.dash_template) > 0:
+            template = location.dash_template + ".html"
         
     except Location.DoesNotExist:
         logger.error('Location %s does not exist' % location_code)

@@ -69,6 +69,16 @@ urlpatterns = patterns('seawidgets.views',
         name = 'seawidgets_sapo_latest',
     ),
 
+    url(r'^radar/(?P<location_code>[-\w]+)/capabilities(.?)$',
+        view = 'radar.capabilities',
+        name = 'seawidgets_radar_capabilities',
+    ),    
+
+    url(r'^radar/(?P<location_code>[-\w]+)/animation.gif$',
+        view = 'radar.animation',
+        name = 'seawidgets_radar_animation',
+    ),
+
     url(r'^views/(?P<name>[-\w]+).html$',
         view = 'dash.widget',
         name = 'seawidgets_widget',

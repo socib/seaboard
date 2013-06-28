@@ -5,7 +5,7 @@
 {% block title %}Sandbox: {{ location }}{% endblock %}
 
 {% block content %}
-<section class="status">
+<!--section class="status">
   <div class="container"> 
     <h1 class="section">Status</h1> 
     <div class="row">
@@ -14,13 +14,15 @@
       </div>        
     </div>
   </div>
-</section>
+</section-->
 <section class="status">
   <div class="container"> 
-    <h1 class="section">Tweets</h1> 
+    <h1 class="section">Radar</h1> 
     <div class="row">
-      <div class="span8 rowspan6">
-        <iframe src="http://visibletweets.com/#query=socib_icts&animation=1" width="100%" height="100%"/>
+      <div class="span6 rowspan5">
+        <div data-id="radar" data-view="Radar" data-title="Radar"></div>
+
+        <!--iframe src="http://visibletweets.com/#query=socib_icts&animation=1" width="100%" height="100%"/ -->
       </div>        
     </div>
   </div>
@@ -37,7 +39,9 @@
 <script src="{% static "widgets/clock/clock.js" %}" ></script>
 <script src="{% static "widgets/beamon/beamon.js" %}" ></script>
 <script src="{% static "js/modernizr.custom.js" %}"></script>
-<script src="{% static "js/jquery.bookblock.js" %}"></script>
+<script src="{% static "js/open_layers/OpenLayers.js" %}"></script>
+<script src="{% static "widgets/radar/openlayers-radar.js" %}"></script>
+<script src="{% static "widgets/radar/radar.js" %}" ></script>
 <script src="{% static "widgets/weather_station/weather_station.js" %}" ></script>
 <script src="{% static "widgets/weather_station_variable/weather_station_variable.js" %}" ></script>
 <script src="{% static "js/seawidgets.application.js" %}" ></script>
