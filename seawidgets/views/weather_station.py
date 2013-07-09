@@ -86,12 +86,17 @@ def station_info(request,location_code,format='html',template='weather_station/s
         }
     return render_to_response(template, kwvars, RequestContext(request))        
 
-def station_variable_info(request,location='pdp',variable='air_temperature'):
+def station_variable_info(request,location_code='pdp',variable='air_temperature'):
 
-    if not location in settings.LOCATIONS.keys():
-        raise Http404
+    try:
+        location = Location.objects.get(code__iexact=location_code)
+        if len(location.location) == 0:
+            location.location = location.zone.latlong
+        
+    except Location.DoesNotExist:
+        raise Http404            
 
-    id_platform = settings.LOCATIONS[location]['id_platform']
+    id_platform = location.zone.id_platform
     id_instrument = ''
     id_variable = ''
 
@@ -116,12 +121,17 @@ def station_variable_info(request,location='pdp',variable='air_temperature'):
     json = simplejson.dumps(variable_data)
     return HttpResponse(json, mimetype='application/json')
 
-def plotting_data(request,location='pdp',variable='air_temperature'):
+def plotting_data(request,location_code='pdp',variable='air_temperature'):
 
-    if not location in settings.LOCATIONS.keys():
-        raise Http404
+    try:
+        location = Location.objects.get(code__iexact=location_code)
+        if len(location.location) == 0:
+            location.location = location.zone.latlong
+        
+    except Location.DoesNotExist:
+        raise Http404            
 
-    id_platform = settings.LOCATIONS[location]['id_platform']
+    id_platform = location.zone.id_platform
     id_instrument = ''
     id_variable = ''
 

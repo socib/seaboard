@@ -97,6 +97,9 @@ def process_image(url,destination):
     if url.find('sapo_n3') > 0:
         # menorca images have another dimensions
         crop_dimensions = (130,205,456,434) 
+    elif url.find('sapo_n1') > 0:
+        # eivissa images have another dimensions
+        crop_dimensions = (130,158,350,430)         
     inImage.crop(crop_dimensions).save(settings.STATIC_ROOT  + destination)
 
     return inImage

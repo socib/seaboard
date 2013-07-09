@@ -152,7 +152,7 @@ OpenLayersRadar = {
 
 
 
-            $.get('/radar/eiv/capabilities', function(response) {
+            $.get('/radar/galfi/capabilities', function(response) {
                 var capabilities = new OpenLayers.Format.WMSCapabilities().read(response);
                 for (var i = 0, len = capabilities.capability.layers.length; i < len; i++) {
                     var layerObj = capabilities.capability.layers[i];

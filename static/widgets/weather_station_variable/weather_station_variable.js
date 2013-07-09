@@ -28,7 +28,8 @@
     };
 
     WeatherStationVariable.prototype.showData = function(data) {
-      this.set('current-value', data.current.value + " " + data.inputUnits);      
+
+      /*this.set('current-value', data.current.value + " " + data.inputUnits);      
       this.set('current-time', data.current.time);      
       this.set('min-value', data.min.value + " " + data.inputUnits);      
       this.set('min-time', data.min.time);      
@@ -36,7 +37,9 @@
       this.set('max-time', data.max.time);      
       if (this.get('variable') == 'wind_speed'){
         $(this.node).addClass('wind-direction-' + data.current.wind_from_direction);  
-      }      
+      }      */
+
+      this.set('item',data);
     };
 
     return WeatherStationVariable;

@@ -3,7 +3,7 @@
 @widgetTitleColor:  #094F6B;
 
 
-.widget-weather-station{
+.widget-weather-station, .widget-weather-station_variable{
   background-color: @widgetBgcolor;
   color: @widgetColor;
   position: relative;  
@@ -32,11 +32,13 @@
         span{
           display: table-cell;
           vertical-align: middle;
+          text-align: right; 
         }
 
         span.ws-units{
           font-size: 0.5em;           
           color: @widgetColor;
+          text-align: left;
         }   
       
       }  
