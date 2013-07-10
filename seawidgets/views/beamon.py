@@ -23,7 +23,13 @@ logger = logging.getLogger(__name__)
 def latest_tiny(request,location,cameras):    
     return latest(request,location,cameras,'_tn')        
 
-def latest(request,location,cameras,folder_suffix=''):    
+def latest_mobile(request,location,cameras):    
+    return latest(request,location,cameras,'','latest_mobile')        
+
+def latest_mobile_tiny(request,location,cameras):    
+    return latest(request,location,cameras,'_tn','latest_mobile')        
+
+def latest(request,location,cameras,folder_suffix='',images_folder='latest_images'):    
     end_stations = False
     station = 0
     images = []
@@ -39,16 +45,24 @@ def latest(request,location,cameras,folder_suffix=''):
     while not end_stations:
         station_str = str(station) if station > 0 else '' 
 
-        imagespath = '/home/mobims/imageData/' + location + '/sirena/' + location + station_str + folder_suffix + '/latest_images/'
+        imagespath = '/home/mobims/imageData/' + location + '/sirena/' + location + station_str + folder_suffix + '/' + images_folder + '/'
 
         if isdir(imagespath):
-            images.extend ([ {'image': f, 'station': station_str, 'path': imagespath} for f in listdir(imagespath) if f.endswith(('_snap.png','_snap.jpeg')) and isfile(join(imagespath,f)) and in_cameras(f,cameras) and _utils.isimage(join(imagespath,f)) ])
+            images.extend ([ {'image': f, 'station': station_str, 'path': imagespath, 'time': image_time_from_filename(join(imagespath,f)) } for f in listdir(imagespath) if f.endswith(('_snap.png','_snap.jpeg','_snap.jpg')) and isfile(join(imagespath,f)) and in_cameras(f,cameras) and _utils.isimage(join(imagespath,f)) ])
         else:        
             if station != 0:
                 end_stations = True
         station = station + 1
 
-    results = [ {'image' : 'http://www.socib.es/users/mobims/imageArchive/' + location + '/sirena/'+ location + image['station'] + folder_suffix +'/latest_images/' + image['image'] , 'title': image_title_from_filename(zone,image['image'],image['path']) } for image in sorted(images) ]   
+    results = []
+    for image in sorted(images):
+        result = {}
+        result['image'] = 'http://www.socib.es/users/mobims/imageArchive/' + location + '/sirena/'+ location + image['station'] + folder_suffix +'/' + images_folder + '/' + image['image']
+        result['title'] = image_title_from_filename(zone,image['image'],image['path']) 
+        result['time']  = image['time']
+        result['image_tn'] = 'http://www.socib.es/users/mobims/imageArchive/' + location + '/sirena/'+ location + image['station'] + '_tn/' + images_folder + '/' + image['image'].replace('.png','.jpeg') 
+        results.append(result)
+   
     json = simplejson.dumps(results)
     return HttpResponse(json, mimetype='application/json')
 
@@ -106,6 +120,14 @@ def image_title(zone,image, camera):
 
     return title
 
+def image_time_from_filename(filename):
+    time_object = ''
+    try:
+        time_object = time.localtime(getmtime(filename))
+    except:
+        pass   
+    return time.strftime('%d/%m/%Y %H:%M',time_object)    
+ 
 def image_title_from_filename(zone,image,imagepath):
     title = '%s - %s' % (zone.name,image)
     try:

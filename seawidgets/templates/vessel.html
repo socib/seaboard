@@ -1,0 +1,78 @@
+{% extends "layout-empty.html" %}
+{% load i18n %}
+{% load static %}
+{% load qr_tags %}
+
+{% block title %}{{ location.name }}{% endblock %}
+
+{% block content %}
+<header>
+  <div class="container">
+    <div class="row">
+      <div class="span6 logos-header">
+        <img src="{% get_static_prefix %}images/logo_Socib.png" />      
+        <img src="{% get_static_prefix %}images/logo-{{ location.code }}.png" title="{{ location.name }}" />
+      </div>  
+    </div>
+  </div>  
+</header>
+<section class="status">
+  <div class="container"> 
+    <div class="row">
+      <div class="span5 rowspan4">
+          <div data-id="cam1" data-view="Text" data-text="Onboard camera 1" data-title="Cam1"></div>
+      </div>
+      <div class="span2 rowspan2">
+          <div data-id="position" data-view="Text" data-title="Position" data-text="38.94933<br/>1.211198"></div>       
+          <div data-id="rumbo" data-view="Text" data-title="Velocity" data-text="10 nmi/h"></div>
+      </div>  
+      <div class="span5 rowspan4">
+        <div data-id="map" data-view="Text" data-title="Map" data-text="Trajectory map"></div>      
+      </div>        
+    </div>
+  </div>
+</section>
+<section class="status">
+  <div class="container">  
+    <div class="row">
+      <div class="span5 rowspan4">
+        <div data-id="cam2" data-view="Text" data-text="Onboard camera 2" data-title="Cam2"></div>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="info">  
+  <div class="container">  
+    <div class="row">
+      <div class="span2 rowspan1">
+        <div data-id="clock2" data-view="Clock"></div>
+      </div>
+    </div>
+  </div>
+</section>
+<footer>
+  <div class="container">  
+    <div class="pull-right">
+      SOCIB - 2013
+    </div>
+  </div>
+</footer>
+
+{% endblock content %}
+
+{% block page_js %}
+<script src="{% static "js/jquery.backstretch.js" %}" ></script>
+<script src="{% static "widgets/text/text.js" %}" ></script>
+<script src="{% static "widgets/clock/clock.js" %}" ></script>
+<script src="{% static "widgets/beamon/beamon.js" %}" ></script>
+<script src="{% static "js/modernizr.custom.js" %}"></script>
+<script src="{% static "js/jquery.bookblock.js" %}"></script>
+<script src="{% static "widgets/weather_station/weather_station.js" %}" ></script>
+<script src="{% static "widgets/weather_forecast/weather_forecast.js" %}" ></script>
+<script src="{% static "widgets/weather_station_variable/weather_station_variable.js" %}" ></script>
+<script src="{% static "widgets/rss/rss.js" %}" ></script>
+<script src="{% static "js/open_layers/OpenLayers.js" %}"></script>
+<script src="{% static "widgets/radar/openlayers-radar.js" %}"></script>
+<script src="{% static "widgets/radar/radar.js" %}" ></script>
+<script src="{% static "js/seawidgets.application.js" %}" ></script>
+{% endblock page_js %}

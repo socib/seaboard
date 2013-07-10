@@ -47,7 +47,7 @@
       } else if (this.get('type') != undefined && this.get('type') == 'waveforecast') {
         url = '/sapo/' + this.get('location') + '/latest';
       }else {
-        url = '/beamon/' + this.get('location') + '/' + this.get('cameras') + '/latest';
+        url = '/beamon/' + this.get('location') + '/' + this.get('cameras') + '/latest_mobile';
       }
       $.getJSON(url, function(data) {
         images = []
