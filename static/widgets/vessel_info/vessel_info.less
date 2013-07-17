@@ -1,0 +1,33 @@
+/* Base is at weather_station */
+
+.widget-vessel-info{
+  .weather-data{    
+        .wsv-current{    
+            font-size: 2.2em;  
+            span {
+                text-align: center !important;
+            }        
+            .wsv-value-units{                        
+                display: table-cell;
+                vertical-align: middle;
+                text-align: center; 
+                span {
+                    display: inline;
+                }
+            }
+        }
+    }
+
+    &.position{
+        .wsv-current{    
+            font-size: 1.8em;  
+            text-align: left;
+            line-height: 1.8em;
+            height: 47px;
+        } 
+        .wsv-min,.wsv-max{
+            display: none;
+        }     
+
+    }
+}

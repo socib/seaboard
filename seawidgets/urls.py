@@ -87,6 +87,42 @@ urlpatterns = patterns('seawidgets.views',
         name = 'seawidgets_radar_animation',
     ),
 
+    url(r'^vessel/current_location.json$',
+        view = 'vessel.current_location',
+        name = 'seawidgets_vessel_current_location',
+    ),    
+
+    url(r'^vessel/location.json$',
+        view = 'vessel.location',
+        name = 'seawidgets_vessel_location',
+    ),    
+
+
+    url(r'^vessel/trajectory.json$',
+        view = 'vessel.trajectory',
+        name = 'seawidgets_vessel_trajectory',
+    ),    
+    
+    url(r'^vessel/current_termosal.json$',
+        view = 'vessel.current_termosal',
+        name = 'seawidgets_vessel_current_termosal',
+    ),    
+
+    url(r'^vessel/termosal.json$',
+        view = 'vessel.termosal',
+        name = 'seawidgets_vessel_termosal',
+    ),  
+
+    url(r'^vessel/meteo.json$',
+        view = 'vessel.meteo',
+        name = 'seawidgets_vessel_meteo',
+    ),    
+
+    url(r'^vessel/current_meteo.json$',
+        view = 'vessel.current_meteo',
+        name = 'seawidgets_vessel_current_meteo',
+    ),    
+
     url(r'^views/(?P<name>[-\w]+).html$',
         view = 'dash.widget',
         name = 'seawidgets_widget',

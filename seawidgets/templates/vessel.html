@@ -22,12 +22,12 @@
       <div class="span5 rowspan4">
           <div data-id="cam1" data-view="Text" data-text="Onboard camera 1" data-title="Cam1"></div>
       </div>
-      <div class="span2 rowspan2">
-          <div data-id="position" data-view="Text" data-title="Position" data-text="38.94933<br/>1.211198"></div>       
-          <div data-id="rumbo" data-view="Text" data-title="Velocity" data-text="10 nmi/h"></div>
+      <div class="span2 rowspan2">          
+          <div data-id="position" data-view="VesselInfo" data-title="Position"></div>       
+          <div data-id="speed" data-view="VesselInfo" data-title="Speed" data-variable="speed"></div> 
       </div>  
-      <div class="span5 rowspan4">
-        <div data-id="map" data-view="Text" data-title="Map" data-text="Trajectory map"></div>      
+      <div class="span5 rowspan4">        
+        <div data-id="map" data-view="Vesselmap" data-title="Map"></div>      
       </div>        
     </div>
   </div>
@@ -35,15 +35,55 @@
 <section class="status">
   <div class="container">  
     <div class="row">
-      <div class="span5 rowspan4">
-        <div data-id="cam2" data-view="Text" data-text="Onboard camera 2" data-title="Cam2"></div>
+      <div class="span5 rowspan4">        
+        <div data-id="cam1" data-view="Text" data-text="Onboard camera 2" data-title="Cam2"></div>
+      </div>      
+      <div class="span7 span-no-bottom-margin">          
+        <h1 class="section">Termosal observation<span class="pull-right updated-at" id="last-vessel-termosal"></span></h1>
+        <div class="row-fluid">        
+          <div class="span4">          
+            <div data-id="sea_water_temperature" data-view="VesselInfo" data-title="Sea Water Temperature"></div>       
+          </div>        
+          <div class="span4">          
+            <div data-id="sea_water_salinity" data-view="VesselInfo" data-title="Sea Water Salinity"></div>
+          </div>        
+          <div class="span4">          
+            <div data-id="sea_water_electrical_conductivity" data-view="VesselInfo" data-title="Sea Water Conductivity"></div>
+          </div>        
+        </div>
+      </div>    
+      <div class="span7 pull-right  span-no-bottom-margin">          
+        <h1 class="section">Weather Station<span class="pull-right updated-at" id="last-vessel-meteo"></span></h1>
+        <div class="row-fluid">        
+          <div class="span3">          
+            <div data-id="air_temperature" data-view="VesselInfo" data-title="Temperature"></div>       
+          </div>        
+          <div class="span3">          
+            <div data-id="air_pressure" data-view="VesselInfo" data-title="Pressure"></div>
+          </div>        
+          <div class="span3">          
+            <div data-id="humidity" data-view="VesselInfo" data-title="Humidity"></div> 
+          </div>        
+          <div class="span3">          
+            <div data-id="wind_speed" data-view="VesselInfo" data-title="Wind speed"></div> 
+          </div>        
+        </div>            
       </div>
+      <div class="span5 rowspan1">        
+        <div data-id="cam3" data-view="Text" data-text="Free..." data-title="Free"></div>
+      </div>                  
     </div>
   </div>
 </section>
 <section class="info">  
   <div class="container">  
     <div class="row">
+      <div class="span5 rowspan3">        
+        <div data-id="sea_water_temperature" data-view="VesselChart" data-title="Sea Water Temperature"></div>       
+      </div>            
+      <div class="span5 rowspan3">        
+        <div data-id="sea_water_salinity" data-view="VesselChart" data-title="Sea Water Salinity"></div>       
+      </div>            
       <div class="span2 rowspan1">
         <div data-id="clock2" data-view="Clock"></div>
       </div>
@@ -61,6 +101,15 @@
 {% endblock content %}
 
 {% block page_js %}
+<link rel="stylesheet" href="{% static "js/leaflet-0.6.2/leaflet.css" %}" />
+<link rel="stylesheet" href="{% static "js/leaflet-0.6.2/Leaflet.Coordinates-0.1.3.css" %}" />
+<!--[if lte IE 8]>
+    <link rel="stylesheet" href="{% static "js/leaflet-0.6.2/leaflet.ie.css" %}" />
+    <link rel="stylesheet" href="{% static "js/leaflet-0.6.2/Leaflet.Coordinates-0.1.3.ie.css" %}" />
+<![endif]-->
+
+<script src="{% static "js/leaflet-0.6.2/leaflet.js" %}"></script>
+<script src="{% static "js/leaflet-0.6.2/Leaflet.Coordinates-0.1.3.min.js" %}"></script>
 <script src="{% static "js/jquery.backstretch.js" %}" ></script>
 <script src="{% static "widgets/text/text.js" %}" ></script>
 <script src="{% static "widgets/clock/clock.js" %}" ></script>
@@ -71,8 +120,11 @@
 <script src="{% static "widgets/weather_forecast/weather_forecast.js" %}" ></script>
 <script src="{% static "widgets/weather_station_variable/weather_station_variable.js" %}" ></script>
 <script src="{% static "widgets/rss/rss.js" %}" ></script>
-<script src="{% static "js/open_layers/OpenLayers.js" %}"></script>
-<script src="{% static "widgets/radar/openlayers-radar.js" %}"></script>
-<script src="{% static "widgets/radar/radar.js" %}" ></script>
+<script src="{% static "js/Highstock-1.3.1/highstock.js" %}"></script>
+<script src="{% static "widgets/vessel_chart/vessel_chart.js" %}" ></script>
+<script src="{% static "widgets/vessel_info/vessel_info.js" %}" ></script>
+<script src="{% static "widgets/vesselmap/vesselmap.js" %}" ></script>
 <script src="{% static "js/seawidgets.application.js" %}" ></script>
+<script src="{% static "js/seawidgets-vessel.application.js" %}" ></script>
+
 {% endblock page_js %}

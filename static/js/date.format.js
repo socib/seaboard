@@ -119,8 +119,34 @@ dateFormat.i18n = {
 	]
 };
 
+
+var dateParse = function(date,s_date,mask){
+	if (mask == 'dd-mm-yyyy HH:MM:ss'){
+		var reggie = /(\d{2})-(\d{2})-(\d{4}) (\d{2}):(\d{2}):(\d{2})/;
+		var dateArray = reggie.exec(s_date); 
+		var dateObject = new Date(
+		    (+dateArray[3]),
+		    (+dateArray[2])-1, // Careful, month starts at 0!
+		    (+dateArray[1]),
+		    (+dateArray[4]),
+		    (+dateArray[5]),
+		    (+dateArray[6])
+		);
+		return dateObject;
+	}
+	return new Date(Date.parse(s_date));
+};
+
+
 // For convenience...
 Date.prototype.format = function (mask, utc) {
 	return dateFormat(this, mask, utc);
 };
+
+
+Date.prototype.parseFormat = function (s_date, mask) {
+	return dateParse(this, s_date, mask);
+};
+
+
 

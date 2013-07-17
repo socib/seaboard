@@ -70,11 +70,11 @@ def station_info(request,location_code,format='html',template='weather_station/s
 
             if id_variable != '':
                 variable_data = get_variable_data(id_platform,id_instrument,id_variable,standard_name, displayName)
+                if 'error' not in variable_data.keys():
+                    results.append(variable_data)
                 # wind_speed hack. Add wind_from_direction.lastSampleValue
-                if standard_name == 'wind_speed':
+                elif standard_name == 'wind_speed':
                     variable_data['current']['wind_from_direction'] = get_wind_from_direction(variable_list)
-
-                results.append(variable_data)
 
     if format == 'json':
         json = simplejson.dumps(results)

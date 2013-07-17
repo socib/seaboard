@@ -61,6 +61,7 @@ def latest(request,location,cameras,folder_suffix='',images_folder='latest_image
         result['title'] = image_title_from_filename(zone,image['image'],image['path']) 
         result['time']  = image['time']
         result['image_tn'] = 'http://www.socib.es/users/mobims/imageArchive/' + location + '/sirena/'+ location + image['station'] + '_tn/' + images_folder + '/' + image['image'].replace('.png','.jpeg') 
+        result['camera'] = location + "_" + image['image'][0:image['image'].find('_')]
         results.append(result)
    
     json = simplejson.dumps(results)
@@ -100,7 +101,7 @@ def today(request,location,cameras,folder_suffix=''):
                 else:
                     images = []
                
-                results.extend ([ {'image' : 'http://www.socib.es/users/mobims/imageArchive/' + location + '/sirena/'+ camera_location + '/' + camera + '/' + day.strftime('%Y/%m/%d') + '/' + image['image'] , 'title': image_title(zone,image['image'], camera) } for image in images ])   
+                results.extend ([ {'image' : 'http://www.socib.es/users/mobims/imageArchive/' + location + '/sirena/'+ camera_location + '/' + camera + '/' + day.strftime('%Y/%m/%d') + '/' + image['image'] , 'title': image_title(zone,image['image'], camera) , 'camera': location + "_" + camera} for image in images ])   
 
     json = simplejson.dumps(results)
     return HttpResponse(json, mimetype='application/json')

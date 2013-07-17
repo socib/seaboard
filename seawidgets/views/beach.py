@@ -46,7 +46,7 @@ def platgesdebalears_status(request,location_code):
         beach['comment'] = soup.select('#capsaComentariInner span.txtRojo11B')[0].getText()
     else:
         beach['status'] = 'estAusente'
-        beach['comment'] = 'No data recieved'
+        beach['comment'] = 'No data received'
 
     return HttpResponse(simplejson.dumps(beach), mimetype='application/json')
     

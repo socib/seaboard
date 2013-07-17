@@ -147,11 +147,8 @@ footer{
   right: 0; }
 
 .updated-at {
-  font-size: 15px;
-  position: absolute;
-  bottom: 12px;
-  left: 0;
-  right: 0; }
+  font-size: 0.55em;
+}
 
 
 .widget-text p {
@@ -238,8 +235,9 @@ ul.weather-station li{
 /* waveforecast
 */
 
-.waveforecast{
+.waveforecast-wrapper{
   padding-right: 50px; 
+  -moz-box-sizing: border-box;
   box-sizing: border-box;
   background: #ffffff url(/static/images/waves_forecast_colorscale.png) no-repeat right top;
   width: 100%;
@@ -254,6 +252,17 @@ ul.weather-station li{
   margin-right: 0px;
 }
 
+.leaflet-popup-content-wrapper{
+  color:#222;
+}
+
+.span-no-bottom-margin{
+  [class*="span"] {
+      margin-bottom: 0px;
+  }
+}
+
+
 @import "../widgets/clock/clock.less";
 @import "../widgets/weather_station/weather_station.less";
 @import "../widgets/weather_forecast/weather_forecast.less";
@@ -262,3 +271,6 @@ ul.weather-station li{
 @import "../widgets/beamon/beamon.less";
 @import "../widgets/qr/qr.less";
 @import "../widgets/radar/radar.less";
+@import "../widgets/vesselmap/vesselmap.less";
+@import "../widgets/vessel_info/vessel_info.less";
+@import "../widgets/vessel_chart/vessel_chart.less";

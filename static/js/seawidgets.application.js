@@ -8,7 +8,7 @@
     // Auto refresh the page every two hours, to minimize the risk of application freezing.    
     function refreshPage() {
         var url = '/status.json';
-        $.getJSON(url, { "noCache": noCache } , function(data) {
+        $.getJSON(url, { "noCache": "noCache" } , function(data) {
             if (data.ok)
                 window.location.href = window.location.href;
             else

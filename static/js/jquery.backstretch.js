@@ -12,7 +12,7 @@
   /* PLUGIN DEFINITION
    * ========================= */
 
-  $.fn.backstretch = function (images, texts, options) {
+  $.fn.backstretch = function (images, texts, cameras, options) {
     // We need at least one image
     if (images === undefined || images.length === 0) {
       $.error("No images were supplied for Backstretch");
@@ -40,16 +40,16 @@
         obj.destroy(true);
       }
 
-      obj = new Backstretch(this, images, texts, options);
+      obj = new Backstretch(this, images, texts, cameras, options);
       $this.data('backstretch', obj);
     });
   };
 
   // If no element is supplied, we'll attach to body
-  $.backstretch = function (images, texts, options) {
+  $.backstretch = function (images, texts, cameras, options) {
     // Return the instance
     return $('body')
-            .backstretch(images, texts, options)
+            .backstretch(images, texts, cameras, options)
             .data('backstretch');
   };
 
@@ -101,7 +101,7 @@
 
   /* CLASS DEFINITION
    * ========================= */
-  var Backstretch = function (container, images, texts, options) {
+  var Backstretch = function (container, images, texts, cameras, options) {
     this.options = $.extend({}, $.fn.backstretch.defaults, options || {});
 
     /* In its simplest form, we allow Backstretch to be called on an image path.
@@ -110,6 +110,7 @@
      */
     this.images = $.isArray(images) ? images : [images];
     this.texts = $.isArray(texts) ? texts : [texts];
+    this.cameras = $.isArray(cameras) ? cameras : [cameras];
 
     // Preload images
     $.each(this.images, function () {
@@ -235,8 +236,15 @@
                         // Show the image, then delete the old one
                         // "speed" option has been deprecated, but we want backwards compatibilty
 
-                        // show overlay image
+                        // show overlay text
                         self.$container.find(".overlay").text(self.texts[index]);
+                        // show situatioin image                        
+                        if (self.cameras.length > 0){
+                          var situation = self.$container.find(".situation");
+                          var img_situation = $('<img />');
+                          img_situation.attr('src','/static/widgets/beamon/images/' + self.cameras[index] + '.png' );
+                          situation.html(img_situation);
+                        }
 
                         $(this).fadeIn(self.options.speed || self.options.fade, function () {
                           oldImage.remove();
@@ -315,6 +323,7 @@
         this.$container = null;
         delete this.images;
         delete this.texts;
+        delete this.cameras;
         delete this.options;
       }
   };

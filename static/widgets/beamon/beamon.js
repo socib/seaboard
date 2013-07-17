@@ -35,6 +35,11 @@
       if (this.get('title') != undefined && this.get('title') == '') {
         $(this.node).find('h1').remove();
       }
+      if (this.get('type') != undefined && this.get('type') == 'waveforecast') {        
+        $(this.node).find('.situation').remove();        
+        $(this.node).append('<div class="credits">In collaboration with Puertos del Estado</div>');
+      }
+
       return setInterval(this.refreshData, 60000 * 20 ); // every 20 minutes      
     };
 
@@ -45,28 +50,32 @@
       if (this.get('type') != undefined && this.get('type') == 'timelapse') {
         url = '/beamon/' + this.get('location') + '/' + this.get('cameras') + '/today';
       } else if (this.get('type') != undefined && this.get('type') == 'waveforecast') {
-        url = '/sapo/' + this.get('location') + '/latest';
+        url = '/sapo/' + this.get('location') + '/latest';        
       }else {
         url = '/beamon/' + this.get('location') + '/' + this.get('cameras') + '/latest_mobile';
       }
       $.getJSON(url, function(data) {
-        images = []
-        texts = []
+        images = [];
+        texts = [];
+        cameras = [];
         for (i in data) {
           image = data[i];
           images.push(image.image);
           texts.push(image.title);
+          if (image.camera){
+            cameras.push(image.camera);
+          }
         }
         if (images.length  > 0){
-          that.showImages(images, texts);  
+          that.showImages(images, texts, cameras);  
         }        
       });
     };
 
-    Beamon.prototype.showImages = function(images, texts) {      
+    Beamon.prototype.showImages = function(images, texts, cameras) {      
 
       // $(this.node).find(".backstretch").remove(); 
-      $(this.node).backstretch(images, texts ,{
+      $(this.node).backstretch(images, texts, cameras ,{
         fade: 750,
         duration: 1000
       });
