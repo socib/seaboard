@@ -1,0 +1,167 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+
+    <title>seawidgets.views.radar &mdash; seaboard  documentation</title>
+
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;"/>
+
+
+    
+    <link rel="stylesheet" href="../../../_static/rtd.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../../../../_static/searchtools.js"></script>
+    <link rel="top" title="seaboard  documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">seaboard  documentation</a> &raquo;</li>
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for seawidgets.views.radar</h1><div class="highlight"><pre>
+<span class="c"># coding: utf-8</span>
+
+<span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">Http404</span><span class="p">,</span> <span class="n">HttpResponse</span><span class="p">,</span> <span class="n">HttpResponseForbidden</span><span class="p">,</span> <span class="n">HttpResponseServerError</span><span class="p">,</span> <span class="n">HttpResponseRedirect</span>
+<span class="kn">from</span> <span class="nn">os.path</span> <span class="kn">import</span> <span class="n">isfile</span><span class="p">,</span> <span class="n">isdir</span><span class="p">,</span> <span class="n">join</span><span class="p">,</span> <span class="n">getmtime</span>
+<span class="kn">from</span> <span class="nn">django.conf</span> <span class="kn">import</span> <span class="n">settings</span>
+<span class="kn">import</span> <span class="nn">seawidgets.functions.utils</span> <span class="kn">as</span> <span class="nn">_utils</span>
+
+<span class="kn">import</span> <span class="nn">urllib2</span><span class="o">,</span> <span class="nn">datetime</span>
+<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span><span class="p">,</span> <span class="n">ImageFile</span> 
+
+
+
+<div class="viewcode-block" id="animation"><a class="viewcode-back" href="../../../modules/seawidgets.views.html#seawidgets.views.radar.animation">[docs]</a><span class="k">def</span> <span class="nf">animation</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">location_code</span><span class="p">):</span>
+    <span class="n">image_destination</span> <span class="o">=</span> <span class="s">&#39;CACHE/img/radar_&#39;</span> <span class="o">+</span> <span class="n">location_code</span> <span class="o">+</span> <span class="s">&#39;.gif&#39;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">file_exists_and_not_old</span><span class="p">(</span><span class="n">join</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">STATIC_ROOT</span><span class="p">,</span><span class="n">image_destination</span><span class="p">)):</span>
+        <span class="n">yesterday</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span> <span class="o">-</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>        
+        <span class="n">init_time</span> <span class="o">=</span> <span class="n">yesterday</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s">&#39;%Y-%m-</span><span class="si">%d</span><span class="s">T%H:00:00.000Z&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;:&#39;</span><span class="p">,</span><span class="s">&#39;%3A&#39;</span><span class="p">)</span>        
+        <span class="n">end_time</span> <span class="o">=</span> <span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span><span class="o">-</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="mi">7200</span><span class="p">))</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s">&#39;%Y-%m-</span><span class="si">%d</span><span class="s">T%H:00:00.000Z&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;:&#39;</span><span class="p">,</span><span class="s">&#39;%3A&#39;</span><span class="p">)</span>        
+
+        <span class="n">urlRadarImg</span> <span class="o">=</span> <span class="s">&#39;http://thredds.socib.es/thredds/wms/observational/hf_radar/hf_radar_ibiza-scb_codarssproc001_aggregation/dep0001_hf-radar-ibiza_scb-codarssproc001_L1_agg.nc?REQUEST=GetMap&amp;VERSION=1.3.0&amp;STYLES=linevec/ferret&amp;CRS=CRS:84&amp;WIDTH=512&amp;HEIGHT=512&amp;FORMAT=image/gif&amp;TRANSPARENT=true&amp;LAYERS=sea_water_velocity&amp;BBOX=-0.2,38.1,2.0,39.2&amp;TIME=&#39;</span> <span class="o">+</span> <span class="n">init_time</span>  <span class="o">+</span> <span class="s">&#39;</span><span class="si">%2F</span><span class="s">&#39;</span> <span class="o">+</span> <span class="n">end_time</span>
+
+        <span class="n">save_image</span><span class="p">(</span><span class="n">urlRadarImg</span><span class="p">,</span><span class="n">image_destination</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">HttpResponseRedirect</span> <span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">STATIC_URL</span>  <span class="o">+</span> <span class="n">image_destination</span><span class="p">)</span>
+    
+
+</div>
+<div class="viewcode-block" id="capabilities"><a class="viewcode-back" href="../../../modules/seawidgets.views.html#seawidgets.views.radar.capabilities">[docs]</a><span class="k">def</span> <span class="nf">capabilities</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">location_code</span><span class="p">):</span>
+    <span class="c"># Ignore location_code. But </span>
+    <span class="c"># GetCapabilities proxy</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="s">&#39;http://thredds.socib.es/thredds/wms/hf_radar/hf_radar_ibiza-scb_codarssproc001/L1/dep0001_hf-radar-ibiza_scb-codarssproc001_L1_latest.nc?service=WMS&amp;version=1.3.0&amp;request=GetCapabilities&#39;</span>
+
+    <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="n">urllib2</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">url</span><span class="p">),</span> <span class="n">mimetype</span><span class="o">=</span><span class="s">&#39;text/xml&#39;</span><span class="p">)</span>
+
+<span class="c"># FUNCTIONS</span>
+</div>
+<div class="viewcode-block" id="file_exists_and_not_old"><a class="viewcode-back" href="../../../modules/seawidgets.views.html#seawidgets.views.radar.file_exists_and_not_old">[docs]</a><span class="k">def</span> <span class="nf">file_exists_and_not_old</span><span class="p">(</span><span class="n">filepath</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">isfile</span><span class="p">(</span><span class="n">filepath</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">False</span>
+
+    <span class="n">created</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">fromtimestamp</span><span class="p">(</span><span class="n">getmtime</span><span class="p">(</span><span class="n">filepath</span><span class="p">))</span>
+    <span class="n">old</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="n">created</span>
+    <span class="k">if</span> <span class="n">old</span><span class="o">.</span><span class="n">seconds</span> <span class="o">&lt;</span> <span class="mi">3600</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">True</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">False</span>
+</div>
+<div class="viewcode-block" id="save_image"><a class="viewcode-back" href="../../../modules/seawidgets.views.html#seawidgets.views.radar.save_image">[docs]</a><span class="k">def</span> <span class="nf">save_image</span><span class="p">(</span><span class="n">url</span><span class="p">,</span><span class="n">destination</span><span class="p">):</span>
+    <span class="n">inStream</span> <span class="o">=</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+
+    <span class="c"># parser = ImageFile.Parser()</span>
+    <span class="c"># while True:</span>
+    <span class="c">#     s = inStream.read(1024)</span>
+    <span class="c">#     if not s:</span>
+    <span class="c">#         break</span>
+    <span class="c">#     parser.feed(s)</span>
+    <span class="c"># inImage = parser.close()</span>
+
+    <span class="c"># inImage.save(settings.STATIC_ROOT  + destination)</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">STATIC_ROOT</span>  <span class="o">+</span> <span class="n">destination</span><span class="p">,</span> <span class="s">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">local_file</span><span class="p">:</span>
+        <span class="n">local_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">inStream</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>    </div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">seaboard  documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+<div class="footer">
+    &copy; Copyright 2013, Biel Frontera. SOCIB.
+  Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2b1.
+  <br />Theme based on <a href="http://readthedocs.org/">Read The Docs</a>
+
+</div>
+
+
+
+
+
+  </body>
+</html>

@@ -1,0 +1,258 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+
+    <title>Welcome to seaboard’s documentation! &mdash; seaboard  documentation</title>
+
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;"/>
+
+
+    
+    <link rel="stylesheet" href="_static/rtd.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/searchtools.js"></script>
+    <link rel="top" title="seaboard  documentation" href="#" />
+    <link rel="next" title="seaboard Package" href="modules/seaboard.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="modules/seaboard.html" title="seaboard Package"
+             accesskey="N">next</a> |</li>
+        <li><a href="#">seaboard  documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="welcome-to-seaboard-s-documentation">
+<h1>Welcome to seaboard&#8217;s documentation!<a class="headerlink" href="#welcome-to-seaboard-s-documentation" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><dl class="first docutils">
+<dt>[RECOMENDED] Install this web application in a python virtualenv.</dt>
+<dd><p class="first">Install virtualenvwrapper:</p>
+<div class="highlight-python"><pre>$ pip install virtualenvwrapper</pre>
+</div>
+<p class="last">Follow <a class="reference external" href="http://virtualenvwrapper.readthedocs.org/en/latest/command_ref.html">this instructions</a>  to create a new environment and activate it.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Install ubuntu dependencies:</dt>
+<dd><ol class="first last loweralpha simple">
+<li>libxml2-dev libxslt1-dev (for feedparser)</li>
+<li>libqrencode-dev (for qrencoder)</li>
+<li>nodejs (for lessc)</li>
+<li>libjpeg libjpeg-dev libfreetype6 libfreetype6-dev zlib1g-dev (for PIL, crop images)</li>
+</ol>
+</dd>
+</dl>
+</li>
+<li><p class="first">Download code:</p>
+<div class="highlight-python"><pre>git clone gituser@portal.socib.es:repositories/seaboard</pre>
+</div>
+</li>
+<li><p class="first">Install python dependencies:</p>
+<div class="highlight-python"><pre>(virtualenv_name) $ pip install -r requirements.txt</pre>
+</div>
+</li>
+<li><p class="first">Install <a class="reference external" href="http://lesscss.org/">lessc</a> (via node package manager):</p>
+<div class="highlight-python"><pre>npm install -g less</pre>
+</div>
+</li>
+<li><p class="first">Configure new virtualhost in apache:</p>
+<div class="highlight-python"><pre>&lt;VirtualHost *:80&gt;
+
+        DocumentRoot "/var/www/seaboard"
+
+        ServerName seaboardtest.socib.es
+        ServerAlias *.seaboardtest.socib.es
+
+        Alias /static/ /var/www/seaboard/static/
+        AliasMatch ^/views/(.*).html /var/www/seaboard/static/widgets/$1/$1.html
+
+        WSGIScriptAlias / /var/www/seaboard/seaboard/wsgi.py
+        WSGIPythonPath /var/www/seaboard:PATH_TO_VIRTUAL_ENV/lib/python2.7/site-packages
+
+        &lt;Directory "/var/www/seaboard"&gt;
+                Options Indexes FollowSymLinks MultiViews
+                Allow from all
+        &lt;/Directory&gt;
+
+        ErrorLog /var/log/apache2/seaboard.socib.es.error.log
+        LogLevel info
+
+        CustomLog /var/log/apache2/seaboard.socib.es.access.log combined
+        ServerSignature On
+
+&lt;/VirtualHost&gt;</pre>
+</div>
+</li>
+</ul>
+</div>
+<div class="section" id="python-modules">
+<h2>Python Modules<a class="headerlink" href="#python-modules" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules/seaboard.html">seaboard Package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="modules/seaboard.html#module-seaboard.local_settings"><tt class="docutils literal"><span class="pre">local_settings</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules/seaboard.html#module-seaboard.settings"><tt class="docutils literal"><span class="pre">settings</span></tt> Module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="modules/seawidgets.html">seawidgets Package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="modules/seawidgets.html#module-seawidgets.models"><tt class="docutils literal"><span class="pre">models</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules/seawidgets.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="modules/seawidgets.functions.html">functions Package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="modules/seawidgets.functions.html#module-seawidgets.functions.utils"><tt class="docutils literal"><span class="pre">utils</span></tt> Module</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="modules/seawidgets.views.html">views Package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="modules/seawidgets.views.html#module-seawidgets.views.beach"><tt class="docutils literal"><span class="pre">beach</span></tt> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/seawidgets.views.html#module-seawidgets.views.beamon"><tt class="docutils literal"><span class="pre">beamon</span></tt> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/seawidgets.views.html#module-seawidgets.views.dash"><tt class="docutils literal"><span class="pre">dash</span></tt> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/seawidgets.views.html#module-seawidgets.views.radar"><tt class="docutils literal"><span class="pre">radar</span></tt> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/seawidgets.views.html#module-seawidgets.views.rss"><tt class="docutils literal"><span class="pre">rss</span></tt> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/seawidgets.views.html#module-seawidgets.views.sapo"><tt class="docutils literal"><span class="pre">sapo</span></tt> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/seawidgets.views.html#module-seawidgets.views.vessel"><tt class="docutils literal"><span class="pre">vessel</span></tt> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/seawidgets.views.html#module-seawidgets.views.weather_forecast"><tt class="docutils literal"><span class="pre">weather_forecast</span></tt> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/seawidgets.views.html#module-seawidgets.views.weather_station"><tt class="docutils literal"><span class="pre">weather_station</span></tt> Module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="javascript-widgets">
+<h2>Javascript Widgets<a class="headerlink" href="#javascript-widgets" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules/jswidgets.html">Javascript Widgets</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="modules/jswidgets.html#batman-js">batman.js</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules/jswidgets.html#dashing-js">dashing.js</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules/jswidgets.html#widget-example">Widget example</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="modules/jswidgets.html#widget-name-js">widget_name.js</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="section" id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><a class="reference internal" href="genindex.html"><em>Index</em></a></li>
+<li><a class="reference internal" href="py-modindex.html"><em>Module Index</em></a></li>
+<li><a class="reference internal" href="search.html"><em>Search Page</em></a></li>
+</ul>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="#">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Welcome to seaboard&#8217;s documentation!</a><ul>
+<li><a class="reference internal" href="#installation">Installation</a></li>
+<li><a class="reference internal" href="#python-modules">Python Modules</a><ul>
+</ul>
+</li>
+<li><a class="reference internal" href="#javascript-widgets">Javascript Widgets</a><ul>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+  <h4>Next topic</h4>
+  <p class="topless"><a href="modules/seaboard.html"
+                        title="next chapter">seaboard Package</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/index.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="modules/seaboard.html" title="seaboard Package"
+             >next</a> |</li>
+        <li><a href="#">seaboard  documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+<div class="footer">
+    &copy; Copyright 2013, Biel Frontera. SOCIB.
+  Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2b1.
+  <br />Theme based on <a href="http://readthedocs.org/">Read The Docs</a>
+
+</div>
+
+
+
+
+
+  </body>
+</html>

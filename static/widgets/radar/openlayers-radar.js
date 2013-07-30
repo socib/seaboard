@@ -126,7 +126,7 @@ OpenLayersRadar = {
 
             // urlRadarImg = 'http://thredds.socib.es/thredds/wms/observational/hf_radar/hf_radar_ibiza-scb_codarssproc001_aggregation/dep0001_hf-radar-ibiza_scb-codarssproc001_L1_agg.nc?REQUEST=GetMap&VERSION=1.3.0&STYLES=linevec/ferret&CRS=CRS:84&WIDTH=512&HEIGHT=512&FORMAT=image/gif&TRANSPARENT=true&LAYERS=sea_water_velocity&BBOX=-0.2,38.1,2.0,39.2&TIME=2013-06-26T00%3A00%3A00.000Z%2F2013-06-26T11%3A00%3A00.000Z';
 
-            urlRadarImg =  '/radar/galfi/animation.gif'
+            urlRadarImg =  '/radar/galfi/animation.gif';
 
             var options = {
                 //numZoomLevels: 15,

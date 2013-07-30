@@ -68,20 +68,31 @@
         }
         if (images.length  > 0){
           that.showImages(images, texts, cameras);  
-        }        
+        }else{
+          that.showNoImage();
+        }
+      }).error(function(){
+        that.showNoImage();
       });
     };
 
     Beamon.prototype.showImages = function(images, texts, cameras) {      
-
-      // $(this.node).find(".backstretch").remove(); 
       $(this.node).backstretch(images, texts, cameras ,{
         fade: 750,
         duration: 1000
       });
-      /*$(this.node).on("backstretch.show", function(e, instance) {
-        $(this).find(".overlay").text(texts[instance.index]);
-      });*/    
+    };
+
+    Beamon.prototype.showNoImage = function() {      
+      var no_image = '/static/widgets/beamon/images/no_image.png';
+      if (this.get('type') != undefined && this.get('type') == 'waveforecast') {     
+        no_image = '/static/widgets/beamon/images/no_image_sapo.png';
+      }
+
+      $(this.node).backstretch(no_image, [], [] ,{
+        fade: 750,
+        duration: 1000
+      });
     };
 
 

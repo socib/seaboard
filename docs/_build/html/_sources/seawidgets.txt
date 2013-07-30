@@ -1,0 +1,27 @@
+seawidgets Package
+==================
+
+:mod:`models` Module
+--------------------
+
+.. automodule:: seawidgets.models
+    :members:
+
+
+:mod:`urls` Module
+------------------
+
+.. automodule:: seawidgets.urls
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+Subpackages
+-----------
+
+.. toctree::
+
+    seawidgets.functions
+    seawidgets.migrations
+    seawidgets.views
+

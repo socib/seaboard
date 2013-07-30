@@ -5,11 +5,13 @@ from django.db.models import permalink
 
 # Create your models here.
 
+
 class Zone(models.Model):
+    """A zone contains one or more locations (for example, pdp = Platja de Palma, contains HMGF i CID)."""
     code = models.CharField(_('code'), max_length=20, unique=True)
     name = models.CharField(_('name'), max_length=200)
     description = models.CharField(_('description'), max_length=250, blank=True)
-    id_platform = models.IntegerField(_('platform id'),null=True, blank=True)
+    id_platform = models.IntegerField(_('platform id'), null=True, blank=True)
     latlong = models.CharField(_('location'), max_length=50, blank=True, null=True)
     beach_flag_url = models.CharField(_('Beach flag status url'), max_length=250, blank=True)
     sapo_image_path = models.CharField(_('Sapo image paths'), max_length=250, blank=True)
@@ -25,8 +27,7 @@ class Zone(models.Model):
         verbose_name_plural = _('Zones')
 
     def __unicode__(self):
-        return  u"%s - %s" % (self.code, self.name)
-
+        return u"%s - %s" % (self.code, self.name)
 
     @permalink
     def get_absolute_url(self):
@@ -34,7 +35,9 @@ class Zone(models.Model):
             'zone': self.code,
         })
 
+
 class Location(models.Model):
+    """Specific location inside a zone."""
     code = models.CharField(_('code'), max_length=20, unique=True)
     name = models.CharField(_('name'), max_length=200)
     zone = models.ForeignKey(Zone)
@@ -50,7 +53,6 @@ class Location(models.Model):
     rss_url = models.CharField(_('RSS url'), max_length=250, blank=True)
     dash_template = models.CharField(_('Dash template'), max_length=100, blank=True)
 
-
     date_added = models.DateTimeField(_('date added'), auto_now_add=True)
     user_add = models.ForeignKey(User, blank=True, null=True, related_name='add-location')
     date_modified = models.DateTimeField(_('date modified'), auto_now=True)
@@ -62,8 +64,7 @@ class Location(models.Model):
         verbose_name_plural = _('Locations')
 
     def __unicode__(self):
-        return  u"%s - %s" % (self.code, self.name)
-
+        return u"%s - %s" % (self.code, self.name)
 
     @permalink
     def get_absolute_url(self):
@@ -71,5 +72,3 @@ class Location(models.Model):
             'zone_code': self.zone.code,
             'location_code': self.code,
         })
-
- 

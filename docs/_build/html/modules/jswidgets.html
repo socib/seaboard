@@ -1,0 +1,212 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+
+    <title>Javascript Widgets &mdash; seaboard  documentation</title>
+
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;"/>
+
+
+    
+    <link rel="stylesheet" href="../_static/rtd.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/searchtools.js"></script>
+    <link rel="top" title="seaboard  documentation" href="../index.html" />
+    <link rel="prev" title="views Package" href="seawidgets.views.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="seawidgets.views.html" title="views Package"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">seaboard  documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="javascript-widgets">
+<h1>Javascript Widgets<a class="headerlink" href="#javascript-widgets" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="batman-js">
+<h2>batman.js<a class="headerlink" href="#batman-js" title="Permalink to this headline">¶</a></h2>
+<p>Seaboard Wigdets use <a class="reference external" href="http://batmanjs.org/">batman.js</a>, a javascript framework that brings a system of view (html) bindings and observable properties.</p>
+</div>
+<div class="section" id="dashing-js">
+<h2>dashing.js<a class="headerlink" href="#dashing-js" title="Permalink to this headline">¶</a></h2>
+<p>Built on top of batman.js, this library is taken from a dashboard application name <a class="reference external" href="http://shopify.github.io/dashing/">dashing</a>. Widgets are inserted in the html code as follows:</p>
+<div class="highlight-python"><pre>&lt;div data-id="__widget_id__" data-view="__WidgetClass__" data-*="__any_atribute__"&gt;&lt;/div&gt;</pre>
+</div>
+</div>
+<div class="section" id="widget-example">
+<h2>Widget example<a class="headerlink" href="#widget-example" title="Permalink to this headline">¶</a></h2>
+<p>All widgets are stored in a folder inside static/widgets, containing 3 files:</p>
+<blockquote>
+<div><ul class="simple">
+<li>widget_name.js: originally widget_name.coffee, that could be a good option in a future</li>
+<li>widget_name.html: static html with variable binding (its retrieved from /views/widget_name.html)</li>
+<li>widget_name.less: css written with less. This file has to be included in css/seawidgets.less (via &#64;import &#8221;../widgets/widget_name/widget_name.less&#8221;;)</li>
+</ul>
+</div></blockquote>
+<div class="section" id="widget-name-js">
+<h3>widget_name.js<a class="headerlink" href="#widget-name-js" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">_ref</span><span class="p">,</span>
+    <span class="nx">__bind</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">fn</span><span class="p">,</span> <span class="nx">me</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">fn</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="nx">me</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+      <span class="p">};</span>
+    <span class="p">},</span>
+    <span class="nx">__hasProp</span> <span class="o">=</span> <span class="p">{}.</span><span class="nx">hasOwnProperty</span><span class="p">,</span>
+    <span class="nx">__extends</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">child</span><span class="p">,</span> <span class="nx">parent</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">key</span> <span class="k">in</span> <span class="nx">parent</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">__hasProp</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">parent</span><span class="p">,</span> <span class="nx">key</span><span class="p">))</span> <span class="nx">child</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">=</span> <span class="nx">parent</span><span class="p">[</span><span class="nx">key</span><span class="p">];</span>
+      <span class="p">}</span>
+
+      <span class="kd">function</span> <span class="nx">ctor</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">constructor</span> <span class="o">=</span> <span class="nx">child</span><span class="p">;</span>
+      <span class="p">}</span>
+      <span class="nx">ctor</span><span class="p">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="nx">parent</span><span class="p">.</span><span class="nx">prototype</span><span class="p">;</span>
+      <span class="nx">child</span><span class="p">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ctor</span><span class="p">();</span>
+      <span class="nx">child</span><span class="p">.</span><span class="nx">__super__</span> <span class="o">=</span> <span class="nx">parent</span><span class="p">.</span><span class="nx">prototype</span><span class="p">;</span>
+      <span class="k">return</span> <span class="nx">child</span><span class="p">;</span>
+    <span class="p">};</span>
+
+  <span class="nx">Dashing</span><span class="p">.</span><span class="nx">WidgetName</span> <span class="o">=</span> <span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">_super</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">__extends</span><span class="p">(</span><span class="nx">BeachFlag</span><span class="p">,</span> <span class="nx">_super</span><span class="p">);</span>
+
+    <span class="kd">function</span> <span class="nx">WidgetName</span><span class="p">()</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">refreshData</span> <span class="o">=</span> <span class="nx">__bind</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">refreshData</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
+      <span class="nx">_ref</span> <span class="o">=</span> <span class="nx">WidgetName</span><span class="p">.</span><span class="nx">__super__</span><span class="p">.</span><span class="nx">constructor</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+      <span class="k">return</span> <span class="nx">_ref</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="nx">WidgetName</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">ready</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">refreshData</span><span class="p">();</span>
+      <span class="k">return</span> <span class="nx">setInterval</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">refreshData</span><span class="p">,</span> <span class="mi">60000</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">2</span><span class="p">);</span> <span class="c1">// every 2 hours</span>
+    <span class="p">};</span>
+
+    <span class="nx">WidgetName</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">refreshData</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">url</span> <span class="o">=</span> <span class="s1">&#39;any_url.json&#39;</span><span class="p">;</span>
+      <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+      <span class="nx">$</span><span class="p">.</span><span class="nx">getJSON</span><span class="p">(</span><span class="nx">url</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">that</span><span class="p">.</span><span class="nx">showData</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
+      <span class="p">});</span>
+    <span class="p">};</span>
+
+    <span class="nx">WidgetName</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">showData</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+      <span class="c1">// set binded variables or add more processing logic</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s1">&#39;variable_binded_in_html&#39;</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
+    <span class="p">};</span>
+
+    <span class="k">return</span> <span class="nx">BeachFlag</span><span class="p">;</span>
+
+  <span class="p">})(</span><span class="nx">Dashing</span><span class="p">.</span><span class="nx">Widget</span><span class="p">);</span>
+
+<span class="p">}).</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Javascript Widgets</a><ul>
+<li><a class="reference internal" href="#batman-js">batman.js</a></li>
+<li><a class="reference internal" href="#dashing-js">dashing.js</a></li>
+<li><a class="reference internal" href="#widget-example">Widget example</a><ul>
+<li><a class="reference internal" href="#widget-name-js">widget_name.js</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="seawidgets.views.html"
+                        title="previous chapter">views Package</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/modules/jswidgets.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="seawidgets.views.html" title="views Package"
+             >previous</a> |</li>
+        <li><a href="../index.html">seaboard  documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+<div class="footer">
+    &copy; Copyright 2013, Biel Frontera. SOCIB.
+  Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2b1.
+  <br />Theme based on <a href="http://readthedocs.org/">Read The Docs</a>
+
+</div>
+
+
+
+
+
+  </body>
+</html>

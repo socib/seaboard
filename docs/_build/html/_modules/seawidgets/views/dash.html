@@ -1,0 +1,194 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+
+    <title>seawidgets.views.dash &mdash; seaboard  documentation</title>
+
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;"/>
+
+
+    
+    <link rel="stylesheet" href="../../../_static/rtd.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../../../../_static/searchtools.js"></script>
+    <link rel="top" title="seaboard  documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">seaboard  documentation</a> &raquo;</li>
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for seawidgets.views.dash</h1><div class="highlight"><pre>
+<span class="c"># coding: utf-8</span>
+
+<span class="kn">from</span> <span class="nn">django.core.urlresolvers</span> <span class="kn">import</span> <span class="n">reverse</span>
+<span class="kn">from</span> <span class="nn">django.template</span> <span class="kn">import</span> <span class="n">RequestContext</span>
+<span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">Http404</span><span class="p">,</span> <span class="n">HttpResponse</span><span class="p">,</span> <span class="n">HttpResponseForbidden</span><span class="p">,</span> <span class="n">HttpResponseServerError</span><span class="p">,</span> <span class="n">HttpResponseRedirect</span>
+<span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render_to_response</span><span class="p">,</span> <span class="n">get_object_or_404</span><span class="p">,</span> <span class="n">render</span>
+<span class="kn">from</span> <span class="nn">django.conf</span> <span class="kn">import</span> <span class="n">settings</span>
+<span class="kn">from</span> <span class="nn">django.utils</span> <span class="kn">import</span> <span class="n">simplejson</span>
+<span class="kn">from</span> <span class="nn">django.contrib.staticfiles.views</span> <span class="kn">import</span> <span class="n">serve</span>
+
+<span class="kn">from</span> <span class="nn">seawidgets.models</span> <span class="kn">import</span> <span class="n">Zone</span><span class="p">,</span> <span class="n">Location</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
+
+<div class="viewcode-block" id="index"><a class="viewcode-back" href="../../../modules/seawidgets.views.html#seawidgets.views.dash.index">[docs]</a><span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="n">request</span><span class="p">,</span><span class="n">location</span><span class="o">=</span><span class="s">&#39;pdp&#39;</span><span class="p">,</span><span class="n">template</span><span class="o">=</span><span class="s">&#39;index.html&#39;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Default page for seaboard-seawidgets</span>
+
+<span class="sd">    :param template: Add a custom template.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">kwvars</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">&#39;location&#39;</span><span class="p">:</span> <span class="n">location</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">render_to_response</span><span class="p">(</span><span class="n">template</span><span class="p">,</span> <span class="n">kwvars</span><span class="p">,</span> <span class="n">RequestContext</span><span class="p">(</span><span class="n">request</span><span class="p">))</span>
+</div>
+<div class="viewcode-block" id="dash"><a class="viewcode-back" href="../../../modules/seawidgets.views.html#seawidgets.views.dash.dash">[docs]</a><span class="k">def</span> <span class="nf">dash</span><span class="p">(</span><span class="n">request</span><span class="p">,</span><span class="n">zone_code</span><span class="o">=</span><span class="s">&#39;socib&#39;</span><span class="p">,</span><span class="n">location_code</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">,</span><span class="n">template</span><span class="o">=</span><span class="s">&#39;dash.html&#39;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Default page for seaboard-seawidgets</span>
+
+<span class="sd">    :param template: Add a custom template.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;Enter dash with zone </span><span class="si">%s</span><span class="s"> and location </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">zone_code</span><span class="p">,</span><span class="n">location_code</span><span class="p">))</span>
+    <span class="c"># If not location_code given, search default location for zone (same code as zone)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">location_code</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">location_code</span> <span class="o">=</span> <span class="n">zone_code</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">location</span> <span class="o">=</span> <span class="n">Location</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">code__iexact</span><span class="o">=</span><span class="n">location_code</span><span class="p">)</span>        
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">location</span><span class="o">.</span><span class="n">location</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">location</span><span class="o">.</span><span class="n">location</span> <span class="o">=</span> <span class="n">location</span><span class="o">.</span><span class="n">zone</span><span class="o">.</span><span class="n">latlong</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">location</span><span class="o">.</span><span class="n">dash_template</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">template</span> <span class="o">=</span> <span class="n">location</span><span class="o">.</span><span class="n">dash_template</span> <span class="o">+</span> <span class="s">&quot;.html&quot;</span>
+        
+    <span class="k">except</span> <span class="n">Location</span><span class="o">.</span><span class="n">DoesNotExist</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s">&#39;Location </span><span class="si">%s</span><span class="s"> does not exist&#39;</span> <span class="o">%</span> <span class="n">location_code</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="n">Http404</span>            
+
+    <span class="c"># check that zone param and location.zone matches</span>
+    <span class="k">if</span> <span class="n">location</span><span class="o">.</span><span class="n">zone</span><span class="o">.</span><span class="n">code</span> <span class="o">!=</span> <span class="n">zone_code</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s">&#39;Zones does not match  </span><span class="si">%s</span><span class="s"> vs </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">location</span><span class="o">.</span><span class="n">zone</span><span class="o">.</span><span class="n">code</span> <span class="p">,</span> <span class="n">zone_code</span><span class="p">)</span> <span class="p">)</span>
+        <span class="k">raise</span> <span class="n">Http404</span>                
+
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;sandbox&#39;</span><span class="p">):</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="s">&#39;sandbox.html&#39;</span>
+
+    <span class="n">kwvars</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">&#39;location&#39;</span><span class="p">:</span> <span class="n">location</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">render_to_response</span><span class="p">(</span><span class="n">template</span><span class="p">,</span> <span class="n">kwvars</span><span class="p">,</span> <span class="n">RequestContext</span><span class="p">(</span><span class="n">request</span><span class="p">))</span>
+</div>
+<div class="viewcode-block" id="widget"><a class="viewcode-back" href="../../../modules/seawidgets.views.html#seawidgets.views.dash.widget">[docs]</a><span class="k">def</span> <span class="nf">widget</span><span class="p">(</span><span class="n">request</span><span class="p">,</span><span class="n">name</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Return widget template</span>
+<span class="sd">    Only for development environment. </span>
+<span class="sd">    In production, add the following line into virtualhost configuration:</span>
+<span class="sd">    AliasMatch ^/views/(.*).html /var/www/seaboard/static/widgets/$1/$1.html </span>
+
+<span class="sd">    :param template: Add a custom template.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">serve</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">&#39;widgets/&#39;</span> <span class="o">+</span> <span class="n">name</span> <span class="o">+</span> <span class="s">&#39;/&#39;</span> <span class="o">+</span> <span class="n">name</span> <span class="o">+</span> <span class="s">&#39;.html&#39;</span> <span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="status"><a class="viewcode-back" href="../../../modules/seawidgets.views.html#seawidgets.views.dash.status">[docs]</a><span class="k">def</span> <span class="nf">status</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">    Check if server and database is ok. </span>
+<span class="sd">    If its ok, the seaboard panel will refresh the page    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">location_list</span> <span class="o">=</span> <span class="n">Location</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;ok&#39;</span><span class="p">:</span> <span class="s">&#39;server up and running!&#39;</span><span class="p">}</span>    
+    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;error&#39;</span><span class="p">:</span> <span class="s">&#39;database lookup did not work&#39;</span><span class="p">}</span>    
+
+    <span class="n">json</span> <span class="o">=</span> <span class="n">simplejson</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="n">json</span><span class="p">,</span> <span class="n">mimetype</span><span class="o">=</span><span class="s">&#39;application/json&#39;</span><span class="p">)</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">seaboard  documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+<div class="footer">
+    &copy; Copyright 2013, Biel Frontera. SOCIB.
+  Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2b1.
+  <br />Theme based on <a href="http://readthedocs.org/">Read The Docs</a>
+
+</div>
+
+
+
+
+
+  </body>
+</html>

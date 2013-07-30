@@ -1,0 +1,19 @@
+seaboard Package
+================
+
+:mod:`local_settings` Module
+----------------------------
+
+.. automodule:: seaboard.local_settings
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+:mod:`settings` Module
+----------------------
+
+.. automodule:: seaboard.settings
+    :members:
+    :undoc-members:
+    :show-inheritance:
+

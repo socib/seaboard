@@ -1,0 +1,167 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+
+    <title>seawidgets.functions.utils &mdash; seaboard  documentation</title>
+
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;"/>
+
+
+    
+    <link rel="stylesheet" href="../../../_static/rtd.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../../../../_static/searchtools.js"></script>
+    <link rel="top" title="seaboard  documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">seaboard  documentation</a> &raquo;</li>
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for seawidgets.functions.utils</h1><div class="highlight"><pre>
+<span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">from</span> <span class="nn">dateutil</span> <span class="kn">import</span> <span class="n">tz</span>
+<span class="kn">import</span> <span class="nn">imghdr</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+
+<span class="c"># IMAGE AND PATH FUNCTIONS</span>
+<div class="viewcode-block" id="isimage"><a class="viewcode-back" href="../../../modules/seawidgets.functions.html#seawidgets.functions.utils.isimage">[docs]</a><span class="k">def</span> <span class="nf">isimage</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">imghdr</span><span class="o">.</span><span class="n">what</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>    
+    <span class="k">except</span> <span class="ne">Exception</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">False</span>
+
+<span class="c"># DATE FUNCTIONS</span></div>
+<div class="viewcode-block" id="unix_time"><a class="viewcode-back" href="../../../modules/seawidgets.functions.html#seawidgets.functions.utils.unix_time">[docs]</a><span class="k">def</span> <span class="nf">unix_time</span><span class="p">(</span><span class="n">dt</span><span class="p">):</span>
+    <span class="n">epoch</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcfromtimestamp</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">delta</span> <span class="o">=</span> <span class="n">dt</span> <span class="o">-</span> <span class="n">epoch</span>
+    <span class="k">return</span> <span class="n">delta</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">()</span>
+</div>
+<div class="viewcode-block" id="unix_time_millis"><a class="viewcode-back" href="../../../modules/seawidgets.functions.html#seawidgets.functions.utils.unix_time_millis">[docs]</a><span class="k">def</span> <span class="nf">unix_time_millis</span><span class="p">(</span><span class="n">dt</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">unix_time</span><span class="p">(</span><span class="n">dt</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1000.0</span>
+</div>
+<div class="viewcode-block" id="utc_to_local"><a class="viewcode-back" href="../../../modules/seawidgets.functions.html#seawidgets.functions.utils.utc_to_local">[docs]</a><span class="k">def</span> <span class="nf">utc_to_local</span><span class="p">(</span><span class="n">dt</span><span class="p">):</span>
+    <span class="n">local</span> <span class="o">=</span> <span class="n">tz</span><span class="o">.</span><span class="n">tzlocal</span><span class="p">()</span>
+    <span class="n">UTC</span> <span class="o">=</span> <span class="n">tz</span><span class="o">.</span><span class="n">gettz</span><span class="p">(</span><span class="s">&#39;UTC&#39;</span><span class="p">)</span>
+    <span class="n">dt</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">tzinfo</span><span class="o">=</span><span class="n">UTC</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">dt</span><span class="o">.</span><span class="n">astimezone</span><span class="p">(</span><span class="n">local</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="strftime_from_millis"><a class="viewcode-back" href="../../../modules/seawidgets.functions.html#seawidgets.functions.utils.strftime_from_millis">[docs]</a><span class="k">def</span> <span class="nf">strftime_from_millis</span><span class="p">(</span><span class="n">milis</span><span class="p">,</span><span class="n">format</span><span class="o">=</span><span class="s">&#39;</span><span class="si">%d</span><span class="s">/%m/%Y %H:%M&#39;</span><span class="p">):</span>    
+    <span class="n">epoch</span> <span class="o">=</span> <span class="n">utc_to_local</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcfromtimestamp</span><span class="p">(</span><span class="n">milis</span><span class="o">/</span><span class="mf">1000.0</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">epoch</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">format</span><span class="p">)</span>    
+
+<span class="c"># from http://codrspace.com/glenbot/tail-a-file-in-python/    </span></div>
+<div class="viewcode-block" id="tail"><a class="viewcode-back" href="../../../modules/seawidgets.functions.html#seawidgets.functions.utils.tail">[docs]</a><span class="k">def</span> <span class="nf">tail</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">lines</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">_buffer</span><span class="o">=</span><span class="mi">1024</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Tail a file and get X lines from the end&quot;&quot;&quot;</span>
+    <span class="c"># place holder for the lines found</span>
+    <span class="n">lines_found</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c"># block counter will be multiplied by buffer</span>
+    <span class="c"># to get the block size from the end</span>
+    <span class="n">block_counter</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+
+    <span class="c"># loop until we find X lines</span>
+    <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">lines_found</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">lines</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="n">block_counter</span> <span class="o">*</span> <span class="n">_buffer</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">SEEK_END</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">IOError</span><span class="p">:</span>  <span class="c"># either file is too small, or too many lines requested</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">lines_found</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+            <span class="k">break</span>
+
+        <span class="n">lines_found</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+
+        <span class="c"># we found enough lines, get out</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">lines_found</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">lines</span><span class="p">:</span>
+            <span class="k">break</span>
+
+        <span class="c"># decrement the block counter to get the</span>
+        <span class="c"># next X bytes</span>
+        <span class="n">block_counter</span> <span class="o">-=</span> <span class="mi">1</span>
+
+    <span class="k">return</span> <span class="n">lines_found</span><span class="p">[</span><span class="o">-</span><span class="n">lines</span><span class="p">:]</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">seaboard  documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+<div class="footer">
+    &copy; Copyright 2013, Biel Frontera. SOCIB.
+  Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2b1.
+  <br />Theme based on <a href="http://readthedocs.org/">Read The Docs</a>
+
+</div>
+
+
+
+
+
+  </body>
+</html>

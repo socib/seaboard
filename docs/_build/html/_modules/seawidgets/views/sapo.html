@@ -1,0 +1,210 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+
+    <title>seawidgets.views.sapo &mdash; seaboard  documentation</title>
+
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;"/>
+
+
+    
+    <link rel="stylesheet" href="../../../_static/rtd.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../../../../_static/searchtools.js"></script>
+    <link rel="top" title="seaboard  documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">seaboard  documentation</a> &raquo;</li>
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for seawidgets.views.sapo</h1><div class="highlight"><pre>
+<span class="c"># coding: utf-8</span>
+
+<span class="kn">from</span> <span class="nn">django.core.urlresolvers</span> <span class="kn">import</span> <span class="n">reverse</span>
+<span class="kn">from</span> <span class="nn">django.template</span> <span class="kn">import</span> <span class="n">RequestContext</span>
+<span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">Http404</span><span class="p">,</span> <span class="n">HttpResponse</span><span class="p">,</span> <span class="n">HttpResponseForbidden</span><span class="p">,</span> <span class="n">HttpResponseServerError</span><span class="p">,</span> <span class="n">HttpResponseRedirect</span>
+<span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render_to_response</span><span class="p">,</span> <span class="n">get_object_or_404</span><span class="p">,</span> <span class="n">render</span>
+<span class="kn">from</span> <span class="nn">django.utils</span> <span class="kn">import</span> <span class="n">simplejson</span>
+<span class="kn">from</span> <span class="nn">django.conf</span> <span class="kn">import</span> <span class="n">settings</span>
+
+<span class="kn">import</span> <span class="nn">seawidgets.functions.utils</span> <span class="kn">as</span> <span class="nn">_utils</span>
+
+<span class="kn">import</span> <span class="nn">datetime</span><span class="o">,</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">choice</span>
+<span class="kn">from</span> <span class="nn">os.path</span> <span class="kn">import</span> <span class="n">isfile</span><span class="p">,</span> <span class="n">isdir</span><span class="p">,</span> <span class="n">join</span><span class="p">,</span> <span class="n">getmtime</span>
+<span class="kn">from</span> <span class="nn">seawidgets.models</span> <span class="kn">import</span> <span class="n">Zone</span>
+
+<span class="kn">import</span> <span class="nn">urllib2</span>
+<span class="kn">from</span> <span class="nn">cStringIO</span> <span class="kn">import</span> <span class="n">StringIO</span>
+<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span><span class="p">,</span> <span class="n">ImageFile</span> 
+
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="latest"><a class="viewcode-back" href="../../../modules/seawidgets.views.html#seawidgets.views.sapo.latest">[docs]</a><span class="k">def</span> <span class="nf">latest</span><span class="p">(</span><span class="n">request</span><span class="p">,</span><span class="n">location</span><span class="p">):</span>    
+    <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="n">location</span> <span class="o">==</span> <span class="s">&#39;socib&#39;</span><span class="p">:</span>
+        <span class="n">location</span> <span class="o">=</span> <span class="n">choice</span><span class="p">([</span><span class="s">&#39;snb&#39;</span><span class="p">,</span><span class="s">&#39;pdp&#39;</span><span class="p">,</span><span class="s">&#39;clm&#39;</span><span class="p">])</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">zone</span> <span class="o">=</span> <span class="n">Zone</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">code__iexact</span><span class="o">=</span><span class="n">location</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">Zone</span><span class="o">.</span><span class="n">DoesNotExist</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">Http404</span>  
+
+    <span class="c"># get datetime of last image generation</span>
+    <span class="n">page</span> <span class="o">=</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">zone</span><span class="o">.</span><span class="n">sapo_image_path</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>    
+    <span class="n">position</span> <span class="o">=</span> <span class="n">page</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">today</span><span class="p">()</span><span class="o">.</span><span class="n">year</span><span class="p">))</span>
+    <span class="n">images_hour_creation</span> <span class="o">=</span> <span class="n">page</span><span class="p">[</span><span class="n">position</span><span class="o">+</span><span class="mi">5</span><span class="p">:</span><span class="n">position</span><span class="o">+</span><span class="mi">7</span><span class="p">]</span>
+
+    <span class="n">forecast_basehour</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">if</span> <span class="nb">int</span><span class="p">(</span><span class="n">images_hour_creation</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">14</span><span class="p">:</span>
+        <span class="n">forecast_basehour</span> <span class="o">=</span> <span class="mi">12</span>
+
+    <span class="n">forecast_basedatetime</span> <span class="o">=</span> <span class="n">get_time_prediction</span><span class="p">(</span><span class="n">forecast_basehour</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">hour</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
+        <span class="c"># download image</span>
+        <span class="n">image_destination</span> <span class="o">=</span> <span class="s">&#39;CACHE/img/sapo_&#39;</span> <span class="o">+</span> <span class="n">location</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">forecast_basehour</span><span class="p">)</span><span class="o">.</span><span class="n">zfill</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;_hs&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">hour</span><span class="p">)</span><span class="o">.</span><span class="n">zfill</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;.jpg&#39;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">file_exists_and_not_old</span><span class="p">(</span><span class="n">join</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">STATICFILES_DIRS</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">image_destination</span><span class="p">)):</span>        
+            <span class="n">process_image</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%s</span><span class="s">hs</span><span class="si">%s</span><span class="s">.jpg&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">zone</span><span class="o">.</span><span class="n">sapo_image_path</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">hour</span><span class="p">)</span><span class="o">.</span><span class="n">zfill</span><span class="p">(</span><span class="mi">2</span><span class="p">)),</span> <span class="n">image_destination</span><span class="p">)</span>       
+
+        <span class="n">image_forecast_time</span> <span class="o">=</span> <span class="n">forecast_basedatetime</span> <span class="o">+</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="n">hour</span><span class="p">)</span>
+        <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">({</span> <span class="s">&#39;image&#39;</span><span class="p">:</span> <span class="s">&#39;http://&#39;</span> <span class="o">+</span> <span class="n">request</span><span class="o">.</span><span class="n">META</span><span class="p">[</span><span class="s">&#39;HTTP_HOST&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">settings</span><span class="o">.</span><span class="n">STATIC_URL</span>  <span class="o">+</span> <span class="n">image_destination</span> <span class="p">,</span> <span class="s">&#39;title&#39;</span><span class="p">:</span> <span class="s">&#39;Waves at </span><span class="si">%s</span><span class="s">&#39;</span><span class="o">%</span> <span class="n">_utils</span><span class="o">.</span><span class="n">utc_to_local</span><span class="p">(</span><span class="n">image_forecast_time</span><span class="p">)</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%d</span><span class="s">/%m/%Y %H:%M&#39;</span><span class="p">)</span> <span class="p">})</span>
+
+    <span class="n">json</span> <span class="o">=</span> <span class="n">simplejson</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="n">json</span><span class="p">,</span> <span class="n">mimetype</span><span class="o">=</span><span class="s">&#39;application/json&#39;</span><span class="p">)</span>
+
+<span class="c"># FUNCTIONS</span>
+</div>
+<div class="viewcode-block" id="file_exists_and_not_old"><a class="viewcode-back" href="../../../modules/seawidgets.views.html#seawidgets.views.sapo.file_exists_and_not_old">[docs]</a><span class="k">def</span> <span class="nf">file_exists_and_not_old</span><span class="p">(</span><span class="n">filepath</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">isfile</span><span class="p">(</span><span class="n">filepath</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">False</span>
+
+    <span class="n">created</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">fromtimestamp</span><span class="p">(</span><span class="n">getmtime</span><span class="p">(</span><span class="n">filepath</span><span class="p">))</span>
+    <span class="n">old</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="n">created</span>
+    <span class="k">if</span> <span class="n">old</span><span class="o">.</span><span class="n">days</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">True</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">False</span>
+</div>
+<div class="viewcode-block" id="get_time_prediction"><a class="viewcode-back" href="../../../modules/seawidgets.views.html#seawidgets.views.sapo.get_time_prediction">[docs]</a><span class="k">def</span> <span class="nf">get_time_prediction</span><span class="p">(</span><span class="n">forecast_basehour</span><span class="p">):</span>    
+    <span class="n">base_prediction</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">forecast_basehour</span> <span class="o">==</span> <span class="mi">12</span> <span class="ow">and</span> <span class="n">today</span><span class="o">.</span><span class="n">hour</span> <span class="o">&lt;</span> <span class="mi">12</span><span class="p">:</span>
+        <span class="n">base_prediction</span> <span class="o">=</span> <span class="n">base_prediction</span> <span class="o">-</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="c"># yesterday</span>
+
+    <span class="k">if</span> <span class="n">forecast_basehour</span> <span class="o">==</span> <span class="mi">12</span><span class="p">:</span>
+        <span class="n">base_prediction</span> <span class="o">=</span> <span class="n">base_prediction</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">hour</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span><span class="n">minute</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">second</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">base_prediction</span> <span class="o">=</span> <span class="n">base_prediction</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">hour</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">minute</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">second</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">base_prediction</span> 
+</div>
+<div class="viewcode-block" id="process_image"><a class="viewcode-back" href="../../../modules/seawidgets.views.html#seawidgets.views.sapo.process_image">[docs]</a><span class="k">def</span> <span class="nf">process_image</span><span class="p">(</span><span class="n">url</span><span class="p">,</span><span class="n">destination</span><span class="p">):</span>
+    <span class="n">inStream</span> <span class="o">=</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">ImageFile</span><span class="o">.</span><span class="n">Parser</span><span class="p">()</span>
+    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">inStream</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">1024</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">s</span><span class="p">:</span>
+            <span class="k">break</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">feed</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+
+    <span class="n">inImage</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="c"># convert to RGB to avoid error with png and tiffs</span>
+    <span class="k">if</span> <span class="n">inImage</span><span class="o">.</span><span class="n">mode</span> <span class="o">!=</span> <span class="s">&quot;RGB&quot;</span><span class="p">:</span>
+        <span class="n">inImage</span> <span class="o">=</span> <span class="n">inImage</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s">&quot;RGB&quot;</span><span class="p">)</span>
+
+    <span class="n">crop_dimensions</span> <span class="o">=</span> <span class="p">(</span><span class="mi">123</span><span class="p">,</span><span class="mi">169</span><span class="p">,</span><span class="mi">452</span><span class="p">,</span><span class="mi">430</span><span class="p">)</span> 
+    <span class="k">if</span> <span class="n">url</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">&#39;sapo_n3&#39;</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="c"># menorca images have another dimensions</span>
+        <span class="n">crop_dimensions</span> <span class="o">=</span> <span class="p">(</span><span class="mi">130</span><span class="p">,</span><span class="mi">205</span><span class="p">,</span><span class="mi">456</span><span class="p">,</span><span class="mi">434</span><span class="p">)</span> 
+    <span class="k">elif</span> <span class="n">url</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">&#39;sapo_n1&#39;</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="c"># eivissa images have another dimensions</span>
+        <span class="n">crop_dimensions</span> <span class="o">=</span> <span class="p">(</span><span class="mi">130</span><span class="p">,</span><span class="mi">158</span><span class="p">,</span><span class="mi">350</span><span class="p">,</span><span class="mi">430</span><span class="p">)</span>         
+    <span class="n">inImage</span><span class="o">.</span><span class="n">crop</span><span class="p">(</span><span class="n">crop_dimensions</span><span class="p">)</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">STATICFILES_DIRS</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="o">+</span> <span class="n">destination</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">inImage</span>
+</pre></div></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">seaboard  documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+<div class="footer">
+    &copy; Copyright 2013, Biel Frontera. SOCIB.
+  Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2b1.
+  <br />Theme based on <a href="http://readthedocs.org/">Read The Docs</a>
+
+</div>
+
+
+
+
+
+  </body>
+</html>

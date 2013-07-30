@@ -1,0 +1,656 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+
+    <title>views Package &mdash; seaboard  documentation</title>
+
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;"/>
+
+
+    
+    <link rel="stylesheet" href="../_static/rtd.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/searchtools.js"></script>
+    <link rel="top" title="seaboard  documentation" href="../index.html" />
+    <link rel="up" title="seawidgets Package" href="seawidgets.html" />
+    <link rel="prev" title="functions Package" href="seawidgets.functions.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="seawidgets.functions.html" title="functions Package"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">seaboard  documentation</a> &raquo;</li>
+          <li><a href="seawidgets.html" accesskey="U">seawidgets Package</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="views-package">
+<h1>views Package<a class="headerlink" href="#views-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-seawidgets.views.beach">
+<span id="beach-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">beach</span></tt> Module<a class="headerlink" href="#module-seawidgets.views.beach" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="seawidgets.views.beach.platgesdebalears_status">
+<tt class="descclassname">seawidgets.views.beach.</tt><tt class="descname">platgesdebalears_status</tt><big>(</big><em>request</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/seawidgets/views/beach.html#platgesdebalears_status"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#seawidgets.views.beach.platgesdebalears_status" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse platgesdebalears.com to get beach status.
+Specific URL for the beach is stored in location object in the database.</p>
+<p>The response is a JSON like this:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span>
+    <span class="s">&quot;status&quot;</span><span class="p">:</span> <span class="s">&quot;estPermitido&quot;</span><span class="p">,</span>
+    <span class="s">&quot;flagMessage&quot;</span><span class="p">:</span> <span class="s">&quot;Green flag&quot;</span><span class="p">,</span>
+    <span class="s">&quot;date&quot;</span><span class="p">:</span> <span class="s">&quot;25/07/2013&quot;</span><span class="p">,</span>
+    <span class="s">&quot;comment&quot;</span><span class="p">:</span> <span class="s">&quot;Opening service&quot;</span><span class="p">,</span>
+    <span class="s">&quot;time&quot;</span><span class="p">:</span> <span class="s">&quot;10:00&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The result is cached 30 minutes.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-seawidgets.views.beamon">
+<span id="beamon-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">beamon</span></tt> Module<a class="headerlink" href="#module-seawidgets.views.beamon" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="seawidgets.views.beamon.latest">
+<tt class="descclassname">seawidgets.views.beamon.</tt><tt class="descname">latest</tt><big>(</big><em>request</em>, <em>location</em>, <em>cameras</em>, <em>folder_suffix=''</em>, <em>images_folder='latest_images'</em><big>)</big><a class="reference internal" href="../_modules/seawidgets/views/beamon.html#latest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#seawidgets.views.beamon.latest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get JSON of latest image of a list of cameras. It returns a JSON array. Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">[</span>
+    <span class="p">{</span>
+        <span class="s">&quot;image_tn&quot;</span><span class="p">:</span> <span class="s">&quot;http://www.socib.es/users/mobims/imageArchive/clm/sirena/clm_tn/latest_images/c01_snap.jpeg&quot;</span><span class="p">,</span>
+        <span class="s">&quot;camera&quot;</span><span class="p">:</span> <span class="s">&quot;clm_c01&quot;</span><span class="p">,</span>
+        <span class="s">&quot;image&quot;</span><span class="p">:</span> <span class="s">&quot;http://www.socib.es/users/mobims/imageArchive/clm/sirena/clm/latest_images/c01_snap.png&quot;</span><span class="p">,</span>
+        <span class="s">&quot;time&quot;</span><span class="p">:</span> <span class="s">&quot;29/07/2013 14:10&quot;</span><span class="p">,</span>
+        <span class="s">&quot;title&quot;</span><span class="p">:</span> <span class="s">&quot;Cala Millor - c01: 29/07/2013 14:10&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s">&quot;image_tn&quot;</span><span class="p">:</span> <span class="s">&quot;http://www.socib.es/users/mobims/imageArchive/clm/sirena/clm_tn/latest_images/c02_snap.jpeg&quot;</span><span class="p">,</span>
+        <span class="s">&quot;camera&quot;</span><span class="p">:</span> <span class="s">&quot;clm_c02&quot;</span><span class="p">,</span>
+        <span class="s">&quot;image&quot;</span><span class="p">:</span> <span class="s">&quot;http://www.socib.es/users/mobims/imageArchive/clm/sirena/clm/latest_images/c02_snap.png&quot;</span><span class="p">,</span>
+        <span class="s">&quot;time&quot;</span><span class="p">:</span> <span class="s">&quot;29/07/2013 14:10&quot;</span><span class="p">,</span>
+        <span class="s">&quot;title&quot;</span><span class="p">:</span> <span class="s">&quot;Cala Millor - c02: 29/07/2013 14:10&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s">&quot;image_tn&quot;</span><span class="p">:</span> <span class="s">&quot;http://www.socib.es/users/mobims/imageArchive/clm/sirena/clm_tn/latest_images/c03_snap.jpeg&quot;</span><span class="p">,</span>
+        <span class="s">&quot;camera&quot;</span><span class="p">:</span> <span class="s">&quot;clm_c03&quot;</span><span class="p">,</span>
+        <span class="s">&quot;image&quot;</span><span class="p">:</span> <span class="s">&quot;http://www.socib.es/users/mobims/imageArchive/clm/sirena/clm/latest_images/c03_snap.png&quot;</span><span class="p">,</span>
+        <span class="s">&quot;time&quot;</span><span class="p">:</span> <span class="s">&quot;29/07/2013 14:10&quot;</span><span class="p">,</span>
+        <span class="s">&quot;title&quot;</span><span class="p">:</span> <span class="s">&quot;Cala Millor - c03: 29/07/2013 14:10&quot;</span>
+    <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>location</strong> &#8211; location code</li>
+<li><strong>cameras</strong> &#8211; list of cameras separated by commas (or &#8216;all&#8217; to show all cameras of this location)</li>
+<li><strong>folder_suffix</strong> &#8211; optional. Suffix for base folder (useful to get thumbnails)</li>
+<li><strong>images_folder</strong> &#8211; optional. Folder that contains images (useful to get resized images instead original)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">JSON array.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="seawidgets.views.beamon.latest_mobile">
+<tt class="descclassname">seawidgets.views.beamon.</tt><tt class="descname">latest_mobile</tt><big>(</big><em>request</em>, <em>location</em>, <em>cameras</em><big>)</big><a class="reference internal" href="../_modules/seawidgets/views/beamon.html#latest_mobile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#seawidgets.views.beamon.latest_mobile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get JSON of latest image of a list of cameras. Select resized images.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>location</strong> &#8211; location code</li>
+<li><strong>cameras</strong> &#8211; list of cameras separated by commas (or &#8216;all&#8217; to show all cameras of this location)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="seawidgets.views.beamon.latest_mobile_tiny">
+<tt class="descclassname">seawidgets.views.beamon.</tt><tt class="descname">latest_mobile_tiny</tt><big>(</big><em>request</em>, <em>location</em>, <em>cameras</em><big>)</big><a class="reference internal" href="../_modules/seawidgets/views/beamon.html#latest_mobile_tiny"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#seawidgets.views.beamon.latest_mobile_tiny" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get JSON of latest image of a list of cameras. Select thumbnail of resized images for mobile.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>location</strong> &#8211; location code</li>
+<li><strong>cameras</strong> &#8211; list of cameras separated by commas (or &#8216;all&#8217; to show all cameras of this location)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="seawidgets.views.beamon.latest_tiny">
+<tt class="descclassname">seawidgets.views.beamon.</tt><tt class="descname">latest_tiny</tt><big>(</big><em>request</em>, <em>location</em>, <em>cameras</em><big>)</big><a class="reference internal" href="../_modules/seawidgets/views/beamon.html#latest_tiny"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#seawidgets.views.beamon.latest_tiny" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get JSON of latest thumbnail image of a list of cameras.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>location</strong> &#8211; location code</li>
+<li><strong>cameras</strong> &#8211; list of cameras separated by commas (or &#8216;all&#8217; to show all cameras of this location)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="seawidgets.views.beamon.today">
+<tt class="descclassname">seawidgets.views.beamon.</tt><tt class="descname">today</tt><big>(</big><em>request</em>, <em>location</em>, <em>cameras</em>, <em>folder_suffix=''</em><big>)</big><a class="reference internal" href="../_modules/seawidgets/views/beamon.html#today"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#seawidgets.views.beamon.today" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get JSON of thumbnail images of a list of cameras. For each camera, it returns all images from yesterday and today. Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">[</span>
+    <span class="p">{</span>
+        <span class="s">&quot;image&quot;</span><span class="p">:</span> <span class="s">&quot;http://www.socib.es/users/mobims/imageArchive/clm/sirena/clm/c01/2013/07/28/clm_s_01_2013-07-28-04-00.png&quot;</span><span class="p">,</span>
+        <span class="s">&quot;camera&quot;</span><span class="p">:</span> <span class="s">&quot;clm_c01&quot;</span><span class="p">,</span>
+        <span class="s">&quot;title&quot;</span><span class="p">:</span> <span class="s">&quot;Cala Millor - c01: 28/07/2013 06:00&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s">&quot;image&quot;</span><span class="p">:</span> <span class="s">&quot;http://www.socib.es/users/mobims/imageArchive/clm/sirena/clm/c01/2013/07/28/clm_s_01_2013-07-28-05-00.png&quot;</span><span class="p">,</span>
+        <span class="s">&quot;camera&quot;</span><span class="p">:</span> <span class="s">&quot;clm_c01&quot;</span><span class="p">,</span>
+        <span class="s">&quot;title&quot;</span><span class="p">:</span> <span class="s">&quot;Cala Millor - c01: 28/07/2013 07:00&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s">&quot;image&quot;</span><span class="p">:</span> <span class="s">&quot;http://www.socib.es/users/mobims/imageArchive/clm/sirena/clm/c01/2013/07/28/clm_s_01_2013-07-28-06-00.png&quot;</span><span class="p">,</span>
+        <span class="s">&quot;camera&quot;</span><span class="p">:</span> <span class="s">&quot;clm_c01&quot;</span><span class="p">,</span>
+        <span class="s">&quot;title&quot;</span><span class="p">:</span> <span class="s">&quot;Cala Millor - c01: 28/07/2013 08:00&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s">&quot;image&quot;</span><span class="p">:</span> <span class="s">&quot;http://www.socib.es/users/mobims/imageArchive/clm/sirena/clm/c01/2013/07/28/clm_s_01_2013-07-28-07-00.png&quot;</span><span class="p">,</span>
+        <span class="s">&quot;camera&quot;</span><span class="p">:</span> <span class="s">&quot;clm_c01&quot;</span><span class="p">,</span>
+        <span class="s">&quot;title&quot;</span><span class="p">:</span> <span class="s">&quot;Cala Millor - c01: 28/07/2013 09:00&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="p">[</span><span class="o">...</span><span class="p">]</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s">&quot;image&quot;</span><span class="p">:</span> <span class="s">&quot;http://www.socib.es/users/mobims/imageArchive/clm/sirena/clm/c01/2013/07/29/clm_s_01_2013-07-29-12-00.png&quot;</span><span class="p">,</span>
+        <span class="s">&quot;camera&quot;</span><span class="p">:</span> <span class="s">&quot;clm_c01&quot;</span><span class="p">,</span>
+        <span class="s">&quot;title&quot;</span><span class="p">:</span> <span class="s">&quot;Cala Millor - c01: 29/07/2013 14:00&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s">&quot;image&quot;</span><span class="p">:</span> <span class="s">&quot;http://www.socib.es/users/mobims/imageArchive/clm/sirena/clm/c01/2013/07/29/clm_s_01_2013-07-29-13-00.png&quot;</span><span class="p">,</span>
+        <span class="s">&quot;camera&quot;</span><span class="p">:</span> <span class="s">&quot;clm_c01&quot;</span><span class="p">,</span>
+        <span class="s">&quot;title&quot;</span><span class="p">:</span> <span class="s">&quot;Cala Millor - c01: 29/07/2013 15:00&quot;</span>
+    <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>location</strong> &#8211; location code</li>
+<li><strong>cameras</strong> &#8211; list of cameras separated by commas (or &#8216;all&#8217; to show all cameras of this location)</li>
+<li><strong>folder_suffix</strong> &#8211; optional. Suffix for base folder (useful to get thumbnails)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="seawidgets.views.beamon.today_tiny">
+<tt class="descclassname">seawidgets.views.beamon.</tt><tt class="descname">today_tiny</tt><big>(</big><em>request</em>, <em>location</em>, <em>cameras</em><big>)</big><a class="reference internal" href="../_modules/seawidgets/views/beamon.html#today_tiny"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#seawidgets.views.beamon.today_tiny" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get JSON of thumbnail images of a list of cameras. For each camera, it returns all images from yesterday and today.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>location</strong> &#8211; location code</li>
+<li><strong>cameras</strong> &#8211; list of cameras separated by commas (or &#8216;all&#8217; to show all cameras of this location)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-seawidgets.views.dash">
+<span id="dash-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">dash</span></tt> Module<a class="headerlink" href="#module-seawidgets.views.dash" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="seawidgets.views.dash.dash">
+<tt class="descclassname">seawidgets.views.dash.</tt><tt class="descname">dash</tt><big>(</big><em>request</em>, <em>zone_code='socib'</em>, <em>location_code=''</em>, <em>template='dash.html'</em><big>)</big><a class="reference internal" href="../_modules/seawidgets/views/dash.html#dash"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#seawidgets.views.dash.dash" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default page for seaboard-seawidgets</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>zone_code</strong> &#8211; </li>
+<li><strong>location_code</strong> &#8211; </li>
+<li><strong>template</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="seawidgets.views.dash.status">
+<tt class="descclassname">seawidgets.views.dash.</tt><tt class="descname">status</tt><big>(</big><em>request</em><big>)</big><a class="reference internal" href="../_modules/seawidgets/views/dash.html#status"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#seawidgets.views.dash.status" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if server and database is ok.
+If its ok, the seaboard panel will refresh the page.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="seawidgets.views.dash.widget">
+<tt class="descclassname">seawidgets.views.dash.</tt><tt class="descname">widget</tt><big>(</big><em>request</em>, <em>name</em><big>)</big><a class="reference internal" href="../_modules/seawidgets/views/dash.html#widget"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#seawidgets.views.dash.widget" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return widget template
+Only for development environment.
+In production, add the following line into virtualhost configuration:</p>
+<div class="highlight-python"><pre>AliasMatch ^/views/(.*).html /var/www/seaboard/static/widgets/$1/$1.html</pre>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> &#8211; widget name.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-seawidgets.views.radar">
+<span id="radar-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">radar</span></tt> Module<a class="headerlink" href="#module-seawidgets.views.radar" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="seawidgets.views.radar.animation">
+<tt class="descclassname">seawidgets.views.radar.</tt><tt class="descname">animation</tt><big>(</big><em>request</em>, <em>location_code</em><big>)</big><a class="reference internal" href="../_modules/seawidgets/views/radar.html#animation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#seawidgets.views.radar.animation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get an animated gif for the observation of the radar for the last 24 hours. It gets the image from the cache (1 hour) or directly from thredds.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>location_code</strong> &#8211; for future use. Now, it will be used only for galfi.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-seawidgets.views.rss">
+<span id="rss-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">rss</span></tt> Module<a class="headerlink" href="#module-seawidgets.views.rss" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="seawidgets.views.rss.read">
+<tt class="descclassname">seawidgets.views.rss.</tt><tt class="descname">read</tt><big>(</big><em>request</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/seawidgets/views/rss.html#read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#seawidgets.views.rss.read" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse RSS feed given inside &#8216;url&#8217; get param. It returns a JSON array with the title and link of each entry.
+The result is cached for 2 hours.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-seawidgets.views.sapo">
+<span id="sapo-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">sapo</span></tt> Module<a class="headerlink" href="#module-seawidgets.views.sapo" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="seawidgets.views.sapo.latest">
+<tt class="descclassname">seawidgets.views.sapo.</tt><tt class="descname">latest</tt><big>(</big><em>request</em>, <em>location</em><big>)</big><a class="reference internal" href="../_modules/seawidgets/views/sapo.html#latest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#seawidgets.views.sapo.latest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get JSON array of SAPO forecast images of a given location. The images are previously croped (and cached for 24 hours).
+Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">[</span>
+    <span class="p">{</span>
+        <span class="s">&quot;image&quot;</span><span class="p">:</span> <span class="s">&quot;http://seaboardtest.socib.es/static/CACHE/img/sapo_snb00_hs06.jpg&quot;</span><span class="p">,</span>
+        <span class="s">&quot;title&quot;</span><span class="p">:</span> <span class="s">&quot;Waves at 29/07/2013 08:00&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s">&quot;image&quot;</span><span class="p">:</span> <span class="s">&quot;http://seaboardtest.socib.es/static/CACHE/img/sapo_snb00_hs08.jpg&quot;</span><span class="p">,</span>
+        <span class="s">&quot;title&quot;</span><span class="p">:</span> <span class="s">&quot;Waves at 29/07/2013 10:00&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s">&quot;image&quot;</span><span class="p">:</span> <span class="s">&quot;http://seaboardtest.socib.es/static/CACHE/img/sapo_snb00_hs10.jpg&quot;</span><span class="p">,</span>
+        <span class="s">&quot;title&quot;</span><span class="p">:</span> <span class="s">&quot;Waves at 29/07/2013 12:00&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s">&quot;image&quot;</span><span class="p">:</span> <span class="s">&quot;http://seaboardtest.socib.es/static/CACHE/img/sapo_snb00_hs12.jpg&quot;</span><span class="p">,</span>
+        <span class="s">&quot;title&quot;</span><span class="p">:</span> <span class="s">&quot;Waves at 29/07/2013 14:00&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s">&quot;image&quot;</span><span class="p">:</span> <span class="s">&quot;http://seaboardtest.socib.es/static/CACHE/img/sapo_snb00_hs14.jpg&quot;</span><span class="p">,</span>
+        <span class="s">&quot;title&quot;</span><span class="p">:</span> <span class="s">&quot;Waves at 29/07/2013 16:00&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s">&quot;image&quot;</span><span class="p">:</span> <span class="s">&quot;http://seaboardtest.socib.es/static/CACHE/img/sapo_snb00_hs16.jpg&quot;</span><span class="p">,</span>
+        <span class="s">&quot;title&quot;</span><span class="p">:</span> <span class="s">&quot;Waves at 29/07/2013 18:00&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s">&quot;image&quot;</span><span class="p">:</span> <span class="s">&quot;http://seaboardtest.socib.es/static/CACHE/img/sapo_snb00_hs18.jpg&quot;</span><span class="p">,</span>
+        <span class="s">&quot;title&quot;</span><span class="p">:</span> <span class="s">&quot;Waves at 29/07/2013 20:00&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s">&quot;image&quot;</span><span class="p">:</span> <span class="s">&quot;http://seaboardtest.socib.es/static/CACHE/img/sapo_snb00_hs20.jpg&quot;</span><span class="p">,</span>
+        <span class="s">&quot;title&quot;</span><span class="p">:</span> <span class="s">&quot;Waves at 29/07/2013 22:00&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s">&quot;image&quot;</span><span class="p">:</span> <span class="s">&quot;http://seaboardtest.socib.es/static/CACHE/img/sapo_snb00_hs22.jpg&quot;</span><span class="p">,</span>
+        <span class="s">&quot;title&quot;</span><span class="p">:</span> <span class="s">&quot;Waves at 30/07/2013 00:00&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s">&quot;image&quot;</span><span class="p">:</span> <span class="s">&quot;http://seaboardtest.socib.es/static/CACHE/img/sapo_snb00_hs24.jpg&quot;</span><span class="p">,</span>
+        <span class="s">&quot;title&quot;</span><span class="p">:</span> <span class="s">&quot;Waves at 30/07/2013 02:00&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s">&quot;image&quot;</span><span class="p">:</span> <span class="s">&quot;http://seaboardtest.socib.es/static/CACHE/img/sapo_snb00_hs26.jpg&quot;</span><span class="p">,</span>
+        <span class="s">&quot;title&quot;</span><span class="p">:</span> <span class="s">&quot;Waves at 30/07/2013 04:00&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s">&quot;image&quot;</span><span class="p">:</span> <span class="s">&quot;http://seaboardtest.socib.es/static/CACHE/img/sapo_snb00_hs28.jpg&quot;</span><span class="p">,</span>
+        <span class="s">&quot;title&quot;</span><span class="p">:</span> <span class="s">&quot;Waves at 30/07/2013 06:00&quot;</span>
+    <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="module-seawidgets.views.vessel">
+<span id="vessel-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">vessel</span></tt> Module<a class="headerlink" href="#module-seawidgets.views.vessel" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="seawidgets.views.vessel.current_location">
+<tt class="descclassname">seawidgets.views.vessel.</tt><tt class="descname">current_location</tt><big>(</big><em>request</em><big>)</big><a class="reference internal" href="../_modules/seawidgets/views/vessel.html#current_location"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#seawidgets.views.vessel.current_location" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read last line from posicion.proc file to get current location, speed, depth... It returs a JSON object.
+Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span>
+    <span class="s">&quot;sog&quot;</span><span class="p">:</span> <span class="s">&quot;0.4&quot;</span><span class="p">,</span>
+    <span class="s">&quot;long&quot;</span><span class="p">:</span> <span class="s">&quot;4.698&quot;</span><span class="p">,</span>
+    <span class="s">&quot;depth&quot;</span><span class="p">:</span> <span class="s">&quot;2548.5&quot;</span><span class="p">,</span>
+    <span class="s">&quot;cog&quot;</span><span class="p">:</span> <span class="s">&quot;346.7&quot;</span><span class="p">,</span>
+    <span class="s">&quot;time&quot;</span><span class="p">:</span> <span class="s">&quot;12-07-2013 20:26:42&quot;</span><span class="p">,</span>
+    <span class="s">&quot;lat&quot;</span><span class="p">:</span> <span class="s">&quot;38.836&quot;</span><span class="p">,</span>
+    <span class="s">&quot;speed&quot;</span><span class="p">:</span> <span class="s">&quot;0.4&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="seawidgets.views.vessel.current_meteo">
+<tt class="descclassname">seawidgets.views.vessel.</tt><tt class="descname">current_meteo</tt><big>(</big><em>request</em><big>)</big><a class="reference internal" href="../_modules/seawidgets/views/vessel.html#current_meteo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#seawidgets.views.vessel.current_meteo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get last lecture of meteo station. It returns a JSON object.
+Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span>
+    <span class="s">&quot;wind_speed&quot;</span><span class="p">:</span> <span class="s">&quot;1.613&quot;</span><span class="p">,</span>
+    <span class="s">&quot;wind_speed_mean&quot;</span><span class="p">:</span> <span class="s">&quot;1.613&quot;</span><span class="p">,</span>
+    <span class="s">&quot;air_pressure&quot;</span><span class="p">:</span> <span class="s">&quot;1016.424&quot;</span><span class="p">,</span>
+    <span class="s">&quot;humidity&quot;</span><span class="p">:</span> <span class="s">&quot;87.49&quot;</span><span class="p">,</span>
+    <span class="s">&quot;air_temperature&quot;</span><span class="p">:</span> <span class="s">&quot;19.415&quot;</span><span class="p">,</span>
+    <span class="s">&quot;time&quot;</span><span class="p">:</span> <span class="s">&quot;11-06-2013 07:47:54&quot;</span><span class="p">,</span>
+    <span class="s">&quot;wind_from_direction&quot;</span><span class="p">:</span> <span class="s">&quot;348.125&quot;</span><span class="p">,</span>
+    <span class="s">&quot;sun_radiation&quot;</span><span class="p">:</span> <span class="s">&quot;0&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="seawidgets.views.vessel.current_termosal">
+<tt class="descclassname">seawidgets.views.vessel.</tt><tt class="descname">current_termosal</tt><big>(</big><em>request</em><big>)</big><a class="reference internal" href="../_modules/seawidgets/views/vessel.html#current_termosal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#seawidgets.views.vessel.current_termosal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get last lecture of termosal. It returns a JSON object.
+Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span>
+    <span class="s">&quot;fluor&quot;</span><span class="p">:</span> <span class="s">&quot;0&quot;</span><span class="p">,</span>
+    <span class="s">&quot;sea_water_temperature&quot;</span><span class="p">:</span> <span class="s">&quot;25.581&quot;</span><span class="p">,</span>
+    <span class="s">&quot;sea_water_salinity&quot;</span><span class="p">:</span> <span class="s">&quot;37.333&quot;</span><span class="p">,</span>
+    <span class="s">&quot;sea_water_electrical_conductivity&quot;</span><span class="p">:</span> <span class="s">&quot;56.846&quot;</span><span class="p">,</span>
+    <span class="s">&quot;time&quot;</span><span class="p">:</span> <span class="s">&quot;12-07-2013 20:22:03&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="seawidgets.views.vessel.location">
+<tt class="descclassname">seawidgets.views.vessel.</tt><tt class="descname">location</tt><big>(</big><em>request</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/seawidgets/views/vessel.html#location"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#seawidgets.views.vessel.location" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get JSON arrays of position, speed, depth... taken every 10 minutes from yesterday and today. The result is cached for 25 minutes.
+Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span>
+    <span class="s">&quot;sog&quot;</span><span class="p">:</span> <span class="p">[],</span>
+    <span class="s">&quot;long&quot;</span><span class="p">:</span> <span class="p">[],</span>
+    <span class="s">&quot;depth&quot;</span><span class="p">:</span> <span class="p">[],</span>
+    <span class="s">&quot;cog&quot;</span><span class="p">:</span> <span class="p">[],</span>
+    <span class="s">&quot;time&quot;</span><span class="p">:</span> <span class="p">[],</span>
+    <span class="s">&quot;lat&quot;</span><span class="p">:</span> <span class="p">[],</span>
+    <span class="s">&quot;speed&quot;</span><span class="p">:</span> <span class="p">[]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="seawidgets.views.vessel.meteo">
+<tt class="descclassname">seawidgets.views.vessel.</tt><tt class="descname">meteo</tt><big>(</big><em>request</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/seawidgets/views/vessel.html#meteo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#seawidgets.views.vessel.meteo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get JSON object with arrays of values from meteo station of last two days, taken every 10 minutes.  Cached for 25 minutes.
+Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span>
+    <span class="s">&quot;wind_speed&quot;</span><span class="p">:</span> <span class="p">[],</span>
+    <span class="s">&quot;wind_speed_mean&quot;</span><span class="p">:</span> <span class="p">[],</span>
+    <span class="s">&quot;air_pressure&quot;</span><span class="p">:</span> <span class="p">[],</span>
+    <span class="s">&quot;humidity&quot;</span><span class="p">:</span> <span class="p">[],</span>
+    <span class="s">&quot;air_temperature&quot;</span><span class="p">:</span> <span class="p">[],</span>
+    <span class="s">&quot;time&quot;</span><span class="p">:</span> <span class="p">[],</span>
+    <span class="s">&quot;wind_from_direction&quot;</span><span class="p">:</span> <span class="p">[],</span>
+    <span class="s">&quot;sun_radiation&quot;</span><span class="p">:</span> <span class="p">[]</span>
+<span class="p">}</span>    
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="seawidgets.views.vessel.termosal">
+<tt class="descclassname">seawidgets.views.vessel.</tt><tt class="descname">termosal</tt><big>(</big><em>request</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/seawidgets/views/vessel.html#termosal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#seawidgets.views.vessel.termosal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get JSON object with arrays of values from termosal of last two days, taken every 10 minutes. Cached for 25 minutes.
+Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span>
+    <span class="s">&quot;fluor&quot;</span><span class="p">:</span> <span class="p">[],</span>
+    <span class="s">&quot;sea_water_temperature&quot;</span><span class="p">:</span> <span class="p">[],</span>
+    <span class="s">&quot;sea_water_salinity&quot;</span><span class="p">:</span> <span class="p">[],</span>
+    <span class="s">&quot;sea_water_electrical_conductivity&quot;</span><span class="p">:</span> <span class="p">[],</span>
+    <span class="s">&quot;time&quot;</span><span class="p">:</span> <span class="p">[]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="seawidgets.views.vessel.trajectory">
+<tt class="descclassname">seawidgets.views.vessel.</tt><tt class="descname">trajectory</tt><big>(</big><em>request</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/seawidgets/views/vessel.html#trajectory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#seawidgets.views.vessel.trajectory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get GeoJSON with the trajectory of the vessel in last two days.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-seawidgets.views.weather_forecast">
+<span id="weather-forecast-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">weather_forecast</span></tt> Module<a class="headerlink" href="#module-seawidgets.views.weather_forecast" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="seawidgets.views.weather_forecast.forecast">
+<tt class="descclassname">seawidgets.views.weather_forecast.</tt><tt class="descname">forecast</tt><big>(</big><em>request</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/seawidgets/views/weather_forecast.html#forecast"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#seawidgets.views.weather_forecast.forecast" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get forecast from forecast.io (see <a class="reference external" href="https://developer.forecast.io/docs/v2">https://developer.forecast.io/docs/v2</a>) for a given location.
+The result is cached for 2 hours, to reduce calls to forecast API (the limit is 1.000 calls a day).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>location_code</strong> &#8211; location</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-seawidgets.views.weather_station">
+<span id="weather-station-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">weather_station</span></tt> Module<a class="headerlink" href="#module-seawidgets.views.weather_station" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="seawidgets.views.weather_station.station_info">
+<tt class="descclassname">seawidgets.views.weather_station.</tt><tt class="descname">station_info</tt><big>(</big><em>request</em>, <em>location_code</em>, <em>format='html'</em>, <em>template='weather_station/station_info.html'</em><big>)</big><a class="reference internal" href="../_modules/seawidgets/views/weather_station.html#station_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#seawidgets.views.weather_station.station_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get current data form weather station and minimum and maximum values for the last 24 hours. It search for all variables listed in STATION_VARIABLES (now: &#8216;air_temperature&#8217;, &#8216;wind_speed&#8217;, &#8216;air_pressure&#8217;, &#8216;relative_humidity&#8217;, &#8216;rain_accumulation&#8217;).
+It returns a JSON array with every variable.
+Example of data of a variable:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span>
+    <span class="s">&quot;inputUnits&quot;</span><span class="p">:</span> <span class="s">&quot;°C&quot;</span><span class="p">,</span>
+    <span class="s">&quot;display_name&quot;</span><span class="p">:</span> <span class="s">&quot;Air temperature&quot;</span><span class="p">,</span>
+    <span class="s">&quot;min&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s">&quot;value&quot;</span><span class="p">:</span> <span class="mf">23.3</span><span class="p">,</span>
+        <span class="s">&quot;time&quot;</span><span class="p">:</span> <span class="s">&quot;30/07/2013 06:44&quot;</span>
+    <span class="p">},</span>
+    <span class="s">&quot;max&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s">&quot;value&quot;</span><span class="p">:</span> <span class="mf">30.5</span><span class="p">,</span>
+        <span class="s">&quot;time&quot;</span><span class="p">:</span> <span class="s">&quot;29/07/2013 12:26&quot;</span>
+    <span class="p">},</span>
+    <span class="s">&quot;current&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s">&quot;value&quot;</span><span class="p">:</span> <span class="mf">25.6</span><span class="p">,</span>
+        <span class="s">&quot;time&quot;</span><span class="p">:</span> <span class="s">&quot;30/07/2013 11:59&quot;</span>
+    <span class="p">},</span>
+    <span class="s">&quot;standard_name&quot;</span><span class="p">:</span> <span class="s">&quot;air_temperature&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>location_code</strong> &#8211; </li>
+<li><strong>format</strong> &#8211; html or json</li>
+<li><strong>template</strong> &#8211; for html format</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="seawidgets.views.weather_station.station_variable_info">
+<tt class="descclassname">seawidgets.views.weather_station.</tt><tt class="descname">station_variable_info</tt><big>(</big><em>request</em>, <em>location_code='pdp'</em>, <em>variable='air_temperature'</em><big>)</big><a class="reference internal" href="../_modules/seawidgets/views/weather_station.html#station_variable_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#seawidgets.views.weather_station.station_variable_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get weather station data for just one variable.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">views Package</a><ul>
+<li><a class="reference internal" href="#module-seawidgets.views.beach"><tt class="docutils literal"><span class="pre">beach</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-seawidgets.views.beamon"><tt class="docutils literal"><span class="pre">beamon</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-seawidgets.views.dash"><tt class="docutils literal"><span class="pre">dash</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-seawidgets.views.radar"><tt class="docutils literal"><span class="pre">radar</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-seawidgets.views.rss"><tt class="docutils literal"><span class="pre">rss</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-seawidgets.views.sapo"><tt class="docutils literal"><span class="pre">sapo</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-seawidgets.views.vessel"><tt class="docutils literal"><span class="pre">vessel</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-seawidgets.views.weather_forecast"><tt class="docutils literal"><span class="pre">weather_forecast</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-seawidgets.views.weather_station"><tt class="docutils literal"><span class="pre">weather_station</span></tt> Module</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="seawidgets.functions.html"
+                        title="previous chapter">functions Package</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/modules/seawidgets.views.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="seawidgets.functions.html" title="functions Package"
+             >previous</a> |</li>
+        <li><a href="../index.html">seaboard  documentation</a> &raquo;</li>
+          <li><a href="seawidgets.html" >seawidgets Package</a> &raquo;</li> 
+      </ul>
+    </div>
+<div class="footer">
+    &copy; Copyright 2013, Biel Frontera. SOCIB.
+  Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2b1.
+  <br />Theme based on <a href="http://readthedocs.org/">Read The Docs</a>
+
+</div>
+
+
+
+
+
+  </body>
+</html>

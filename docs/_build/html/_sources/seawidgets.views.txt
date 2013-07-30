@@ -1,0 +1,75 @@
+views Package
+=============
+
+:mod:`beach` Module
+-------------------
+
+.. automodule:: seawidgets.views.beach
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+:mod:`beamon` Module
+--------------------
+
+.. automodule:: seawidgets.views.beamon
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+:mod:`dash` Module
+------------------
+
+.. automodule:: seawidgets.views.dash
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+:mod:`radar` Module
+-------------------
+
+.. automodule:: seawidgets.views.radar
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+:mod:`rss` Module
+-----------------
+
+.. automodule:: seawidgets.views.rss
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+:mod:`sapo` Module
+------------------
+
+.. automodule:: seawidgets.views.sapo
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+:mod:`vessel` Module
+--------------------
+
+.. automodule:: seawidgets.views.vessel
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+:mod:`weather_forecast` Module
+------------------------------
+
+.. automodule:: seawidgets.views.weather_forecast
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+:mod:`weather_station` Module
+-----------------------------
+
+.. automodule:: seawidgets.views.weather_station
+    :members:
+    :undoc-members:
+    :show-inheritance:
+

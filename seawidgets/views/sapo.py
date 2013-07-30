@@ -1,39 +1,89 @@
 # coding: utf-8
 
-from django.core.urlresolvers import reverse
-from django.template import RequestContext
-from django.http import Http404, HttpResponse, HttpResponseForbidden, HttpResponseServerError, HttpResponseRedirect
-from django.shortcuts import render_to_response, get_object_or_404, render
+from django.http import Http404, HttpResponse
 from django.utils import simplejson
 from django.conf import settings
 
 import seawidgets.functions.utils as _utils
-
-import datetime, time
+import datetime
 from random import choice
-from os.path import isfile, isdir, join, getmtime
+from os.path import isfile, join, getmtime
 from seawidgets.models import Zone
 
 import urllib2
-from cStringIO import StringIO
-from PIL import Image, ImageFile 
+from PIL import ImageFile
 
 import logging
 logger = logging.getLogger(__name__)
 
 
-def latest(request,location):    
+def latest(request, location):
+    """Get JSON array of SAPO forecast images of a given location. The images are previously croped (and cached for 24 hours).
+    Example::
+
+        [
+            {
+                "image": "http://seaboardtest.socib.es/static/CACHE/img/sapo_snb00_hs06.jpg",
+                "title": "Waves at 29/07/2013 08:00"
+            },
+            {
+                "image": "http://seaboardtest.socib.es/static/CACHE/img/sapo_snb00_hs08.jpg",
+                "title": "Waves at 29/07/2013 10:00"
+            },
+            {
+                "image": "http://seaboardtest.socib.es/static/CACHE/img/sapo_snb00_hs10.jpg",
+                "title": "Waves at 29/07/2013 12:00"
+            },
+            {
+                "image": "http://seaboardtest.socib.es/static/CACHE/img/sapo_snb00_hs12.jpg",
+                "title": "Waves at 29/07/2013 14:00"
+            },
+            {
+                "image": "http://seaboardtest.socib.es/static/CACHE/img/sapo_snb00_hs14.jpg",
+                "title": "Waves at 29/07/2013 16:00"
+            },
+            {
+                "image": "http://seaboardtest.socib.es/static/CACHE/img/sapo_snb00_hs16.jpg",
+                "title": "Waves at 29/07/2013 18:00"
+            },
+            {
+                "image": "http://seaboardtest.socib.es/static/CACHE/img/sapo_snb00_hs18.jpg",
+                "title": "Waves at 29/07/2013 20:00"
+            },
+            {
+                "image": "http://seaboardtest.socib.es/static/CACHE/img/sapo_snb00_hs20.jpg",
+                "title": "Waves at 29/07/2013 22:00"
+            },
+            {
+                "image": "http://seaboardtest.socib.es/static/CACHE/img/sapo_snb00_hs22.jpg",
+                "title": "Waves at 30/07/2013 00:00"
+            },
+            {
+                "image": "http://seaboardtest.socib.es/static/CACHE/img/sapo_snb00_hs24.jpg",
+                "title": "Waves at 30/07/2013 02:00"
+            },
+            {
+                "image": "http://seaboardtest.socib.es/static/CACHE/img/sapo_snb00_hs26.jpg",
+                "title": "Waves at 30/07/2013 04:00"
+            },
+            {
+                "image": "http://seaboardtest.socib.es/static/CACHE/img/sapo_snb00_hs28.jpg",
+                "title": "Waves at 30/07/2013 06:00"
+            }
+        ]
+
+    """
     results = []
     if location == 'socib':
-        location = choice(['snb','pdp','clm'])
+        location = choice(['snb', 'pdp', 'clm'])
 
     try:
         zone = Zone.objects.get(code__iexact=location)
     except Zone.DoesNotExist:
-        raise Http404  
+        raise Http404
 
     # get datetime of last image generation
-    page = urllib2.urlopen(zone.sapo_image_path).read()    
+    page = urllib2.urlopen(zone.sapo_image_path).read()
     position = page.find(str(datetime.datetime.today().year))
     images_hour_creation = page[position+5:position+7]
 
@@ -46,17 +96,17 @@ def latest(request,location):
     for hour in range(6, 30, 2):
         # download image
         image_destination = 'CACHE/img/sapo_' + location + str(forecast_basehour).zfill(2) + '_hs' + str(hour).zfill(2) + '.jpg'
-        if not file_exists_and_not_old(join(settings.STATIC_ROOT,image_destination)):        
-            process_image('%shs%s.jpg' % (zone.sapo_image_path, str(hour).zfill(2)), image_destination)       
+        if not file_exists_and_not_old(join(settings.STATICFILES_DIRS[0], image_destination)):
+            process_image('%shs%s.jpg' % (zone.sapo_image_path, str(hour).zfill(2)), image_destination)
 
         image_forecast_time = forecast_basedatetime + datetime.timedelta(hours=hour)
-        results.append({ 'image': 'http://' + request.META['HTTP_HOST'] + settings.STATIC_URL  + image_destination , 'title': 'Waves at %s'% _utils.utc_to_local(image_forecast_time).strftime('%d/%m/%Y %H:%M') })
+        results.append({'image': 'http://' + request.META['HTTP_HOST'] + settings.STATIC_URL + image_destination, 'title': 'Waves at %s' % _utils.utc_to_local(image_forecast_time).strftime('%d/%m/%Y %H:%M')})
 
     json = simplejson.dumps(results)
     return HttpResponse(json, mimetype='application/json')
 
-# FUNCTIONS
 
+# FUNCTIONS
 def file_exists_and_not_old(filepath):
     if not isfile(filepath):
         return False
@@ -68,18 +118,20 @@ def file_exists_and_not_old(filepath):
     else:
         return False
 
-def get_time_prediction(forecast_basehour):    
+
+def get_time_prediction(forecast_basehour):
     base_prediction = datetime.datetime.utcnow()
-    if forecast_basehour == 12 and today.hour < 12:
-        base_prediction = base_prediction - datetime.timedelta(days=1) # yesterday
+    if forecast_basehour == 12 and base_prediction.hour < 12:
+        base_prediction = base_prediction - datetime.timedelta(days=1)  # yesterday
 
     if forecast_basehour == 12:
-        base_prediction = base_prediction.replace(hour=12,minute=0,second=0)
+        base_prediction = base_prediction.replace(hour=12, minute=0, second=0)
     else:
-        base_prediction = base_prediction.replace(hour=0,minute=0,second=0)
-    return base_prediction 
+        base_prediction = base_prediction.replace(hour=0, minute=0, second=0)
+    return base_prediction
 
-def process_image(url,destination):
+
+def process_image(url, destination):
     inStream = urllib2.urlopen(url)
     parser = ImageFile.Parser()
     while True:
@@ -93,16 +145,13 @@ def process_image(url,destination):
     if inImage.mode != "RGB":
         inImage = inImage.convert("RGB")
 
-    crop_dimensions = (123,169,452,430) 
+    crop_dimensions = (123, 169, 452, 430)
     if url.find('sapo_n3') > 0:
         # menorca images have another dimensions
-        crop_dimensions = (130,205,456,434) 
+        crop_dimensions = (130, 205, 456, 434)
     elif url.find('sapo_n1') > 0:
         # eivissa images have another dimensions
-        crop_dimensions = (130,158,350,430)         
-    inImage.crop(crop_dimensions).save(settings.STATIC_ROOT  + destination)
+        crop_dimensions = (130, 158, 350, 430)
+    inImage.crop(crop_dimensions).save(settings.STATICFILES_DIRS[0] + destination)
 
     return inImage
-
-
-
