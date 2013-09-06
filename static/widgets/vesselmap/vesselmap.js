@@ -123,7 +123,8 @@
         position: "bottomleft",
         decimals: 3,
         labelTemplateLat: "Latitude: {y}",
-        labelTemplateLng: "Longitude: {x}"
+        labelTemplateLng: "Longitude: {x}",
+        useDMS: true,
       }).addTo(this.map);
 
 

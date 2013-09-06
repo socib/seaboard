@@ -1,0 +1,40 @@
+/* Base is at weather_station */
+
+.widget-vessel-wind{    
+    position: relative;
+    h3{        
+        font-size: 1em;
+    }
+    .wind-direction{
+        height: 120px;
+        width: 100%; 
+        position: relative;       
+        background-color: #EEE;
+        color: #094f6b;        
+        .wind-value{
+            position: absolute;
+            top: 40px;
+            left: 0;
+            height: 40px;            
+            width: 100%;        
+            z-index: 100;            
+            font-size: 1.7em; 
+            font-weight: bold;                         
+            text-align: center !important;
+        }
+        .wind-arrow{
+            background: url('/static/widgets/vessel_wind/images/wind_arrow.png') no-repeat center center;                
+            height: 120px;
+            width: 100%;
+            z-index: 50;
+        }
+    }
+    .warning{
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        padding-right: 10px;
+        color: #094f6b;
+        font-size: 0.65em;
+    }
+}

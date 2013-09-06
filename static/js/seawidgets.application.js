@@ -3,6 +3,7 @@
     Dashing.on('ready', function() {
         console.log('Dashing ready');
     });
+    $.ajaxSetup({ cache: false });
 
 
     // Auto refresh the page every two hours, to minimize the risk of application freezing.    
@@ -12,7 +13,7 @@
             if (data.ok)
                 window.location.href = window.location.href;
             else
-                null; // server is not responding, do not refresh the page. It will try two hours later
+                ; // server is not responding, do not refresh the page. It will try two hours later
         });
     }
     setInterval(refreshPage, 60000 * 60 * 2 ); // every 2 hours  

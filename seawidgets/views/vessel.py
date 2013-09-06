@@ -8,9 +8,9 @@ import seawidgets.functions.utils as _utils
 from os.path import isfile, isdir, join
 from django.views.decorators.cache import cache_page
 
-folderbase = '/home/bfrontera/code/seaboard/static/CACHE/'
-# folderbase = '/home/vessel/RTDATA/'
-
+# folderbase = '/home/bfrontera/code/seaboard/static/CACHE/'
+folderbase = '/home/vessel/RTDATA/'
+folderbase = '/datos/BaseDatosContinua/SCB/'
 
 def current_location(request):
     """Read last line from posicion.proc file to get current location, speed, depth... It returs a JSON object.
@@ -27,6 +27,16 @@ def current_location(request):
         }
 
     """
+    results = {}
+    results['time'] = 0
+    results['long'] = 'N/A'
+    results['lat'] = 'N/A'
+    results['speed'] = 'N/A'
+    results['depth'] = 'N/A'
+    results['cog'] = 'N/A'
+    results['sog'] = 'N/A'
+
+
 
     today = datetime.datetime.today()
     yesterday = datetime.date.fromordinal(today.toordinal()-1)
@@ -41,7 +51,7 @@ def current_location(request):
                 found = True
 
         if not found:
-            results = {'error': 'Folder %s does not exist' % folderpath}
+            results['error'] = 'Folder %s does not exist' % folderpath
             json = simplejson.dumps(results)
             return HttpResponse(json, mimetype='application/json')
 
@@ -55,14 +65,13 @@ def current_location(request):
             today = datetime.date.fromordinal(today.toordinal()-1)
 
     if not file_found:
-        results = {'error': 'File %s does not exist' % filename}
+        results['error'] = 'File %s does not exist' % filename
         json = simplejson.dumps(results)
         return HttpResponse(json, mimetype='application/json')
 
     datafile = open(join(folderpath, filename), 'rb')
     current_location = _utils.tail(datafile, 2)[0].split(',')
-    # fecha,longitud,latitud,rumbo,velocidad,profundidad,cog,sog,fecha_telegrama
-    results = {}
+    # fecha,longitud,latitud,rumbo,velocidad,profundidad,cog,sog,fecha_telegrama    
     results['time'] = current_location[0]
     results['long'] = current_location[1]
     results['lat'] = current_location[2]
@@ -93,6 +102,14 @@ def location(request):
         }
 
     """
+    results = {}
+    results['time'] = []
+    results['long'] = []
+    results['lat'] = []
+    results['speed'] = []
+    results['depth'] = []
+    results['cog'] = []
+    results['sog'] = []
 
     # Test if /home/vessel/RTDATA/mm-YYYY/termosal.proc/ exists
     today = datetime.datetime.today()
@@ -109,7 +126,7 @@ def location(request):
                 found = True
 
         if not found:
-            results = {'error': 'Folder %s does not exist' % folderpath}
+            results['error'] = 'Folder %s does not exist' % folderpath
             json = simplejson.dumps(results)
             return HttpResponse(json, mimetype='application/json')
 
@@ -123,20 +140,12 @@ def location(request):
             today = datetime.date.fromordinal(today.toordinal()-1)
 
     if not file_found:
-        results = {'error': 'File %s does not exist' % filename}
+        results['error'] = 'File %s does not exist' % filename
         json = simplejson.dumps(results)
         return HttpResponse(json, mimetype='application/json')
 
     # fecha,longitud,latitud,rumbo,velocidad,profundidad,cog,sog,fecha_telegrama
-    results = {}
-    results['time'] = []
-    results['long'] = []
-    results['lat'] = []
-    results['speed'] = []
-    results['depth'] = []
-    results['cog'] = []
-    results['sog'] = []
-
+  
     yesterday = datetime.date.fromordinal(today.toordinal()-1)
     for day in [yesterday, today]:
         folderpath = folderbase + '%s/posicion.proc/' % day.strftime('%m-%Y')
@@ -272,8 +281,17 @@ def current_termosal(request):
 
     """
 
+    results = {}
+    results['time'] = 0
+    results['sea_water_temperature'] = 'N/A'
+    results['sea_water_salinity'] = 'N/A'
+    results['sea_water_electrical_conductivity'] = 'N/A'
+    results['fluor'] = 'N/A'
+
     # Test if /home/vessel/RTDATA/mm-YYYY/termosal.proc/ exists
     today = datetime.datetime.today()
+
+
 
     folderpath = folderbase + '%s/termosal.proc/' % today.strftime('%m-%Y')
     if not isdir(folderpath):
@@ -286,7 +304,7 @@ def current_termosal(request):
                 found = True
 
         if not found:
-            results = {'error': 'Folder %s does not exist' % folderpath}
+            results['error'] = 'Folder %s does not exist' % folderpath
             json = simplejson.dumps(results)
             return HttpResponse(json, mimetype='application/json')
 
@@ -300,16 +318,16 @@ def current_termosal(request):
             today = datetime.date.fromordinal(today.toordinal()-1)
 
     if not file_found:
-        results = {'error': 'File %s does not exist' % filename}
+        results['error'] = 'File %s does not exist' % filename
         json = simplejson.dumps(results)
         return HttpResponse(json, mimetype='application/json')
 
     #fecha,fecha_instrumento,temperatura,salinidad,sigmat,conductividad,fluor,temperatura_remota
     datafile = open(join(folderpath, filename), 'r')
     current_termosal = _utils.tail(datafile, 2)[0].split(',')
-    results = {}
+
     results['time'] = current_termosal[1]
-    results['sea_water_temperature'] = current_termosal[2]
+    results['sea_water_temperature'] = current_termosal[7]
     results['sea_water_salinity'] = current_termosal[3]
     results['sea_water_electrical_conductivity'] = current_termosal[5]
     results['fluor'] = current_termosal[6]
@@ -335,6 +353,13 @@ def termosal(request):
 
     """
 
+    results = {}
+    results['time'] = []
+    results['sea_water_temperature'] = []
+    results['sea_water_salinity'] = []
+    results['sea_water_electrical_conductivity'] = []
+    results['fluor'] = []    
+
     # Test if /home/vessel/RTDATA/mm-YYYY/termosal.proc/ exists
     today = datetime.datetime.today()
 
@@ -349,7 +374,7 @@ def termosal(request):
                 found = True
 
         if not found:
-            results = {'error': 'Folder %s does not exist' % folderpath}
+            results['error'] = 'Folder %s does not exist' % folderpath
             json = simplejson.dumps(results)
             return HttpResponse(json, mimetype='application/json')
 
@@ -363,18 +388,11 @@ def termosal(request):
             today = datetime.date.fromordinal(today.toordinal()-1)
 
     if not file_found:
-        results = {'error': 'File %s does not exist' % filename }
+        results['error'] = 'File %s does not exist' % filename 
         json = simplejson.dumps(results)
         return HttpResponse(json, mimetype='application/json')
 
     #fecha,fecha_instrumento,temperatura,salinidad,sigmat,conductividad,fluor,temperatura_remota
-    results = {}
-    results['time'] = []
-    results['sea_water_temperature'] = []
-    results['sea_water_salinity'] = []
-    results['sea_water_electrical_conductivity'] = []
-    results['fluor'] = []
-
     yesterday = datetime.date.fromordinal(today.toordinal()-1)
     for day in [yesterday, today]:
         folderpath = folderbase + '%s/termosal.proc/' % day.strftime('%m-%Y')
@@ -388,7 +406,7 @@ def termosal(request):
                         this_time = datetime.datetime.strptime(line['fecha_instrumento'], '%d-%m-%Y %H:%M:%S')
                         if last_time is None or (this_time - last_time).seconds > 600:
                             results['time'].append(line['fecha_instrumento'])
-                            results['sea_water_temperature'].append(line['temperatura'])
+                            results['sea_water_temperature'].append(line['temperatura_remota'])
                             results['sea_water_salinity'].append(line['salinidad'])
                             results['sea_water_electrical_conductivity'].append(line['conductividad'])
                             results['fluor'].append(line['fluor'])
@@ -417,6 +435,15 @@ def meteo(request):
         }    
 
     """
+    results = {}
+    results['time'] = []
+    results['wind_speed_mean'] = []
+    results['wind_speed'] = []
+    results['wind_from_direction'] = []
+    results['air_temperature'] = []
+    results['humidity'] = []
+    results['sun_radiation'] = []
+    results['air_pressure'] = []    
 
     # Test if /home/vessel/RTDATA/mm-YYYY/termosal.proc/ exists
     today = datetime.datetime.today()
@@ -433,7 +460,7 @@ def meteo(request):
                 found = True
 
         if not found:
-            results = {'error': 'Folder %s does not exist' % folderpath}
+            results['error'] = 'Folder %s does not exist' % folderpath
             json = simplejson.dumps(results)
             return HttpResponse(json, mimetype='application/json')
 
@@ -447,20 +474,12 @@ def meteo(request):
             today = datetime.date.fromordinal(today.toordinal()-1)
 
     if not file_found:
-        results = {'error': 'File %s does not exist' % filename}
+        results['error'] = 'File %s does not exist' % filename
         json = simplejson.dumps(results)
         return HttpResponse(json, mimetype='application/json')
 
     # fecha,velocidad_media_viento,velocidad_inst_viento,direccion_viento,temperatura_aire,humedad,radiacion_solar,presion_atm,fecha_instrumento
-    results = {}
-    results['time'] = []
-    results['wind_speed_mean'] = []
-    results['wind_speed'] = []
-    results['wind_from_direction'] = []
-    results['air_temperature'] = []
-    results['humidity'] = []
-    results['sun_radiation'] = []
-    results['air_pressure'] = []
+
 
     yesterday = datetime.date.fromordinal(today.toordinal()-1)
     for day in [yesterday, today]:
@@ -476,7 +495,7 @@ def meteo(request):
                         if last_time is None or (this_time - last_time).seconds > 600:
                             results['time'].append(line['fecha_instrumento'])
                             results['wind_speed_mean'].append(line['velocidad_media_viento'])
-                            results['wind_speed'].append(line['velocidad_inst_viento'])
+                            results['wind_speed'].append(line['velocidad_inst_viento'])                            
                             results['wind_from_direction'].append(line['direccion_viento'])
                             results['air_temperature'].append(line['temperatura_aire'])
                             results['humidity'].append(line['humedad'])
@@ -506,6 +525,16 @@ def current_meteo(request):
         }
 
     """
+    results = {}
+    results['time'] = 0
+    results['wind_speed_mean'] = 'N/A'
+    results['wind_speed'] = 'N/A'
+    results['wind_from_direction'] = 'N/A'
+    results['air_temperature'] = 'N/A'
+    results['humidity'] = 'N/A'
+    results['sun_radiation'] = 'N/A'
+    results['air_pressure'] = 'N/A'
+
 
     # Test if /home/vessel/RTDATA/mm-YYYY/meteo.proc/ exists
     today = datetime.datetime.today()
@@ -522,7 +551,7 @@ def current_meteo(request):
                 found = True
 
         if not found:
-            results = {'error': 'Folder %s does not exist' % folderpath}
+            results['error'] = 'Folder %s does not exist' % folderpath
             json = simplejson.dumps(results)
             return HttpResponse(json, mimetype='application/json')
 
@@ -536,14 +565,13 @@ def current_meteo(request):
             today = datetime.date.fromordinal(today.toordinal()-1)
 
     if not file_found:
-        results = {'error': 'File %s does not exist' % filename}
+        results['error'] = 'File %s does not exist' % filename
         json = simplejson.dumps(results)
         return HttpResponse(json, mimetype='application/json')
 
     # fecha,velocidad_media_viento,velocidad_inst_viento,direccion_viento,temperatura_aire,humedad,radiacion_solar,presion_atm,fecha_instrumento
     datafile = open(join(folderpath, filename), 'r')
     current_meteo = _utils.tail(datafile, 2)[0].split(',')
-    results = {}
     results['time'] = current_meteo[8].replace('\n', '')
     results['wind_speed_mean'] = current_meteo[1]
     results['wind_speed'] = current_meteo[2]
@@ -557,3 +585,4 @@ def current_meteo(request):
 
     json = simplejson.dumps(results)
     return HttpResponse(json, mimetype='application/json')
+

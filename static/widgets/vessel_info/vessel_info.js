@@ -10,32 +10,79 @@
     'sea_water_salinity': 'psu',
     'sea_water_electrical_conductivity': 'ms cm-1',
     'depth': 'm',
-    'speed': 'm s-1',
-    'wind_speed': 'm s-1',
+    'speed': 'kn',
+    'wind_speed': 'kn',
     'wind_speed_mean': 'm s-1',
     'air_pressure': 'hPa',
     'humidity': '%',
-    'air_temperature': '°C',    
-    'sun_radiation': 'W m^2-1'    
-  }
+    'air_temperature': '°C',
+    'sun_radiation': 'W m^2-1'
+  };
+
+  var formatNumber = function(value,decimalpositions){
+    if (decimalpositions === undefined){
+      decimalpositions = 1;
+    }
+    var result = parseFloat(value);
+    if (isNaN(result))
+      return 'No data';
+    return result.toFixed(decimalpositions);
+  };
+
+  var conversions = {
+    'speed': function (value){
+      return ((value / 1852) * 3600).toFixed(1);
+    },
+    'wind_speed': function (value){
+      return ((value / 1852) * 3600).toFixed(1);
+    },
+    'sea_water_temperature': function (value){
+      return formatNumber(value);
+    },
+    'sea_water_salinity': function (value){
+      return formatNumber(value);
+    },
+    'sea_water_electrical_conductivity': function (value){
+      return formatNumber(value);
+    },
+    'air_pressure': function (value){
+      return formatNumber(value);
+    },
+    'air_temperature': function (value){
+      return formatNumber(value);
+    },
+    'humidity': function (value){
+      return formatNumber(value);
+    }
+  };
+
+
 
   Dashing.VesselInfo = (function(_super) {
     __extends(VesselInfo, _super);
 
     function VesselInfo() {
-      this.initialData = __bind(this.initialData, this);  
-      this.setItem = __bind(this.setItem, this);      
+      this.initialData = __bind(this.initialData, this);
+      this.setItem = __bind(this.setItem, this);
       _ref = VesselInfo.__super__.constructor.apply(this, arguments);
       return _ref;
     }
 
     VesselInfo.prototype.ready = function() {
-      $(this.node).addClass(this.get('id'));            
+      $(this.node).addClass(this.get('id'));
+    };
+
+    VesselInfo.prototype.unitConversion = function(value) {
+      if (this.get('id') in conversions){
+        return conversions[this.get('id')].call(this, value);
+      }else{
+        return value;
+      }
     };
 
     VesselInfo.prototype.onData = function(data) {
       var oldItem = {};
-      if (this.get('item') != undefined)        
+      if (this.get('item') !== undefined)
         oldItem = this.get('item');
 
       var item = {};
@@ -45,31 +92,38 @@
       item.current = {};
       item.current.time = data.time;
       if (this.get('id') == 'position'){
-        item.current.value = data.long + ' , ' + data.lat;
+        item.current.value = data.long + ',' + data.lat;
+        item.current.dispvalue = this.decimalDegrees2DMS(data.long, 'Longitude') + ' <br /> ' +
+                             this.decimalDegrees2DMS(data.lat, 'Latitude');
       }else{
         item.current.value = data[this.get('id')];
+        item.current.dispvalue = this.unitConversion(data[this.get('id')]);
         item.inputUnits = inputUnits[this.get('id')];
       }
       item.min = {};
 
       if (!oldItem.min || parseFloat(oldItem.min.value) > parseFloat(item.current.value)){
         item.min.value = item.current.value;
+        item.min.dispvalue = item.current.dispalue;
         item.min.time = data.time;
       }else{
         item.min.value = oldItem.min.value;
-        item.min.time = oldItem.min.time;        
+        item.min.dispvalue = oldItem.min.dispvalue;
+        item.min.time = oldItem.min.time;
       }
 
       item.max = {};
       if (!oldItem.max || parseFloat(oldItem.max.value) < parseFloat(item.current.value)){
         item.max.value = item.current.value;
+        item.max.dispvalue = item.current.dispvalue;
         item.max.time = data.time;
       }else{
         item.max.value = oldItem.max.value;
-        item.max.time = oldItem.max.time;        
+        item.max.dispvalue = oldItem.max.dispvalue;
+        item.max.time = oldItem.max.time;
       }
 
-      this.set('item',item);      
+      this.set('item',item);
     };
 
     VesselInfo.prototype.initialData = function(data) {
@@ -84,20 +138,62 @@
       var length = data.time.length;
       item.current.time = data.time[length - 1];
       if (this.get('id') == 'position'){
-        item.current.value = data['long'][length - 1] + ' , ' + data['lat'][length - 1]; 
-      }else{        
-        item.current.value = data[this.get('id')][length - 1];        
+        item.current.value = data['long'][length - 1] + ',' + data['lat'][length - 1];
+        item.current.dispvalue = this.decimalDegrees2DMS(data['long'][length - 1],'Longitude') + '<br/>' +
+                             this.decimalDegrees2DMS(data['lat'][length - 1],'Latitude');
+      }else{
+        item.current.value = data[this.get('id')][length - 1];
+        item.current.dispvalue = this.unitConversion(data[this.get('id')][length - 1]);
         item.inputUnits = inputUnits[this.get('id')];
-        item.min.value = Math.min.apply(Math, data[this.get('id')] );        
-        item.max.value = Math.max.apply(Math, data[this.get('id')] );
-        // TODO: get time of min and max value. Indexof...
-        index_min = data[this.get('id')].indexOf(item.min.value.toString());
-        item.min.time = data.time[index_min];
-        index_max = data[this.get('id')].indexOf(item.max.value.toString());
-        item.max.time = data.time[index_max];
+        if (this.get('id') != 'depth'){
+          item.min.value = Math.min.apply(Math, data[this.get('id')] );
+          item.max.value = Math.max.apply(Math, data[this.get('id')] );
+          if (item.min.value == Infinity) { item.min.value = 'N/A'; }
+          if (item.max.value == -Infinity) { item.max.value = 'N/A'; }
+          item.min.dispvalue = this.unitConversion(item.min.value);
+          item.max.dispvalue = this.unitConversion(item.max.value);
+          index_min = data[this.get('id')].indexOf(item.min.value.toString());
+          item.min.time = data.time[index_min];
+          index_max = data[this.get('id')].indexOf(item.max.value.toString());
+          item.max.time = data.time[index_max];
+        }
       }
 
-      this.set('item',item);            
+      this.set('item',item);
+    };
+
+    /*
+        Converts a Decimal Degree Value into
+        Degrees Minute Seconds Notation.
+
+        Pass value as double
+        type = {Latitude or Longitude} as string
+
+        returns a string as D:M:S:Direction
+    */
+    VesselInfo.prototype.decimalDegrees2DMS = function(value, type) {
+      degrees = Math.floor(value);
+      submin = Math.abs( (value - degrees ) * 60);
+      minutes = Math.floor(submin);
+      subseconds = Math.abs((submin-minutes) * 60);
+      direction = "";
+      if (type == "Longitude"){
+        if (degrees < 0)
+            direction = "W";
+        else if (degrees > 0)
+            direction = "E";
+        else
+            direction = "";
+      } else if (type == "Latitude"){
+          if (degrees < 0)
+              direction = "S";
+          else if (degrees > 0)
+              direction = "N";
+          else
+              direction = "";
+      }
+      notation = degrees + "°" + minutes + "'" + String(subseconds).substr(0,4) + "\"" + direction;
+      return notation;
     };
 
 
