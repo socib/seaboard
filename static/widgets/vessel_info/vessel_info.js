@@ -93,8 +93,8 @@
       item.current.time = data.time;
       if (this.get('id') == 'position'){
         item.current.value = data.long + ',' + data.lat;
-        item.current.dispvalue = this.decimalDegrees2DMS(data.long, 'Longitude') + ' <br /> ' +
-                             this.decimalDegrees2DMS(data.lat, 'Latitude');
+        item.current.dispvalue = this.decimalDegrees2DMS(data.lat, 'Latitude') + ' <br /> ' +
+                             this.decimalDegrees2DMS(data.long, 'Longitude');
       }else{
         item.current.value = data[this.get('id')];
         item.current.dispvalue = this.unitConversion(data[this.get('id')]);
@@ -139,8 +139,8 @@
       item.current.time = data.time[length - 1];
       if (this.get('id') == 'position'){
         item.current.value = data['long'][length - 1] + ',' + data['lat'][length - 1];
-        item.current.dispvalue = this.decimalDegrees2DMS(data['long'][length - 1],'Longitude') + '<br/>' +
-                             this.decimalDegrees2DMS(data['lat'][length - 1],'Latitude');
+        item.current.dispvalue = this.decimalDegrees2DMS(data['lat'][length - 1],'Latitude') + '<br/>' +
+                             this.decimalDegrees2DMS(data['long'][length - 1],'Longitude');
       }else{
         item.current.value = data[this.get('id')][length - 1];
         item.current.dispvalue = this.unitConversion(data[this.get('id')][length - 1]);
@@ -172,11 +172,15 @@
         returns a string as D:M:S:Direction
     */
     VesselInfo.prototype.decimalDegrees2DMS = function(value, type) {
-      degrees = Math.floor(value);
+      var degrees = Math.floor(value);
+
+      var minutes = Math.abs( (value - degrees ) * 60);
+      /*
       submin = Math.abs( (value - degrees ) * 60);
       minutes = Math.floor(submin);
-      subseconds = Math.abs((submin-minutes) * 60);
-      direction = "";
+      subseconds = Math.abs((submin-minutes) * 60);a
+      */
+      var direction = "";
       if (type == "Longitude"){
         if (degrees < 0)
             direction = "W";
@@ -192,7 +196,8 @@
           else
               direction = "";
       }
-      notation = degrees + "°" + minutes + "'" + String(subseconds).substr(0,4) + "\"" + direction;
+      // notation = degrees + "°" + minutes + "'" + String(subseconds).substr(0,4) + "\"" + direction;
+      var notation = direction + " " + degrees + "°" +  String(minutes).substr(0,6) + "'";
       return notation;
     };
 
