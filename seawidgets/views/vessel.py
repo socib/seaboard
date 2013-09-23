@@ -10,7 +10,7 @@ from django.views.decorators.cache import cache_page
 
 # folderbase = '/home/bfrontera/code/seaboard/static/CACHE/'
 folderbase = '/home/vessel/RTDATA/'
-folderbase = '/datos/BaseDatosContinua/SCB/'
+# folderbase = '/datos/BaseDatosContinua/SCB/'
 
 def current_location(request):
     """Read last line from posicion.proc file to get current location, speed, depth... It returs a JSON object.

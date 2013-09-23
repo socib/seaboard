@@ -10,69 +10,69 @@
   <div class="container">
     <div class="row">
       <div class="span6 logos-header">
-        <img src="{% get_static_prefix %}images/logo_Socib.png" />      
+        <img src="{% get_static_prefix %}images/logo_Socib.png" />
         <img src="{% get_static_prefix %}images/logo-{{ location.code }}.png" title="{{ location.name }}" />
-      </div>  
+      </div>
     </div>
-  </div>  
+  </div>
 </header>
 <section class="status">
-  <div class="container"> 
+  <div class="container">
     <div class="row">
-      <div class="span2  span-no-bottom-margin">          
-          <div data-id="position" data-view="VesselInfo" data-title="Position"></div>       
-          <div data-id="speed" data-view="VesselInfo" data-title="Speed" ></div> 
-          <div data-id="depth" data-view="VesselInfo" data-title="Depth"></div> 
-      </div>  
-      <div class="span10 rowspan5">        
-        <div data-id="map" data-view="Vesselmap" data-title="Map"></div>      
-      </div>        
+      <div class="span2  span-no-bottom-margin">
+          <div data-id="position" data-view="VesselInfo" data-title="Position"></div>
+          <div data-id="speed" data-view="VesselInfo" data-title="Speed" ></div>
+          <div data-id="depth" data-view="VesselInfo" data-title="Depth"></div>
+      </div>
+      <div class="span10 rowspan5">
+        <div data-id="map" data-view="Vesselmap" data-title="Map"></div>
+      </div>
     </div>
   </div>
 </section>
 <section class="status">
-  <div class="container">  
-    <div class="row">      
-      <div class="span8 span-no-bottom-margin">          
+  <div class="container">
+    <div class="row">
+      <div class="span8 span-no-bottom-margin">
         <h1 class="section">Termosal<span class="pull-right updated-at" id="last-vessel-termosal"></span></h1>
-        <div class="row-fluid">        
-          <div class="span4">          
-            <div data-id="sea_water_temperature" data-view="VesselInfo" data-title="Sea Water Temperature"></div>       
-          </div>        
-          <div class="span4">          
+        <div class="row-fluid">
+          <div class="span4">
+            <div data-id="sea_water_temperature" data-view="VesselInfo" data-title="Sea Water Temperature"></div>
+          </div>
+          <div class="span4">
             <div data-id="sea_water_salinity" data-view="VesselInfo" data-title="Sea Water Salinity"></div>
-          </div>        
-          <div class="span4">          
+          </div>
+          <div class="span4">
             <div data-id="sea_water_electrical_conductivity" data-view="VesselInfo" data-title="Sea Water Conductivity"></div>
-          </div>        
+          </div>
         </div>
-        <div class="row-fluid">        
-          <div class="span6 rowspan3">        
-            <div data-id="sea_water_temperature" data-view="VesselChart" data-title="Sea Water Temperature"></div>       
-          </div>            
-          <div class="span6 rowspan3">        
-            <div data-id="sea_water_salinity" data-view="VesselChart" data-title="Sea Water Salinity"></div>       
-          </div>            
-        </div>        
-      </div>    
-      <div class="span4 pull-right  span-no-bottom-margin">          
+        <div class="row-fluid">
+          <div class="span6 rowspan3">
+            <div data-id="sea_water_temperature" data-view="VesselChart" data-title="Sea Water Temperature"></div>
+          </div>
+          <div class="span6 rowspan3">
+            <div data-id="sea_water_salinity" data-view="VesselChart" data-title="Sea Water Salinity"></div>
+          </div>
+        </div>
+      </div>
+      <div class="span4 pull-right  span-no-bottom-margin">
         <h1 class="section">Weather<span class="pull-right updated-at" id="last-vessel-meteo"></span></h1>
-        <div class="row-fluid">        
-          <div class="span6">          
-            <div data-id="air_temperature" data-view="VesselInfo" data-title="Temperature"></div>       
-          </div>        
-          <div class="span6">          
+        <div class="row-fluid">
+          <div class="span6">
+            <div data-id="air_temperature" data-view="VesselInfo" data-title="Temperature"></div>
+          </div>
+          <div class="span6">
             <div data-id="air_pressure" data-view="VesselInfo" data-title="Pressure"></div>
-          </div>        
+          </div>
         </div>
-        <div class="row-fluid">                  
-          <div class="span6">          
-            <div data-id="wind_speed" data-view="VesselInfo" data-title="Wind speed"></div> 
-          </div>        
-          <div class="span6">          
-            <div data-id="wind_from_direction" data-view="VesselWind" data-title="Wind direction"></div> 
-          </div>        
-        </div>            
+        <div class="row-fluid">
+          <div class="span6">
+            <div data-id="wind_speed" data-view="VesselInfo" data-title="Wind speed"></div>
+          </div>
+          <div class="span6">
+            <div data-id="wind_from_direction" data-view="VesselWind" data-title="Wind direction"></div>
+          </div>
+        </div>
       </div>
       <div class="span4 rowspan1 pull-right">
         <div data-id="clock2" data-view="Clock"></div>
@@ -81,20 +81,23 @@
     </div>
   </div>
 </section>
-<section class="info">  
-  <div class="container">  
+<!-- section class="info">
+  <div class="container">
     <div class="row">
       <div class="span6 rowspan4">
-          <div data-id="cam1" data-view="Text" data-text="Onboard camera 1 http://172.16.137.33/axis-cgi/mjpg/video.cgi?resolution=352x288" data-title="Cam1"></div>
+          <video width="352" height="288">
+            <source src="http://161.115.4.53/axis-cgi/mjpg/video.cgi?resolution=352x288" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
       </div>
-      <div class="span6 rowspan4">        
+      <div class="span6 rowspan4">
         <div data-id="cam2" data-view="Text" data-text="Onboard camera 2 http://172.16.137.33/axis-cgi/mjpg/video.cgi?resolution=352x288" data-title="Cam2"></div>
-      </div>      
+      </div>
     </div>
   </div>
-</section>
+</section -->
 <footer>
-  <div class="container">  
+  <div class="container">
     <div class="pull-right">
       SOCIB - 2013
     </div>
