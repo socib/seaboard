@@ -11,9 +11,11 @@ Installation
 
 - Install ubuntu dependencies:
 	a) libxml2-dev libxslt1-dev (for feedparser)
-	b) libqrencode-dev (for qrencoder) 
+	b) libqrencode-dev (for qrencoder)
 	c) nodejs (for lessc)
 	d) libjpeg libjpeg-dev libfreetype6 libfreetype6-dev zlib1g-dev (for PIL, crop images)
+	e) uwsgi (o pip install) +  libapache2-mod-uwsgi supervisor (for uwsgi)
+
 
 - Download code::
 
@@ -23,22 +25,22 @@ Installation
 
     (virtualenv_name) $ pip install -r requirements.txt
 
-- Install `lessc <http://lesscss.org/>`_ (via node package manager)::    
+- Install `lessc <http://lesscss.org/>`_ (via node package manager)::
 
 	npm install -g less
 
-- Configure new virtualhost in apache::
+- [DEPRECATED] Configure new virtualhost in apache::
 
 	<VirtualHost *:80>
-	        
+
 	        DocumentRoot "/var/www/seaboard"
 
 	        ServerName seaboardtest.socib.es
 	        ServerAlias *.seaboardtest.socib.es
-	        
+
 	        Alias /static/ /var/www/seaboard/static/
 	        AliasMatch ^/views/(.*).html /var/www/seaboard/static/widgets/$1/$1.html
-	        
+
 	        WSGIScriptAlias / /var/www/seaboard/seaboard/wsgi.py
 	        WSGIPythonPath /var/www/seaboard:PATH_TO_VIRTUAL_ENV/lib/python2.7/site-packages
 
@@ -54,4 +56,154 @@ Installation
 	        ServerSignature On
 
 	</VirtualHost>
+
+- Configure seaboard with uwsgi::
+
+	Note: can't install (or not easy) in Ubuntu 11.04. Try gunicorn
+
+	1. Install uwsgi, libapache2-mod-uwsgi and supervisor
+
+	2. Prepare uwsgi config folder. Create /etc/uwsgi/apps-enabled
+
+	3. Prepare uwsgi log folder. Create /var/log/uwsgi and change owner to www-data
+
+	4. Create a symbolic link to uwsgi.ini::
+
+		ln -s /path/to/seaboard/seaboard/uwsgi.ini /etc/uwsgi/apps-enabled/seaboard.ini
+
+	5. Configure supervisor in order to load uwsgi server with OS. File /etc/supervisor/conf.d/uwsgi.conf::
+
+		[program:uwsgi-emperor]
+		command=/usr/local/bin/uwsgi --emperor "/etc/uwsgi/apps-enabled/*.ini" --die-on-term --master --uid www-data --gid www-data --logto /var/log/uwsgi/emperor.log --emperor-stats 127.0.0.1:1716
+		autostart=true
+		autorestart=true
+		redirect_stderr=true
+
+
+	6. Modify virtualhost in apache::
+
+		<VirtualHost *:80>
+
+		        DocumentRoot "/var/www/seaboard"
+
+		        ServerName seaboardtest.socib.es
+	        	ServerAlias *.seaboardtest.socib.es
+
+		        <Location />
+		            SetHandler uwsgi-handler
+		            uWSGISocket 127.0.0.1:49152
+		        </Location>
+
+		        <Location /static>
+		            SetHandler none
+		        </Location>
+
+		        <Location /views>
+		            SetHandler none
+		        </Location>
+
+	        	<Directory "/var/www/seaboard">
+	                Options Indexes FollowSymLinks MultiViews
+	                Allow from all
+	        	</Directory>
+
+		        Alias /static/ /var/www/seaboard/static/
+		        AliasMatch ^/views/(.*).html /var/www/seaboard/static/widgets/$1/$1.html
+
+		        ErrorLog /var/log/apache2/seaboard.socib.es.error.log
+		        LogLevel info
+
+		        CustomLog /var/log/apache2/seaboard.socib.es.access.log combined
+		        ServerSignature On
+
+		</VirtualHost>
+
+- Monitor uwsgi::
+
+	1. Install uwsgitop::
+
+		pip install uwsgitop
+
+	2. Connect uwsgitop to uwsgi stats socket::
+
+		- Emperor::
+
+			uwsgitop 127.0.0.1:1718
+
+		- Seaboard::
+
+			uwsgitop 127.0.0.1:1717
+
+
+
+
+- Configure seaboard with gunicorn::
+
+	1. Install gunicorn::
+
+		pip install gunicorn
+
+	2. Install supervisor with apt-get or aptitude
+
+	3. Prepare gunicorn log folder. Create /var/log/gunicorn and change owner to www-data
+
+	4. Configure supervisor in order to load gunicorn servir with OS. File /etc/supervisor/conf.d/gunicorn-seaboard.conf::
+
+		[program:gunicorn-seaboard]
+		command=/path/to/virtualenv/bin/gunicorn -c /var/www/seaboard/seaboard/gunicorn_conf.py seaboard.wsgi:application
+		directory=/var/www/seaboard
+		user=www-data
+		autostart=true
+		autorestart=true
+		priority=991
+		stopsignal=KILL
+
+		stdout_logfile=/var/log/gunicorn/seaboard.log
+		stdout_logfile_maxbytes=1MB
+		stdout_logfile_backups=2
+		stderr_logfile=/var/log/gunicorn/seaboard.error.log
+		stderr_logfile_maxbytes=1MB
+		stderr_logfile_backups=2
+
+
+	5. Modify virtualhost in apache::
+
+		<VirtualHost *:80>
+
+		        DocumentRoot "/var/www/seaboard"
+
+		        ServerName seaboardtest.socib.es
+	        	ServerAlias *.seaboardtest.socib.es
+
+		        ProxyPreserveHost On
+		        <Proxy *>
+		            Order deny,allow
+		            Allow from all
+		        </Proxy>
+
+		        # Serve static
+		        ProxyPass /favicon.ico !
+		        ProxyPass /static/ !
+		        ProxyPass /views/ !
+
+		        # proxy a la resta
+		        ProxyPass / http://localhost:49153/
+		        ProxyPassReverse / http://localhost:49153/
+
+		        Alias /static/ /var/www/seaboard/static/
+		        AliasMatch ^/views/(.*).html /var/www/seaboard/static/widgets/$1/$1.html
+
+	        	<Directory "/var/www/seaboard">
+	                Options Indexes FollowSymLinks MultiViews
+	                Allow from all
+	        	</Directory>
+
+		        ErrorLog /var/log/apache2/seaboard.socib.es.error.log
+		        LogLevel info
+
+		        CustomLog /var/log/apache2/seaboard.socib.es.access.log combined
+		        ServerSignature On
+
+		</VirtualHost>
+
 
