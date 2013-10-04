@@ -1,32 +1,44 @@
 /* Base is at weather_station */
 
-.widget-vessel-wind{    
+.widget-vessel-wind{
     position: relative;
-    h3{        
-        font-size: 1em;
+
+    h2 {
+        color: #FFFFFF;
+        font-size: 25.1px;
+        padding-bottom: 0px;
+        border: 1px solid #B7AAA7;
+        margin-bottom: 4px;
     }
+
     .wind-direction{
-        height: 120px;
-        width: 100%; 
-        position: relative;       
-        background-color: #EEE;
-        color: #094f6b;        
+        color: #48c3d2;
+        border: 1px solid #48c3d2;
+        position: relative;
+        padding-top: 10px;
+        text-align: center;
+        width: 99%;
+        position: relative;
         .wind-value{
-            position: absolute;
-            top: 40px;
-            left: 0;
-            height: 40px;            
-            width: 100%;        
-            z-index: 100;            
-            font-size: 1.7em; 
-            font-weight: bold;                         
+            padding-top: 10px;
+            padding-bottom: 10px;
+            min-height: 95px;
+            line-height: 85px;
+            width: 100%;
+            z-index: 10;
+            font-size: 2.2em;
             text-align: center !important;
+            position: relative;
+            text-shadow: black 0.1em 0.1em 0.1em;
+
         }
         .wind-arrow{
-            background: url('/static/widgets/vessel_wind/images/wind_arrow.png') no-repeat center center;                
-            height: 120px;
+            background: url('/static/widgets/vessel_wind/images/wind_arrow.png') no-repeat center center;
+            min-height: 95px;
             width: 100%;
-            z-index: 50;
+            z-index: 1;
+            position: absolute;
+            bottom: 20px;
         }
     }
     .warning{
@@ -34,7 +46,7 @@
         bottom: 0;
         right: 0;
         padding-right: 10px;
-        color: #094f6b;
+        color: #FFFFFF;
         font-size: 0.65em;
     }
 }

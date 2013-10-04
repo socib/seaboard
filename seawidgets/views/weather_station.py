@@ -7,6 +7,7 @@ from django.utils import simplejson
 from django.conf import settings
 import seawidgets.functions.utils as _utils
 from seawidgets.models import Location
+from django.views.decorators.cache import cache_page
 
 import datetime
 import urllib2
@@ -30,7 +31,7 @@ CONVERSION = {
     'wind_speed': lambda x: round(x * 3.6, 2),
 }
 
-
+@cache_page(60 * 60 * 1, cache="default")
 def station_info(request, location_code, format='html', template='weather_station/station_info.html'):
     """Get current data form weather station and minimum and maximum values for the last 24 hours. It search for all variables listed in STATION_VARIABLES (now: 'air_temperature', 'wind_speed', 'air_pressure', 'relative_humidity', 'rain_accumulation').
     It returns a JSON array with every variable.
@@ -94,10 +95,11 @@ def station_info(request, location_code, format='html', template='weather_statio
             if id_variable != '':
                 variable_data = get_variable_data(id_platform, id_instrument, id_variable, standard_name, displayName)
                 if 'error' not in variable_data.keys():
+                    # wind_speed hack. Add wind_from_direction.lastSampleValue
+                    if standard_name == 'wind_speed':
+                        variable_data['current']['wind_from_direction'] = get_wind_from_direction(variable_list)
+
                     results.append(variable_data)
-                # wind_speed hack. Add wind_from_direction.lastSampleValue
-                elif standard_name == 'wind_speed':
-                    variable_data['current']['wind_from_direction'] = get_wind_from_direction(variable_list)
 
     if format == 'json':
         json = simplejson.dumps(results)
@@ -109,7 +111,7 @@ def station_info(request, location_code, format='html', template='weather_statio
         }
     return render_to_response(template, kwvars, RequestContext(request))
 
-
+@cache_page(60 * 5, cache="default")
 def station_variable_info(request, location_code='pdp', variable='air_temperature'):
     """Get weather station data for just one variable."""
 

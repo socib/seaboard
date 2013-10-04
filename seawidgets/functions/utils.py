@@ -4,7 +4,7 @@ import datetime
 from dateutil import tz
 import imghdr
 import os
-
+from math import radians, cos, sin, asin, sqrt
 
 # IMAGE AND PATH FUNCTIONS
 def isimage(path):
@@ -39,7 +39,7 @@ def utc_to_local(dt):
     return dt.astimezone(local)
 
 
-def strftime_from_millis(milis,format='%d/%m/%Y %H:%M'):   
+def strftime_from_millis(milis,format='%d/%m/%Y %H:%M'):
     """Format datetime expressed in milliseconds in a given format."""
     epoch = utc_to_local(datetime.datetime.utcfromtimestamp(milis/1000.0))
     return epoch.strftime(format)
@@ -81,12 +81,12 @@ def decimalDegrees2DMS(value,type):
     """
         Converts a Decimal Degree Value into
         Degrees Minute Seconds Notation.
-        
+
         Pass value as double
         type = {Latitude or Longitude} as string
-        
+
         returns a string as D:M:S:Direction
-        created by: anothergisblog.blogspot.com 
+        created by: anothergisblog.blogspot.com
     """
 
     if isinstance(value, str):
@@ -110,7 +110,27 @@ def decimalDegrees2DMS(value,type):
         elif degrees > 0:
             direction = "N"
         else:
-            direction = "" 
+            direction = ""
     notation = str(degrees) + "°" + str(minutes) + "'" +\
                str(subseconds)[0:5] + "\"" + direction
     return notation
+
+def haversine(lon1, lat1, lon2, lat2):
+    """
+    Calculate the great circle distance between two points
+    on the earth (specified in decimal degrees)
+    """
+    if lon1 is None or lat1 is None or lon2 is None or lat2 is None: return -1
+    try:
+        # convert decimal degrees to radians
+        lon1, lat1, lon2, lat2 = map(radians, [float(lon1), float(lat1), float(lon2), float(lat2)])
+        # haversine formula
+        dlon = lon2 - lon1
+        dlat = lat2 - lat1
+        a = sin(dlat/2)**2 + cos(lat1) * cos(lat2) * sin(dlon/2)**2
+        c = 2 * asin(sqrt(a))
+        km = 6367 * c
+        return km
+    except Exception as e:
+        print 'Error calculating harvesine... ', type(e), e.args
+        return -1

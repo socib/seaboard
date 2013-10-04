@@ -21,6 +21,22 @@
       return child;
     };
 
+
+  Batman.mixin(Batman.Filters, {
+    displayWindDirection: function(val) {
+      if (typeof val === 'undefined') {
+        return void 0;
+      }
+      if (val.lenght == 0) {
+        return void 0;
+      }
+      if (val == '-') {
+        return void 0;
+      }
+      return '(' + val + ')';
+    }
+  });
+
   Dashing.WeatherStation = (function(_super) {
     __extends(WeatherStation, _super);
 

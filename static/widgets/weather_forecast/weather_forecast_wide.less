@@ -1,0 +1,183 @@
+@wf-widgetBgcolor:  #094F6B;
+@wf-widgetColor:  #F6B094;
+@wf-widgetTitleColor:  #EEE;
+
+@-webkit-keyframes rotation {
+    from{
+        -webkit-transform: rotate(0deg);
+    }
+    to{
+        -webkit-transform: rotate(360deg);
+    }
+}
+
+@-webkit-keyframes halfrotation {
+    from{
+        -webkit-transform: rotate(270deg);
+    }
+    to{
+        -webkit-transform: rotate(360deg);
+    }
+}
+
+.widget-weather-forecast{
+  background-color: @wf-widgetBgcolor;
+  color: @wf-widgetColor;
+  position: relative;
+
+  .wf-weeksummary{
+    text-align: left;
+    width: 100%;
+    font-size: 1.20em;
+    background-color: #DDD;
+    color: @wf-widgetBgcolor;
+    margin: 0;
+    padding: 5px 10px 10px 10px;
+    font-weight: bold;
+  }
+
+  .wf-prediction {
+    text-align: center;
+    width: 100%;
+    /*background-color: @wf-widgetColor;
+    color: @wf-widgetBgcolor;/*/
+    padding: 5px 0px;
+    border-bottom: 2px solid @wf-widgetColor;
+    position: relative;
+  }
+  .wf-prediction:last-child {
+    border-bottom: none;
+  }
+
+  .wf-summary{
+    font-size: 1.25em;
+    color: @wf-widgetTitleColor;
+    float:left;
+    margin-left: 70px;
+
+  }
+  ul.wf-variables, ul.wf-variables-header {
+    list-style: none;
+    clear:left;
+    float:left;
+    list-style:none;
+    margin:0 0px 0px 10px;
+    padding:0;
+    position:relative;
+    left:50%;
+    text-align:center;
+  }
+  ul.wf-variables-header {
+    color:@wf-widgetTitleColor;;
+    text-transform: uppercase;
+    margin-top: 5px;
+  }
+  li.wf-variable {
+    display: block;
+    float: left;
+    list-style:none;
+    margin:0;
+    padding:0;
+    position:relative;
+    right:50%;
+    margin-left: 5px;
+    min-width: 120px;
+    &.wf-day{
+      text-align: left;
+      text-transform: uppercase;
+      min-width: 100px;
+    }
+    &.wf-humidity {
+      min-width: 80px;
+    }
+    .wf-min-temp{
+      color:#2cc0d0;
+    }
+    .wf-max-temp{
+      color:#CC3300;
+    }
+  }
+
+  [class^="wf-icon-"],
+  [class*=" wf-icon-"]{
+      font-family: "iconvault";
+      font-style: normal;
+      font-weight: normal;
+      font-variant: normal;
+      text-transform: none;
+      line-height: 1;
+      -webkit-font-smoothing: antialiased;
+      display: block;
+      text-decoration: inherit;
+      font-size: 3em;
+      float:left;
+      position: absolute;
+      top: 5px;
+      left: 10px;
+  }
+  .wf-icon-clear-day:before {
+      content: "\f113";
+      color:rgb(255, 165, 0);
+      display: block;
+      -webkit-animation: rotation 12s infinite linear;
+  }
+  .wf-icon-clear-night:before{
+      content: "\f10d";
+      color:#2cc0d0;
+      display: block;
+  };
+
+  .wf-icon-partly-cloudy-night:before,.wf-icon-partly-cloudy-day:before, .wf-icon-cloudy:before {
+      content: "\f106";
+      color: rgb(204, 204, 204);
+      position: absolute;
+  }
+
+  .wf-icon-partly-cloudy-night:after {
+      content: "\f100";
+      color: #2cc0d0;
+      position: absolute;
+  }
+  .wf-icon-partly-cloudy-day:after {
+      content: "\f101";
+      color: rgb(255, 165, 0);
+      position: absolute;
+      display: block;
+      -webkit-animation: halfrotation 5s infinite linear;
+  }
+  .wf-icon-rain:before, .wf-icon-wind:before, .wf-icon-sleet:before, .wf-icon-snow:before {
+    content: '\f105';
+    position:absolute;
+    color:rgb(204, 204, 204);
+  }
+  .wf-icon-rain:after {
+      content: "\f104";
+      color: #82b2e4;
+  }
+  .wf-icon-snow:after{
+      content: "\f10b";
+      color: #acd3f3;
+  }
+  .wf-icon-sleet:after {
+      content: "\f10c";
+      color: #acd3f3;
+  }
+  .wf-icon-wind:after {
+      content: "\f115";
+      color: rgb(255, 95, 32);
+  }
+  .wf-icon-fog:before {
+      content: "\f108";
+      color: rgb(204, 204, 204);
+  }
+  .wf-credit{
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    padding-right: 10px;
+    color: @wf-widgetTitleColor;
+    font-size: 0.65em;
+  }
+
+}
+

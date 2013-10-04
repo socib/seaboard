@@ -1,6 +1,4 @@
-@wf-widgetBgcolor:  #094F6B;
-@wf-widgetColor:  #F6B094;
-@wf-widgetTitleColor:  #EEE;
+@wf-widgetColor:  #48c3d2;
 
 @-webkit-keyframes rotation {
     from{
@@ -21,74 +19,160 @@
 }
 
 .widget-weather-forecast{
-  background-color: @wf-widgetBgcolor;
   color: @wf-widgetColor;
-  position: relative;  
+  position: relative;
+  margin-bottom: 0px !important;
+
 
   .wf-weeksummary{
-    text-align: left;
+    text-align: center;
     width: 100%;
-    font-size: 1.20em;
-    background-color: #DDD;
-    color: @wf-widgetBgcolor;
+    font-size: 11.34px;
     margin: 0;
-    padding: 5px 10px 10px 10px;
-    font-weight: bold;    
+    white-space: nowrap;
   }
 
   .wf-prediction {
-    text-align: center;
-    width: 100%;
-    /*background-color: @wf-widgetColor;
-    color: @wf-widgetBgcolor;/*/
-    padding: 5px 0px;
-    border-bottom: 2px solid @wf-widgetColor;
-    position: relative;
+    border: 1px solid @wf-widgetColor;
+    margin-bottom: 8px;
+    height: 81px;
+    overflow: hidden;
+
+    .wf-summary{
+      font-size: 8.9px;
+      background-color: @wf-widgetColor;
+      border-left: 1px solid @wf-widgetColor;
+      color: #003a63;
+      white-space: nowrap;
+    }
+
+    .wf-day{
+      font-size: 19.68px;
+      text-align: center;
+      margin-top: 10px;
+      width: 100%;
+    }
+    .wf-table-variables {
+      overflow: hidden;
+      font-size: 11.3px;
+      height: 100%;
+      width: 100%;
+      table-layout: fixed;
+
+      .wf-variable-name {
+          border-left: 1px solid @wf-widgetColor;
+          font-size: 11.3px;
+          color: #FFFFFF;
+          /*
+          background-position-x: center;
+          background-position-y: 5px;*/
+          background-position: 50% 10%;
+          background-repeat: no-repeat;
+          padding-top: 19px;
+          line-height: 10px;
+
+
+          &.wf-temperature {
+            background-image: url('/static/widgets/weather_forecast/images/air_temperature.png');
+
+            /*background-position-x: 20px;
+            background-position-y: 9px;*/
+            background-position: 20px 9px;
+            font-size: 19.4px;
+            padding-top: 7px;
+            padding-left: 25px;
+          }
+          &.wf-wind {
+            background-image: url('/static/widgets/weather_forecast/images/wind_speed.png');
+          }
+          &.wf-humidity {
+            background-image: url('/static/widgets/weather_forecast/images/relative_humidity.png');
+          }
+          &.wf-pressure {
+            background-image: url('/static/widgets/weather_forecast/images/air_pressure.png');
+          }
+      }
+      .wf-variable{
+        border-left: 1px solid @wf-widgetColor;
+        margin: 0px;
+        height: 100%;
+        font-size: 14.6px;
+        line-height: 14px;
+        vertical-align: top;
+        color: #FFFFFF;
+          .wf-units{
+            color: @wf-widgetColor;
+            font-size: 9.7px;
+            line-height: 13px;
+          }
+          &.wf-humidity {
+            font-size: 19.4px;
+          }
+          &.wf-humidity {
+            font-size: 19.4px;
+            vertical-align: middle;
+          }
+          &.wf-pressure {
+            font-size: 11.5px;
+          }
+          .wf-max-temp{
+            color: #ff2b06;
+          }
+          .wf-min-temp{
+            color: @wf-widgetColor;
+          }
+      }
+    }
   }
+
+  .wf-prediction:first-child {
+    border: 1px solid #b7aaa7;
+    .wf-summary{
+      font-size: 8.9px;
+      background-color: #b7aaa7;
+      border-left: 1px solid #b7aaa7;
+    }
+    .wf-day{
+      color: #FFFFFF;
+    }
+    .wf-table-variables {
+      .wf-variable-name {
+          border-left: 1px solid #b7aaa7;
+      }
+
+      .wf-variable {
+          border-left: 1px solid #b7aaa7;
+      }
+    }
+
+  }
+
   .wf-prediction:last-child {
-    border-bottom: none;
+    margin-bottom: 0px;
   }
 
-  .wf-summary{
-    font-size: 1.25em;
-    color: @wf-widgetTitleColor;
-    float:left;
-    margin-left: 70px;
 
-  }
-  ul.wf-variables, ul.wf-variables-header {
-    list-style: none;      
+  ul.wf-variables {
+    list-style: none;
     clear:left;
-    float:left;
     list-style:none;
     margin:0 0px 0px 10px;
     padding:0;
     position:relative;
-    left:50%;
-    text-align:center;  
+    text-align:center;
   }
-  ul.wf-variables-header {
-    color:@wf-widgetTitleColor;;
-    text-transform: uppercase; 
-    margin-top: 5px;   
-  }
+
   li.wf-variable {
+    border: 1px solid @wf-widgetColor;
     display: block;
     float: left;
     list-style:none;
     margin:0;
     padding:0;
     position:relative;
-    right:50%;      
-    margin-left: 5px;
-    min-width: 120px;
-    &.wf-day{
-      text-align: left;
-      text-transform: uppercase;   
-      min-width: 100px;   
-    }
+
     &.wf-humidity {
-      min-width: 80px;    
+      min-width: 80px;
     }
     .wf-min-temp{
       color:#2cc0d0;
@@ -96,7 +180,7 @@
     .wf-max-temp{
       color:#CC3300;
     }
-  } 
+  }
 
   [class^="wf-icon-"],
   [class*=" wf-icon-"]{
@@ -105,40 +189,43 @@
       font-weight: normal;
       font-variant: normal;
       text-transform: none;
-      line-height: 1;
+      line-height: 50px;
       -webkit-font-smoothing: antialiased;
       display: block;
-      text-decoration: inherit;      
-      font-size: 3em;
-      float:left;
-      position: absolute;
-      top: 5px;
-      left: 10px;
+      text-decoration: inherit;
+      font-size: 50px;
+      margin: auto;
+      margin-top: 5px;
+      width: 0px;
+      height: 40px;
+      padding-right: 30px;
+
+
   }
-  .wf-icon-clear-day:before { 
-      content: "\f113";      
-      color:rgb(255, 165, 0);      
+  .wf-icon-clear-day:before {
+      content: "\f113";
+      color:rgb(255, 165, 0);
       display: block;
       -webkit-animation: rotation 12s infinite linear;
   }
   .wf-icon-clear-night:before{
       content: "\f10d";
-      color:#2cc0d0;      
-      display: block;    
+      color:#2cc0d0;
+      display: block;
   };
 
-  .wf-icon-partly-cloudy-night:before,.wf-icon-partly-cloudy-day:before, .wf-icon-cloudy:before { 
+  .wf-icon-partly-cloudy-night:before,.wf-icon-partly-cloudy-day:before, .wf-icon-cloudy:before {
       content: "\f106";
-      color: rgb(204, 204, 204);   
+      color: rgb(204, 204, 204);
       position: absolute;
   }
-  
-  .wf-icon-partly-cloudy-night:after { 
+
+  .wf-icon-partly-cloudy-night:after {
       content: "\f100";
       color: #2cc0d0;
       position: absolute;
   }
-  .wf-icon-partly-cloudy-day:after { 
+  .wf-icon-partly-cloudy-day:after {
       content: "\f101";
       color: rgb(255, 165, 0);
       position: absolute;
@@ -150,34 +237,40 @@
     position:absolute;
     color:rgb(204, 204, 204);
   }
-  .wf-icon-rain:after { 
+  .wf-icon-rain:after {
       content: "\f104";
-      color: #82b2e4;   
-  }  
-  .wf-icon-snow:after{ 
+      color: #82b2e4;
+  }
+  .wf-icon-snow:after{
       content: "\f10b";
-      color: #acd3f3;   
+      color: #acd3f3;
   }
-  .wf-icon-sleet:after { 
+  .wf-icon-sleet:after {
       content: "\f10c";
-      color: #acd3f3;   
+      color: #acd3f3;
   }
-  .wf-icon-wind:after { 
+  .wf-icon-wind:after {
       content: "\f115";
-      color: rgb(255, 95, 32);   
+      color: rgb(255, 95, 32);
   }
-  .wf-icon-fog:before { 
+  .wf-icon-fog:before {
       content: "\f108";
-      color: rgb(204, 204, 204);   
+      color: rgb(204, 204, 204);
   }
   .wf-credit{
-    position: absolute;
-    bottom: 0;
-    right: 0;
     padding-right: 10px;
-    color: @wf-widgetTitleColor;
-    font-size: 0.65em;
+    font-size: 8px;
+    line-height: 10px;
+    float: right;
+    margin-top: 0px;
+    color: #FFFFFF;
   }
-  
+
+  @media (max-width: 767px) {
+    .wf-prediction {
+      height: 100%;
+    }
+  }
+
 }
 

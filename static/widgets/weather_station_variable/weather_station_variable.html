@@ -1,21 +1,14 @@
-<div class="row-fluid">
-  <div class="span9 weather-title">
-    <h3 data-bind="item.display_name"></h3>
-  </div>
-  <div class="span3 weather-icon" data-bind-class="item.standard_name | prepend 'span3 weather-icon '" data-bind-data-wind="item.current.wind_from_direction | default 'none'">
-  </div>
-</div>
-<div class="row-fluid weather-data">      
-  <div class="wsv-current span6">
-    <span data-bind="item.current.value" data-bind-title="item.current.time" class="ws-value"></span> <span data-bind="item.inputUnits" class="ws-units"></span>
-  </div>
-  <div class="span6 wsv-maxmin">
-    <div class="wsv-min  pull-right">
-      Low, <span data-bind="item.min.value" data-bind-title="item.min.time" class="ws-value"></span> <span data-bind="item.inputUnits" class="ws-units"></span>
-    </div>          
-    <div class="wsv-max  pull-right">
-      High, <span data-bind="item.max.value" data-bind-title="item.max.time" class="ws-value"></span> <span data-bind="item.inputUnits" class="ws-units"></span>
+<h2 class="weather-title" data-bind="item.display_name"></h2>
+
+<div class="weather-data" data-bind-class="item.standard_name | prepend 'weather-data '">
+    <span data-bind="item.current.value" data-bind-title="item.current.time" class="ws-currentvalue"></span> <span data-bind="item.inputUnits" class="ws-currentunits"></span> <span data-bind="item.current.wind_from_direction | displayWindDirection" class="ws-currentunits"></span>
+    <div class="wsv-maxmin">
+      <span class="wsv-max">
+        <span data-bind="item.max.value" data-bind-title="item.max.time"></span> <span data-bind="item.inputUnits" class="ws-units"></span> High
+      </span>
+      <span class="wsv-min">
+        <span data-bind="item.min.value" data-bind-title="item.min.time"></span> <span data-bind="item.inputUnits" class="ws-units"></span> Low
+      </span>
     </div>
-  </div>
 </div>
 

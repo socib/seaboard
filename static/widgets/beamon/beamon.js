@@ -32,25 +32,25 @@
 
     Beamon.prototype.ready = function() {
       this.refreshData();
-      if (this.get('title') != undefined && this.get('title') == '') {
+      if (this.get('title') !== undefined && this.get('title') == '') {
         $(this.node).find('h1').remove();
       }
-      if (this.get('type') != undefined && this.get('type') == 'waveforecast') {        
-        $(this.node).find('.situation').remove();        
-        $(this.node).append('<div class="credits">In collaboration with Puertos del Estado</div>');
+      if (this.get('type') !== undefined && this.get('type') == 'waveforecast') {
+        $(this.node).find('.situation').remove();
+        // $(this.node).append('<div class="credits">In collaboration with Puertos del Estado</div>');
       }
 
-      return setInterval(this.refreshData, 60000 * 20 ); // every 20 minutes      
+      return setInterval(this.refreshData, 60000 * 20 ); // every 20 minutes
     };
 
-    Beamon.prototype.refreshData = function() {      
+    Beamon.prototype.refreshData = function() {
       var that = this;
       var url = '';
 
-      if (this.get('type') != undefined && this.get('type') == 'timelapse') {
+      if (this.get('type') !== undefined && this.get('type') == 'timelapse') {
         url = '/beamon/' + this.get('location') + '/' + this.get('cameras') + '/today';
-      } else if (this.get('type') != undefined && this.get('type') == 'waveforecast') {
-        url = '/sapo/' + this.get('location') + '/latest';        
+      } else if (this.get('type') !== undefined && this.get('type') == 'waveforecast') {
+        url = '/sapo/' + this.get('location') + '/latest';
       }else {
         url = '/beamon/' + this.get('location') + '/' + this.get('cameras') + '/latest_mobile';
       }
@@ -58,7 +58,7 @@
         images = [];
         texts = [];
         cameras = [];
-        for (i in data) {
+        for (var i in data) {
           image = data[i];
           images.push(image.image);
           texts.push(image.title);
@@ -67,7 +67,7 @@
           }
         }
         if (images.length  > 0){
-          that.showImages(images, texts, cameras);  
+          that.showImages(images, texts, cameras);
         }else{
           that.showNoImage();
         }
@@ -76,20 +76,20 @@
       });
     };
 
-    Beamon.prototype.showImages = function(images, texts, cameras) {      
-      $(this.node).backstretch(images, texts, cameras ,{
+    Beamon.prototype.showImages = function(images, texts, cameras) {
+      $(this.node).find('.beamon-image').backstretch(images, texts, cameras ,{
         fade: 750,
         duration: 1000
       });
     };
 
-    Beamon.prototype.showNoImage = function() {      
+    Beamon.prototype.showNoImage = function() {
       var no_image = '/static/widgets/beamon/images/no_image.png';
-      if (this.get('type') != undefined && this.get('type') == 'waveforecast') {     
+      if (this.get('type') != undefined && this.get('type') == 'waveforecast') {
         no_image = '/static/widgets/beamon/images/no_image_sapo.png';
       }
 
-      $(this.node).backstretch(no_image, [], [] ,{
+      $(this.node).find('.beamon-image').backstretch(no_image, ['Waves forecast'] ,{
         fade: 750,
         duration: 1000
       });

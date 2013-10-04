@@ -1,42 +1,66 @@
 /* Base is at weather_station */
 
 .widget-vessel-info{
-  .weather-data{    
-        .wsv-current{    
-            font-size: 2.2em;  
+
+  h2 {
+    color: #FFFFFF;
+    font-size: 25.1px;
+    padding-bottom: 0px;
+    border: 1px solid #B7AAA7;
+    margin-bottom: 4px;
+  }
+
+  .weather-data{
+        color: #48c3d2;
+        border: 1px solid #48c3d2;
+        position: relative;
+        padding-top: 10px;
+        text-align: center;
+
+        .wsv-current{
+            font-size: 2.2em;
+            min-height: 95px;
+            line-height: 95px;
             span {
                 text-align: center !important;
-            }        
-            .wsv-value-units{                        
-                display: table-cell;
-                vertical-align: middle;
-                text-align: center; 
+            }
+            .wsv-value-units{
+                text-align: center;
                 span {
                     display: inline;
                 }
             }
         }
+        .wsv-min,.wsv-max{
+            display: inline-block;
+            color: #FFFFFF;
+            span{
+                color: #48c3d2;
+            }
+        }
     }
 
     &.position{
-        .wsv-current{    
-            font-size: 1.8em;  
+        .wsv-current{
+            font-size: 1.8em;
             text-align: left;
             line-height: 1.8em;
             /* height: 47px;*/
-        } 
+        }
         .wsv-min,.wsv-max{
             display: none;
-        }     
+        }
 
     }
     &.depth{
-        .wsv-current{    
-            height: 47px;
-        } 
+        .wsv-current{
+            height: 65px;
+            min-height: 65px;
+            line-height: 65px;
+        }
         .wsv-min,.wsv-max{
             display: none;
-        }     
+        }
 
-    }    
+    }
 }

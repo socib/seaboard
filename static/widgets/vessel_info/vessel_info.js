@@ -30,9 +30,6 @@
   };
 
   var conversions = {
-    'speed': function (value){
-      return ((value / 1852) * 3600).toFixed(1);
-    },
     'wind_speed': function (value){
       return ((value / 1852) * 3600).toFixed(1);
     },
@@ -81,9 +78,14 @@
     };
 
     VesselInfo.prototype.onData = function(data) {
+      if (data.error){
+        return;
+      }
+
       var oldItem = {};
       if (this.get('item') !== undefined)
         oldItem = this.get('item');
+
 
       var item = {};
       var current_value = '';
@@ -102,9 +104,9 @@
       }
       item.min = {};
 
-      if (!oldItem.min || parseFloat(oldItem.min.value) > parseFloat(item.current.value)){
+      if (!oldItem.min || !oldItem.min.value || parseFloat(oldItem.min.value) > parseFloat(item.current.value)){
         item.min.value = item.current.value;
-        item.min.dispvalue = item.current.dispalue;
+        item.min.dispvalue = item.current.dispvalue;
         item.min.time = data.time;
       }else{
         item.min.value = oldItem.min.value;
@@ -113,7 +115,7 @@
       }
 
       item.max = {};
-      if (!oldItem.max || parseFloat(oldItem.max.value) < parseFloat(item.current.value)){
+      if (!oldItem.max || !oldItem.max.value || parseFloat(oldItem.max.value) < parseFloat(item.current.value)){
         item.max.value = item.current.value;
         item.max.dispvalue = item.current.dispvalue;
         item.max.time = data.time;
@@ -173,9 +175,8 @@
     */
     VesselInfo.prototype.decimalDegrees2DMS = function(value, type) {
       degrees = Math.floor(value);
-      submin = Math.abs( (value - degrees ) * 60);
-      minutes = Math.floor(submin);
-      subseconds = Math.abs((submin-minutes) * 60);
+      minutes = Math.abs( (value - degrees ) * 60).toFixed(2);
+      // subseconds = Math.abs((submin-minutes) * 60);
       direction = "";
       if (type == "Longitude"){
         if (degrees < 0)
@@ -192,7 +193,7 @@
           else
               direction = "";
       }
-      notation = degrees + "°" + minutes + "'" + String(subseconds).substr(0,4) + "\"" + direction;
+      notation = degrees + "° " + minutes + "' " + direction;
       return notation;
     };
 

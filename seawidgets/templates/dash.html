@@ -2,93 +2,65 @@
 {% load i18n %}
 {% load static %}
 {% load qr_tags %}
+{% load compress %}
 
 {% block title %}{{ location.name }}{% endblock %}
 
 {% block content %}
-<header>
 <div class="container">
   <div class="row">
-    <div class="span6 rowspan1 logos-header">
-        <img src="{% get_static_prefix %}images/logo_Socib.png" />      
-        <img src="{% get_static_prefix %}images/logo-{{ location.code }}.png" title="{{ location.name }}" />
-    </div>  
-    <div class="span6 rowspan2">
+    <div class="span12">
+      <header>
+        <div class="logo-location"><img src="{% get_static_prefix %}images/logo-{{ location.code }}.png" title="{{ location.name }}" /></div>
         <div data-id="proud" data-view="Text" data-title="{{ location.proud_heading }}" data-text="{{ location.proud_body }}" ></div>
+        <div class="qrcode"><a href="{{ location.get_absolute_url }}">{% qr_from_object location 149 %}</a></div>
+        <div class="logo-socib"><img src="{% get_static_prefix %}images/logo_Socib.png" /></div>
+      </header>
     </div>
   </div>
-</div>  
-</header>
-<section class="status">
-  <div class="container"> 
-    <h1 class="section">Observation and real time data</h1> 
-    <div class="row">
-      <div class="span5 rowspan4">
-          <div data-id="beamon2" data-view="Beamon" data-location="{{ location.zone.code }}" data-cameras="{{ location.timelapse_cameras }}" data-type="timelapse" data-title="Beach evolution"></div>
-      </div>
-      <div class="span2 rowspan2">
-          <div data-id="weather" data-view="WeatherStation" data-location="{{ location.zone.code }}"></div>          
-          <div data-id="beach" data-view="BeachFlag" data-location="{{ location.zone.code }}" data-title="Beach alerts"></div>
-      </div>  
-      <div class="span5 rowspan4">
-        <div data-id="beamon" data-view="Beamon" data-title="Beach overview" data-location="{{ location.zone.code }}" data-type="latest"  data-cameras="{{ location.latest_cameras }}"></div>
-      </div>        
-    </div>
-  </div>
-</section>
-<section class="prediction">
-  <div class="container">  
-    <div class="row">
-      <div class="span9">
-        <h1 class="section">Wave and weather forecast</h1>
-        <div class="row">
-          <div class="span3 rowspan3">
-              <div class="waveforecast-wrapper">
-                <div data-id="waveforecast" data-view="Beamon" data-location="{{ location.zone.code }}" data-type="waveforecast" data-title=""></div>
-              </div>
+  <div class="row">
+    <div class="span8">
+      <section class="status">
+          <h1 class="section">Observation and real time data</h1>
+          <div class="row-fluid">
+            <div class="span6">
+              <div data-id="beamon" data-view="Beamon" data-location="{{ location.zone.code }}" data-cameras="{{ location.timelapse_cameras }}" data-type="timelapse" data-title="Beach evolution"></div>
+              <div data-id="beamon-second" data-view="Beamon" data-title="Beach overview" data-location="{{ location.zone.code }}" data-type="latest"  data-cameras="{{ location.latest_cameras }}"></div>
+            </div>
+            <div class="span6">
+              <div data-id="weather" data-view="WeatherStation" data-location="{{ location.zone.code }}"></div>
+              <div data-id="beach" data-view="BeachFlag" data-location="{{ location.zone.code }}" data-title="Beach alerts"></div>
+              <section class="info">
+                <h1 class="section">More information</h1>
+                <iframe src="http://player.vimeo.com/video/55355735?autoplay=0&amp;loop=1" width="100%" height="185" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+              </section>
+            </div>
           </div>
-          <div class="span6 rowspan3">
-            <div data-id="forecast" data-view="WeatherForecast" data-location="{{ location.zone.code }}"></div>          
-
-             <!-- <script type='text/javascript' src='http://www.aemet.es/en/eltiempo/prediccion/municipios/launchwidget/son-servera-id07062?w=g4p01111111ohmffffffw670z216x4f86d9t95b6e9r0s3n2'></script><noscript><a target='_blank' style='font-weight: bold;font-size: 1.20em;' href='http://www.aemet.es/en/eltiempo/prediccion/municipios/son-servera-id07062'>El Tiempo. Consulte la predicción de la AEMET para Son Servera</a></noscript>     -->
-          </div>      
+      </section>
+    </div>
+    <div class="span4">
+      <div data-id="clock2" data-view="Clock"></div>
+      <section class="prediction">
+        <h1 class="section">Wave and weather forecast</h1>
+        <div data-id="forecast" data-view="WeatherForecast" data-location="{{ location.zone.code }}"></div>
+        <div data-id="waveforecast" data-view="Beamon" data-location="{{ location.zone.code }}" data-type="waveforecast" data-title=""></div>
+      </section>
+    </div>
+  </div>
+</div>
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="span8">
+        <img src="{% get_static_prefix %}images/logo_ministerio.png" />
+        <img src="{% get_static_prefix %}images/logo_govern.png" />
+      </div>
+      <div class="span4">
+        <img src="{% get_static_prefix %}images/logo_puertos.png" />
+        <div class="footer-signature">
+          SOCIB - 2013
         </div>
       </div>
-      <div class="span3 rowspan3">
-        <h1 class="section">Location</h1>
-        <img src="http://maps.googleapis.com/maps/api/staticmap?size=430x300&maptype=terrain
-&markers=color:blue%7C{{ location.location }}&sensor=false&zoom=10" title="{{ location.name }}" />
-      </div>
-    </div>
-  </div>
-</section>
-<section class="info">  
-  <div class="container">  
-    <h1 class="section">More information<span class="pull-right"><a href="http://www.socib.es">www.socib.es</a></span></h1>
-    <div class="row">
-      <div class="span4 rowspan3">
-          <iframe src="http://player.vimeo.com/video/55355735?autoplay=1&amp;loop=1" width="100%" height="100%" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
-      </div>
-      <div class="span6 rowspan1">
-          <div data-id="rss2" data-view="RSS" data-title="{{ location.name }} RSS" data-url="{{ location.rss_url }}" ></div>
-          <div data-id="rss" data-view="RSS" data-title="SOCIB-News" data-url="http://www.socib.es/feed.php" ></div>          
-          <div class="logos-cols pull-right">
-              <img src="{% get_static_prefix %}images/logos-colaboradors.png" />      
-          </div>                
-          <!-- div data-id="clock2" data-view="Clock" data-title="clock" data-min="0" data-max="100"></div-->
-      </div>      
-      <div class="span2 rowspan1">
-          <div data-id="clock2" data-view="Clock"></div>
-          <div class="qrcode"><a href="{{ location.get_absolute_url }}">{% qr_from_object location 143 %}</a></div>
-      </div>
-
-    </div>
-  </div>
-</section>
-<footer>
-  <div class="container">  
-    <div class="pull-right">
-      SOCIB - 2013
     </div>
   </div>
 </footer>
@@ -109,3 +81,9 @@
 <script src="{% static "widgets/beach_flag/beach_flag.js" %}" ></script>
 <script src="{% static "js/seawidgets.application.js" %}" ></script>
 {% endblock page_js %}
+
+{% block page_css %}
+  {% compress css %}
+    <link type="text/less" href="{% static "css/seawidgets-dash.less" %}" rel="stylesheet" />
+  {% endcompress %}
+{% endblock page_css %}

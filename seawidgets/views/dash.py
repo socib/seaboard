@@ -26,7 +26,7 @@ def dash(request, zone_code='socib', location_code='', template='dash.html'):
         location_code = zone_code
 
     try:
-        location = Location.objects.get(code__iexact=location_code)
+        location = Location.objects.get(code__exact=location_code)
         if len(location.location) == 0:
             location.location = location.zone.latlong
 

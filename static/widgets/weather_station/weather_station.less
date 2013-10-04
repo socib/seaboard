@@ -1,154 +1,137 @@
-@widgetBgcolor:  #EEE;
-@widgetColor:  #3F4C6B;
-@widgetTitleColor:  #094F6B;
+.widget-weather-station, .widget-weather-station_variable{
+  color: #48c3d2;
+  position: relative;
+  min-height: 170px;
 
-
-.widget-weather-station, .widget-weather-station_variable, .widget-vessel-info{
-  background-color: @widgetBgcolor;
-  color: @widgetColor;
-  position: relative;  
-
-  .weather-title{
-    background-color: @widgetTitleColor;
-    color:#EEE;
-
-    h3{
-        font-size: 1em;
-      }
+  h2.weather-title{
+    color: #FFFFFF;
+    font-size: 25.1px;
+    padding-bottom: 0px;
+    border: 1px solid #B7AAA7;
+    margin-bottom: 10px;
   }
-  .weather-data{
-    margin-top: 0px;     
-    position: relative;    
 
-      .wsv-current{    
-        font-size: 3.1em;
-        font-weight: bold;
-        height: 87px;
-        display: table;   
-        text-align: center;
-        vertical-align: middle;        
-        padding-left: 10px;
-        color: @widgetTitleColor;
+  .weather-data, .weather-icon {
+    color: #48c3d2;
+    border: 1px solid #48c3d2;
+    height: 114px;
+    position: relative;
+    padding-top: 10px;
+  }
+
+  .weather-data {
+    .ws-currentvalue{
+      font-size: 56.7px;
+      line-height: 60px;
+    }
+    .wsv-maxmin{
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      text-align: center;
+      font-size: 11.3px;
+      .wsv-max,.wsv-min{
+        font-size: 12px;
+        color: #FFFFFF;
         span{
-          display: table-cell;
-          vertical-align: middle;
-          text-align: right; 
+          color: #48c3d2;
         }
-
-        span.ws-units{
-          font-size: 0.5em;           
-          color: @widgetColor;
-          text-align: left;
-        }   
-      
-      }  
-      .wsv-maxmin{
-        position: absolute;
-        height: 87px;
-        top:0;
-        right: 0;        
       }
-      .wsv-max, .wsv-min{
-        font-size: 0.75em;
-        margin: 0px 10px;  
-        position: absolute;     
-        white-space: nowrap;        
+    }
 
-        span {
-          color: @widgetTitleColor;
-          font-weight: bold;
-          font-size: 1.25em;
-        }
-      }    
-      .wsv-max{
-        top:0;
-        right: 0;
+    &.air_temperature, &.relative_humidity {
+      .ws-currentunits{
+        font-size: 56.7px;
+        line-height: 60px;
       }
-      .wsv-min{
-        bottom:0;
-        right: 0;
-      }      
+    }
+
+    &.air_pressure, &.wind_speed {
+      .ws-currentvalue{
+        font-size: 48.15px;
+        line-height: 50px;
+      }
+      .ws-currentunits{
+        font-size: 24.3px;
+        line-height: 26px;
+      }
+      .wsv-max .ws-units, .wsv-min .ws-units{
+        display: none;
+      }
+    }
+
+
+    &.rain_accumulation {
+      .wsv-max .ws-units, .wsv-min .ws-units{
+        display: none;
+      }
+    }
+
   }
 
   .weather-icon {
     background-repeat: no-repeat;
     background-position: center center;
-    height: 40px;
-    background-color: @widgetBgcolor;
-
 
       &.air_temperature {
         background-image: url('/static/widgets/weather_station/images/air_temperature.png');
       }
       &.rain_accumulation {
         background-image: url('/static/widgets/weather_station/images/rain_accumulation.png');
-      }  
+      }
       &.relative_humidity {
         background-image: url('/static/widgets/weather_station/images/relative_humidity.png');
       }
       &.air_pressure {
         background-image: url('/static/widgets/weather_station/images/air_pressure.png');
       }
-      &.wind_speed[data-wind="S"]  {
-        background-image: url('/static/widgets/weather_station/images/wind/S.png');
-      }
-      &.wind_speed[data-wind="N"]  {
-        background-image: url('/static/widgets/weather_station/images/wind/N.png');
-      }
-      &.wind_speed[data-wind="W"]  {
-        background-image: url('/static/widgets/weather_station/images/wind/W.png');
-      }
-      &.wind_speed[data-wind="E"]  {
-        background-image: url('/static/widgets/weather_station/images/wind/E.png');
-      }
-      &.wind_speed[data-wind="S"]  {
-        background-image: url('/static/widgets/weather_station/images/wind/S.png');
-      }
-      &.wind_speed[data-wind="SW"]  {
-        background-image: url('/static/widgets/weather_station/images/wind/SW.png');
-      }
-      &.wind_speed[data-wind="SE"]  {
-        background-image: url('/static/widgets/weather_station/images/wind/SE.png');
-      }
-      &.wind_speed[data-wind="NW"]  {
-        background-image: url('/static/widgets/weather_station/images/wind/NW.png');
-      }
-      &.wind_speed[data-wind="NE"]  {
-        background-image: url('/static/widgets/weather_station/images/wind/NE.png');
-      }
-      &.wind_speed[data-wind="wSW"]  {
-        background-image: url('/static/widgets/weather_station/images/wind/WSW.png');
-      }
-      &.wind_speed[data-wind="SSW"]  {
-        background-image: url('/static/widgets/weather_station/images/wind/SSW.png');
-      }
-      &.wind_speed[data-wind="SSE"]  {
-        background-image: url('/static/widgets/weather_station/images/wind/SSE.png');
-      }
-      &.wind_speed[data-wind="ESE"]  {
-        background-image: url('/static/widgets/weather_station/images/wind/ESE.png');
-      }
-      &.wind_speed[data-wind="WNW"]  {
-        background-image: url('/static/widgets/weather_station/images/wind/WNW.png');
-      }
-      &.wind_speed[data-wind="NNW"]  {
-        background-image: url('/static/widgets/weather_station/images/wind/NNW.png');
-      }
-      &.wind_speed[data-wind="ENE"]  {
-        background-image: url('/static/widgets/weather_station/images/wind/ENE.png');
-      }
-      &.wind_speed[data-wind="NNE"]  {
-        background-image: url('/static/widgets/weather_station/images/wind/NNE.png');
+      &.wind_speed{
+        background-image: url('/static/widgets/weather_station/images/wind_speed.png');
       }
   }
 
-
-  
-  nav.bb-nav{
-    display: none;
-  }
-  nav.bb-nav a {
-    background-color: @widgetTitleColor;
-  }
 }
 
+
+.widget-weather-station_variable{
+  .weather-data {
+    padding-right: 50px;
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+
+      &.air_temperature {
+        background-image: url('/static/widgets/weather_station/images/air_temperature_sm_white.png');
+        .ws-currentvalue{
+          font-size: 50px;
+          line-height: 90px;
+        }
+        .ws-currentunits{
+          font-size: 50px;
+          line-height: 51px;
+        }
+      }
+      &.air_pressure {
+        background-image: url('/static/widgets/weather_station/images/air_pressure_sm_white.png');
+        .ws-currentvalue{
+          font-size: 44.15px;
+          line-height: 50px;
+        }
+        .ws-currentunits{
+          font-size: 22.3px;
+          line-height: 24px;
+        }
+      }
+      &.wind_speed{
+        background-image: url('/static/widgets/weather_station/images/wind_speed_sm_white.png');
+        .ws-currentvalue{
+          font-size: 44.15px;
+          line-height: 50px;
+        }
+        .ws-currentunits{
+          font-size: 22.3px;
+          line-height: 24px;
+        }
+      }
+  }
+
+}

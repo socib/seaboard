@@ -3,12 +3,12 @@ Django settings for seaboard project.
 Some of them are overwriten in local_settings.
 
 """
-# 
+#
 
 
 # System Prerequisites
 # libxml2-dev libxslt1-dev (for feedparser)
-# libqrencode-dev (per qrencoder) 
+# libqrencode-dev (per qrencoder)
 # nodejs (for lessc)
 # libjpeg libjpeg-dev libfreetype6 libfreetype6-dev zlib1g-dev (for PIL, crop images)
 
@@ -171,7 +171,7 @@ LOGGING = {
         'simple': {
             'format': '%(levelname)s %(message)s'
         },
-    },    
+    },
     'filters': {
         'require_debug_false': {
             '()': 'django.utils.log.RequireDebugFalse'
@@ -188,7 +188,7 @@ LOGGING = {
             'class': 'logging.StreamHandler',
             'stream': sys.stdout,
             'formatter': 'simple'
-        },        
+        },
     },
     'loggers': {
         'django.request': {
@@ -210,38 +210,39 @@ CACHES = {
     #     'LOCATION': 'unique-seaboard',
     #     'OPTIONS': {
     #         'MAX_ENTRIES': 4000
-    #     }        
+    #     }
     # }
     'default': {
         'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
         'LOCATION': '/var/tmp/django_cache',
         'OPTIONS': {
             'MAX_ENTRIES': 4000
-        }        
+        }
     }
 }
 CACHE_MIDDLEWARE_KEY_PREFIX = 'cache'
 CACHE_MIDDLEWARE_SECONDS = 600
 
 # Seaboard settings
-DATADISCOVERY_URL = 'http://appstest.socib.es/DataDiscovery'
+# DATADISCOVERY_URL = 'http://appstest.socib.es/DataDiscovery'
+DATADISCOVERY_URL = 'http://apps.socib.es/DataDiscovery'
 
 # Remove locations
 LOCATIONS = {
     'pdp': {
         'id_platform': 35,
         'name': 'Platja de Palma',
-        'position': (39.52505, 2.73563),        
+        'position': (39.52505, 2.73563),
     },
     'clm': {
         'id_platform': 36,
         'name': 'Cala Millor',
-        'position': (39.59634, 3.38328),        
+        'position': (39.59634, 3.38328),
     },
     'snb': {
         'id_platform': 64,
         'name': 'Son Bou',
-        'position': (39.89840, 4.07657),        
+        'position': (39.89840, 4.07657),
     },
 }
 
