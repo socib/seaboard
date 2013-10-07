@@ -99,7 +99,7 @@ def station_info(request, location_code, format='html', template='weather_statio
                     if standard_name == 'wind_speed':
                         variable_data['current']['wind_from_direction'] = get_wind_from_direction(variable_list)
 
-                    results.append(variable_data)
+                results.append(variable_data)
 
     if format == 'json':
         json = simplejson.dumps(results)
@@ -201,7 +201,7 @@ def get_variable_data(id_platform, id_instrument, id_variable, standard_name, di
         min_x, max_x, min_y, max_y = variable_data[0][0], variable_data[-1][0], variable_data[0][1], variable_data[-1][-1]
         results = {'inputUnits': input_units, 'min': {'value': conversion(min_y, standard_name), 'time': _utils.strftime_from_millis(min_x)}, 'max': {'value': conversion(max_y, standard_name), 'time': _utils.strftime_from_millis(max_x)}, 'current': current, 'display_name': displayName, 'standard_name': standard_name}
     else:
-        results = {'error': 'No data available', 'current': {'value:': 'null', 'time': 0}}
+        results = {'error': 'No data available', 'current': {'value:': 'No data', 'time': 0}, 'display_name': displayName, 'standard_name': standard_name}
 
     return results
 
