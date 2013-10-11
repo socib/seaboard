@@ -27,7 +27,7 @@
               <div data-id="beamon" data-view="Beamon" data-location="{{ location.zone.code }}" data-cameras="{{ location.timelapse_cameras }}" data-type="timelapse" data-title="Beach evolution"></div>
               <div data-id="beamon-second" data-view="Beamon" data-title="Beach overview" data-location="{{ location.zone.code }}" data-type="latest"  data-cameras="{{ location.latest_cameras }}"></div>
             </div>
-            <div class="span6">
+            <div class="span6" style="padding-left:4px;">
               <div data-id="weather" data-view="WeatherStation" data-location="{{ location.zone.code }}"></div>
               <div data-id="beach" data-view="BeachFlag" data-location="{{ location.zone.code }}" data-title="Beach alerts"></div>
               <section class="info">
@@ -52,11 +52,17 @@
   <div class="container">
     <div class="row">
       <div class="span8">
-        <img src="{% get_static_prefix %}images/logo_ministerio.png" />
-        <img src="{% get_static_prefix %}images/logo_govern.png" />
+        <div class="logos">
+          <img src="{% get_static_prefix %}images/logo_ministerio.png" />
+          <img src="{% get_static_prefix %}images/logo_govern.png" />
+        </div>
       </div>
-      <div class="span4">
-        <img src="{% get_static_prefix %}images/logo_puertos.png" />
+      <div class="span2">
+        <div class="logos">
+          <img src="{% get_static_prefix %}images/logo_puertos.png" />
+        </div>
+      </div>
+      <div class="span2">
         <div class="footer-signature">
           SOCIB - 2013
         </div>
