@@ -45,8 +45,13 @@ def dash(request, zone_code='socib', location_code='', template='dash.html'):
     if request.GET.get('sandbox'):
         template = 'sandbox.html'
 
+    video_autoplay = '1'
+    if request.GET.get('autoplay'):
+        video_autoplay = request.GET.get('autoplay')
+
     kwvars = {
-        'location': location
+        'location': location,
+        'video_autoplay': video_autoplay
     }
 
     return render_to_response(template, kwvars, RequestContext(request))
