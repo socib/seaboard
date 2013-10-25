@@ -78,28 +78,29 @@ def station_info(request, location_code, format='html', template='weather_statio
     results = []
 
     for instrument in mooring_last_data['jsonInstrumentList']:
-        id_instrument = instrument['id']
-        variable_list = instrument['jsonVariableList']
-        displayName = ''
+        if 'id' in instrument and 'jsonVariableList' in instrument:
+            id_instrument = instrument['id']
+            variable_list = instrument['jsonVariableList']
+            displayName = ''
 
-        # Process variables
-        for standard_name in STATION_VARIABLES:
-            # Get id_variable
-            id_variable = ''
-            for variable_info in variable_list:
-                if variable_info['standardName'] == standard_name:
-                    id_variable = variable_info['id']
-                    displayName = variable_info['displayName']
-                    break
+            # Process variables
+            for standard_name in STATION_VARIABLES:
+                # Get id_variable
+                id_variable = ''
+                for variable_info in variable_list:
+                    if variable_info['standardName'] == standard_name:
+                        id_variable = variable_info['id']
+                        displayName = variable_info['displayName']
+                        break
 
-            if id_variable != '':
-                variable_data = get_variable_data(id_platform, id_instrument, id_variable, standard_name, displayName)
-                if 'error' not in variable_data.keys():
-                    # wind_speed hack. Add wind_from_direction.lastSampleValue
-                    if standard_name == 'wind_speed':
-                        variable_data['current']['wind_from_direction'] = get_wind_from_direction(variable_list)
+                if id_variable != '':
+                    variable_data = get_variable_data(id_platform, id_instrument, id_variable, standard_name, displayName)
+                    if 'error' not in variable_data.keys():
+                        # wind_speed hack. Add wind_from_direction.lastSampleValue
+                        if standard_name == 'wind_speed':
+                            variable_data['current']['wind_from_direction'] = get_wind_from_direction(variable_list)
 
-                results.append(variable_data)
+                    results.append(variable_data)
 
     if format == 'json':
         json = simplejson.dumps(results)

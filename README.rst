@@ -143,7 +143,7 @@ Installation
 
 		pip install gunicorn
 
-	2. Install supervisor with apt-get or aptitude
+	2. Install supervisor with apt-get or aptitude (before, aptitude install python-meld3 && pip install meld3==0.6.7)
 
 	3. Prepare gunicorn log folder. Create /var/log/gunicorn and change owner to www-data
 
@@ -165,8 +165,16 @@ Installation
 		stderr_logfile_maxbytes=1MB
 		stderr_logfile_backups=2
 
+	5. Run supervisor (reload with new config):
+		service supervisor stop
+		unlink /var/run//supervisor.sock
+		service supervisor start
 
-	5. Modify virtualhost in apache::
+	6. Enable proxy_http module in apache2::
+
+		a2enmod proxy_http
+
+	7. Modify virtualhost in apache::
 
 		<VirtualHost *:80>
 
@@ -205,5 +213,40 @@ Installation
 		        ServerSignature On
 
 		</VirtualHost>
+
+
+- Gunicorn notes::
+
+	1. Show gunicorn processes::
+
+		ps aux | grep gunicorn
+
+	2. Reload gunicorn processes::
+
+		supervisorctl pid gunicorn-seaboard | xargs kill -HUP
+
+		Or::
+
+		supervisorctl restart gunicorn-seaboard
+
+- Gstats (gunicorn stats)::
+
+	1. Install packages:
+
+		pip install gstats
+		pip install pyzmq
+		pip install setproctitle (optional)
+
+	2. Modify gunicorn_conf.py (with pre_request and post_request)
+
+	3. Init collector::
+
+		gstats-collectd -s tcp://127.0.0.2:2345
+
+	3. Show stats::
+
+		gstatsctl -c tcp://127.0.0.1:2345 stats
+
+
 
 
