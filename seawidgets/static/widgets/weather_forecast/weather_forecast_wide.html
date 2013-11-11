@@ -1,0 +1,46 @@
+<div class="wf-weeksummary" data-bind="summary"></div>
+
+<ul class="wf-variables-header">
+  <li class="wf-variable wf-day">
+    &nbsp;
+  </li>
+  <li class="wf-variable wf-temperature">
+    Temperature
+  </li>
+  <li class="wf-variable wf-wind">
+    Wind
+  </li>
+  <li class="wf-variable wf-humidity">
+    Humidity
+  </li>
+  <li class="wf-variable wf-pressure">
+    Pressure
+  </li>
+</ul>
+<div class="clearfix"></div>
+<div class="wf-predictions-wrapper">
+  <div class="wf-prediction" data-foreach-item="predictions">
+    <div data-bind-class="item.icon | prepend 'wf-icon-'"></div>
+    <ul class="wf-variables">
+      <li class="wf-variable wf-day">
+        <span data-bind="item.time"></span>
+      </li>
+      <li class="wf-variable wf-temperature">
+        <span data-bind="item.temperatureMin" class="wf-min-temp"></span> / <span data-bind="item.temperatureMax"  class="wf-max-temp"></span>
+      </li>
+      <li class="wf-variable wf-wind">
+        <span data-bind="item.windSpeed"></span> (<span data-bind="item.windBearing"></span>)</li>
+      <li class="wf-variable wf-humidity">
+        <div data-bind="item.humidity"></div>
+      </li>
+      <li class="wf-variable wf-pressure">
+        <div data-bind="item.pressure"></div>
+      </li>
+    </ul>
+    <div class="wf-summary" data-bind="item.summary"></div>
+    <div class="clearfix"></div>
+  </div>
+</div>
+<div class="wf-credit">
+  Powered by <a href="http://forecast.io/">Forecast.io</a>
+</div>

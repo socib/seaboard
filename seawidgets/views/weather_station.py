@@ -131,8 +131,14 @@ def station_variable_info(request, location_code='pdp', variable='air_temperatur
     # get instrument and variable list
     url = settings.DATADISCOVERY_URL + '/mooring-last-data?id_platform=' + str(id_platform) + '&mode=catalog'
     mooring_last_data = simplejson.load(urllib2.urlopen(url))
-    id_instrument = mooring_last_data['jsonInstrumentList'][0]['id']
-    variable_list = mooring_last_data['jsonInstrumentList'][0]['jsonVariableList']
+
+    # get first instrument
+    for instrument in mooring_last_data['jsonInstrumentList']:
+        if 'id' in instrument:
+            id_instrument = instrument['id']
+            variable_list = instrument['jsonVariableList']
+            break
+
     displayName = ''
     for variable_info in variable_list:
         if variable_info['standardName'] == variable:
@@ -165,8 +171,14 @@ def plotting_data(request, location_code='pdp', variable='air_temperature'):
     # get instrument and variable list
     url = settings.DATADISCOVERY_URL + '/mooring-last-data?id_platform=' + str(id_platform) + '&mode=catalog'
     mooring_last_data = simplejson.load(urllib2.urlopen(url))
-    id_instrument = mooring_last_data['jsonInstrumentList'][0]['id']
-    variable_list = mooring_last_data['jsonInstrumentList'][0]['jsonVariableList']
+
+    # get first instrument
+    for instrument in mooring_last_data['jsonInstrumentList']:
+        if 'id' in instrument:
+            id_instrument = instrument['id']
+            variable_list = instrument['jsonVariableList']
+            break
+
     for variable_info in variable_list:
         if variable_info['standardName'] == variable:
             id_variable = variable_info['id']

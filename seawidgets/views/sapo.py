@@ -96,7 +96,7 @@ def latest(request, location):
     for hour in range(6, 30, 2):
         # download image
         image_destination = 'CACHE/img/sapo_' + location + str(forecast_basehour).zfill(2) + '_hs' + str(hour).zfill(2) + '.jpg'
-        if not file_exists_and_not_old(join(settings.STATICFILES_DIRS[0], image_destination)):
+        if not file_exists_and_not_old(join(settings.STATIC_ROOT, image_destination)):
             process_image('%shs%s.jpg' % (zone.sapo_image_path, str(hour).zfill(2)), image_destination)
 
         image_forecast_time = forecast_basedatetime + datetime.timedelta(hours=hour)
@@ -152,6 +152,6 @@ def process_image(url, destination):
     elif url.find('sapo_n1') > 0:
         # eivissa images have another dimensions
         crop_dimensions = (130, 158, 350, 430)
-    inImage.crop(crop_dimensions).save(settings.STATICFILES_DIRS[0] + destination)
+    inImage.crop(crop_dimensions).save(settings.STATIC_ROOT + destination)
 
     return inImage

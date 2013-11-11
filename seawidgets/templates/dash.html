@@ -74,18 +74,20 @@
 {% endblock content %}
 
 {% block page_js %}
-<script src="{% static "js/jquery.backstretch.js" %}" ></script>
-<script src="{% static "widgets/text/text.js" %}" ></script>
-<script src="{% static "widgets/clock/clock.js" %}" ></script>
-<script src="{% static "widgets/beamon/beamon.js" %}" ></script>
-<script src="{% static "js/modernizr.custom.js" %}"></script>
-<script src="{% static "js/jquery.bookblock.js" %}"></script>
-<script src="{% static "widgets/weather_station/weather_station.js" %}" ></script>
-<script src="{% static "widgets/weather_forecast/weather_forecast.js" %}" ></script>
-<script src="{% static "widgets/weather_station_variable/weather_station_variable.js" %}" ></script>
-<script src="{% static "widgets/rss/rss.js" %}" ></script>
-<script src="{% static "widgets/beach_flag/beach_flag.js" %}" ></script>
-<script src="{% static "js/seawidgets.application.js" %}" ></script>
+  {% compress js %}
+    <script src="{% static "js/jquery.backstretch.js" %}" ></script>
+    <script src="{% static "widgets/text/text.js" %}" ></script>
+    <script src="{% static "widgets/clock/clock.js" %}" ></script>
+    <script src="{% static "widgets/beamon/beamon.js" %}" ></script>
+    <script src="{% static "js/modernizr.custom.js" %}"></script>
+    <script src="{% static "js/jquery.bookblock.js" %}"></script>
+    <script src="{% static "widgets/weather_station/weather_station.js" %}" ></script>
+    <script src="{% static "widgets/weather_forecast/weather_forecast.js" %}" ></script>
+    <script src="{% static "widgets/weather_station_variable/weather_station_variable.js" %}" ></script>
+    <script src="{% static "widgets/rss/rss.js" %}" ></script>
+    <script src="{% static "widgets/beach_flag/beach_flag.js" %}" ></script>
+    <script src="{% static "js/seawidgets.application.js" %}" ></script>
+  {% endcompress %}
 {% endblock page_js %}
 
 {% block page_css %}

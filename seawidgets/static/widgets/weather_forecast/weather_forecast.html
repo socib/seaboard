@@ -1,0 +1,57 @@
+<div class="wf-weeksummary" data-bind="summary"></div>
+<div class="wf-predictions-wrapper">
+  <div class="wf-prediction" data-foreach-item="predictions">
+    <div class="row-fluid fullheight">
+      <div class="span4">
+        <div data-bind="item.time" class="wf-day"></div>
+        <div data-bind-class="item.icon | prepend 'wf-icon-'"></div>
+      </div>
+      <div class="span8 fullheight">
+        <!-- div class="wf-summary" data-bind="item.summary"></div-->
+        <table class="wf-table-variables fullheight">
+          <tr>
+            <td class="wf-summary" colspan="4" data-bind="item.summary"></td>
+          </tr>
+          <tr>
+            <td class="wf-variable-name wf-temperature" width="25%">
+              °C
+            </td>
+            <td class="wf-variable-name wf-wind" width="25%">
+              Wind
+            </td>
+            <td class="wf-variable-name wf-humidity" width="25%">
+              Humidity
+            </td>
+            <td class="wf-variable-name wf-pressure" width="25%">
+              Pressure
+            </td>
+          </tr>
+          <tr>
+            <td class="wf-variable wf-temperature" width="25%">
+              <div data-bind="item.temperatureMax" class="wf-max-temp"></div>
+              <div data-bind="item.temperatureMin" class="wf-min-temp"></div>
+            </td>
+            <td class="wf-variable wf-wind" width="25%">
+              <span data-bind="item.windSpeed"></span>
+              <div class="wf-units">
+                <span data-bind="item.windSpeed_units"></span> (<span data-bind="item.windBearing"></span>)
+              </div>
+            </td>
+            <td class="wf-variable wf-humidity" width="25%">
+              <div data-bind="item.humidity"></div>
+
+            </td>
+            <td class="wf-variable wf-pressure" width="25%">
+              <div data-bind="item.pressure"></div>
+              <div data-bind="item.pressure_units" class="wf-units"></div>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="clearfix"></div>
+<div class="wf-credit">
+  Powered by <a href="http://forecast.io/">Forecast.io</a>
+</div>

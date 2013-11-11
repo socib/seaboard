@@ -1,0 +1,39 @@
+@widgetRSSBgcolor:  #094f6b;
+@widgetRSSColor:  #FFF;
+@widgetRSSTitleColor:  #F6B094;
+
+
+.widget-rss{
+  background-color: @widgetRSSBgcolor;
+  color: @widgetRSSColor;    
+  background-image: url('/static//widgets/rss/images/rss.png');
+  background-position: bottom left;
+  background-repeat: no-repeat;
+  position: relative;
+
+  .rss-from{
+    position: absolute;
+    font-size: 0.75em;
+    bottom: 0;
+    left: 40px;    
+    line-height: normal;
+  }
+
+  .bb-item{
+    display: table;    
+    a {
+      vertical-align:middle;
+      font-size: 1em;
+      line-height: 1.2em;
+      display: table-cell;
+      padding: 0px 15px;
+      color: @widgetRSSTitleColor;
+      &:hover{
+        color:@widgetRSSTitleColor;
+        text-decoration: none;
+      }
+    }
+  }  
+  
+}
+

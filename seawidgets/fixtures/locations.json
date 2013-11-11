@@ -1,0 +1,170 @@
+[
+{
+    "pk": 1, 
+    "model": "seawidgets.location", 
+    "fields": {
+        "rss_url": "http://www.agendamallorca.net/xml/semanal/rss.html", 
+        "code": "HMGF", 
+        "proud_heading": "Be proud of your hotel!", 
+        "name": "Hotel HM Gran Fiesta", 
+        "zone": 2, 
+        "date_modified": "2013-07-09T11:36:15.374Z", 
+        "user_add": 1, 
+        "timelapse_cameras": "c02", 
+        "location": "", 
+        "proud_body": "We are pleased to inform you that this hotel contributes to beach conservation and science based coastal and ocean management. Your hotel collaborates with the Beach Monitoring Programme from SOCIB.", 
+        "dash_template": "", 
+        "date_added": "2013-05-30T16:26:42.048Z", 
+        "latest_cameras": "c01,c02,c03,c10,c11,c14", 
+        "user_modify": 1, 
+        "description": "Hotel HM Gran Fiesta"
+    }
+},
+{
+    "pk": 2, 
+    "model": "seawidgets.location", 
+    "fields": {
+        "rss_url": "http://www.agendamenorca.org/rss/novetats.php?lang=en", 
+        "code": "snb", 
+        "proud_heading": "Be proud of your hotel!", 
+        "name": "Son Bou", 
+        "zone": 1, 
+        "date_modified": "2013-07-09T11:35:37.338Z", 
+        "user_add": 1, 
+        "timelapse_cameras": "c01", 
+        "location": "", 
+        "proud_body": "We are pleased to inform you that this hotel contributes to beach conservation and science based coastal and ocean management. Your hotel collaborates with the Beach Monitoring Programme from SOCIB.", 
+        "dash_template": "", 
+        "date_added": "2013-05-31T10:48:37.990Z", 
+        "latest_cameras": "all", 
+        "user_modify": 1, 
+        "description": "Son Bou"
+    }
+},
+{
+    "pk": 3, 
+    "model": "seawidgets.location", 
+    "fields": {
+        "rss_url": "http://www.agendamallorca.net/xml/semanal/rss.html", 
+        "code": "pdp", 
+        "proud_heading": "Be proud of your hotel!", 
+        "name": "Platja de Palma", 
+        "zone": 2, 
+        "date_modified": "2013-07-16T10:13:13.549Z", 
+        "user_add": 1, 
+        "timelapse_cameras": "c07,c10", 
+        "location": "", 
+        "proud_body": "We are pleased to inform you that this hotel contributes to beach conservation and science based coastal and ocean management. Your hotel collaborates with the Beach Monitoring Programme from SOCIB.", 
+        "dash_template": "", 
+        "date_added": "2013-05-31T10:52:17.385Z", 
+        "latest_cameras": "all", 
+        "user_modify": 1, 
+        "description": "Gen\u00e8ric Platja de Palma"
+    }
+},
+{
+    "pk": 4, 
+    "model": "seawidgets.location", 
+    "fields": {
+        "rss_url": "http://www.santllorenc.es/rss/rss.asp?ajag=1", 
+        "code": "clm", 
+        "proud_heading": "Be proud of your hotel!", 
+        "name": "Cala Millor", 
+        "zone": 3, 
+        "date_modified": "2013-07-09T11:37:19.741Z", 
+        "user_add": 1, 
+        "timelapse_cameras": "c01", 
+        "location": "", 
+        "proud_body": "We are pleased to inform you that this hotel contributes to beach conservation and science based coastal and ocean management. Your hotel collaborates with the Beach Monitoring Programme from SOCIB.", 
+        "dash_template": "", 
+        "date_added": "2013-05-31T10:54:19.328Z", 
+        "latest_cameras": "all", 
+        "user_modify": 1, 
+        "description": "Cala Millor"
+    }
+},
+{
+    "pk": 5, 
+    "model": "seawidgets.location", 
+    "fields": {
+        "rss_url": "http://www.agendamallorca.net/xml/semanal/rss.html", 
+        "code": "CID", 
+        "proud_heading": "Be proud of your hotel!", 
+        "name": "Hotel THB El Cid", 
+        "zone": 2, 
+        "date_modified": "2013-07-09T11:38:01.068Z", 
+        "user_add": 1, 
+        "timelapse_cameras": "c03,c10", 
+        "location": "", 
+        "proud_body": "We are pleased to inform you that this hotel contributes to beach conservation and science based coastal and ocean management. Your hotel collaborates with the Beach Monitoring Programme from SOCIB.", 
+        "dash_template": "", 
+        "date_added": "2013-06-03T09:57:11.844Z", 
+        "latest_cameras": "all", 
+        "user_modify": 1, 
+        "description": "Hotel THB El Cid - Platja de Palma"
+    }
+},
+{
+    "pk": 6, 
+    "model": "seawidgets.location", 
+    "fields": {
+        "rss_url": "http://www.agendamallorca.net/xml/semanal/rss.html", 
+        "code": "socib", 
+        "proud_heading": "SOCIB SeaBoard", 
+        "name": "SOCIB - Parc Bit", 
+        "zone": 4, 
+        "date_modified": "2013-07-09T11:52:53.793Z", 
+        "user_add": 1, 
+        "timelapse_cameras": "c01", 
+        "location": "", 
+        "proud_body": "SOCIB is a Coastal Ocean Observing and Forecasting System located in the Balearic Islands", 
+        "dash_template": "", 
+        "date_added": "2013-06-05T16:46:00.478Z", 
+        "latest_cameras": "all", 
+        "user_modify": 1, 
+        "description": "SOCIB"
+    }
+},
+{
+    "pk": 7, 
+    "model": "seawidgets.location", 
+    "fields": {
+        "rss_url": "", 
+        "code": "galfi", 
+        "proud_heading": "Be proud of your Hotel!", 
+        "name": "Station Galfi - Radar", 
+        "zone": 5, 
+        "date_modified": "2013-09-02T14:41:10.454Z", 
+        "user_add": 1, 
+        "timelapse_cameras": "", 
+        "location": "", 
+        "proud_body": "We are pleased to inform you that this hotel contributes with scientific community working on oceanographic research. Your hotel collaborates with the Coastal HF Radar Facility from SOCIB.", 
+        "dash_template": "radar", 
+        "date_added": "2013-06-27T12:18:34.645Z", 
+        "latest_cameras": "", 
+        "user_modify": 1, 
+        "description": "-"
+    }
+},
+{
+    "pk": 8, 
+    "model": "seawidgets.location", 
+    "fields": {
+        "rss_url": "", 
+        "code": "vessel", 
+        "proud_heading": " SOCIB Research Vessel Monitor", 
+        "name": "Research vessel", 
+        "zone": 6, 
+        "date_modified": "2013-10-02T09:51:04.108Z", 
+        "user_add": 1, 
+        "timelapse_cameras": "", 
+        "location": "", 
+        "proud_body": " ", 
+        "dash_template": "vessel2", 
+        "date_added": "2013-07-09T12:41:09.261Z", 
+        "latest_cameras": "", 
+        "user_modify": 1, 
+        "description": "Research vessel"
+    }
+}
+]

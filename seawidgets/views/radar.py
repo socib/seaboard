@@ -50,5 +50,5 @@ def file_exists_and_not_old(filepath):
 def save_image(url, destination):
     inStream = urllib2.urlopen(url)
 
-    with open(settings.STATICFILES_DIRS[0] + destination, "wb") as local_file:
+    with open(settings.STATIC_ROOT + destination, "wb") as local_file:
         local_file.write(inStream.read())

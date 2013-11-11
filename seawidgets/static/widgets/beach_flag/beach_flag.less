@@ -1,0 +1,65 @@
+.widget-beach-flag{
+  color: #48c3d2;
+  position: relative;
+
+  h2.swim-title{
+    color: #FFFFFF;
+    font-size: 25.1px;
+    padding-bottom: 0px;
+    border: 1px solid #B7AAA7;
+    margin-bottom: 10px;
+  }
+
+  .swim-image, .swim-flag{
+    border: 1px solid #48c3d2;
+    height: 114px;
+    position: relative;
+    padding-top: 10px;
+    background-position: center center;
+    background-repeat: no-repeat;
+    font-size: 19.4px;
+  }
+  .swim-flag{
+    background-position: center 40px;
+  }
+
+
+  .estPermitido {
+    .swim-flag{
+      background-image:url(/static/widgets/beach_flag/images/flag_bano_permitido.png);
+    }
+    .swim-image{
+      background-image:url(/static/widgets/beach_flag/images/bano_permitido.png);
+    }
+  }
+
+  .estLimitaciones {
+    .swim-flag{
+      background-image:url(/static/widgets/beach_flag/images/flag_bano_limitaciones.png);
+    }
+    .swim-image{
+      background-image:url(/static/widgets/beach_flag/images/bano_limitaciones.png);
+    }
+  }
+
+  .estPeligroso {
+    .swim-flag{
+      background-image:url(/static/widgets/beach_flag/images/flag_bano_peligroso.png);
+    }
+    .swim-image{
+      background-image:url(/static/widgets/beach_flag/images/bano_peligroso.png);
+    }
+  }
+
+  .estAusente {
+    .swim-flag{
+      background-image:url(/static/widgets/beach_flag/images/flag_bano_ausente.png);
+    }
+    .swim-image{
+      background-image:url(/static/widgets/beach_flag/images/bano_ausente.png);
+    }
+  }
+
+
+}
+

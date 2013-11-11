@@ -1,0 +1,28 @@
+//
+// Responsive: Large desktop and up
+// --------------------------------------------------
+
+
+@media (min-width: 1400px) {
+
+  // Fixed grid
+  #grid > .core(@gridColumnWidth1400, @gridGutterWidth1400);
+
+  // Fluid grid
+  #grid > .fluid(@fluidGridColumnWidth1400, @fluidGridGutterWidth1400);
+
+  // Input grid
+  #grid > .input(@gridColumnWidth1400, @gridGutterWidth1400);
+
+  // Thumbnails
+  .thumbnails {
+    margin-left: -@gridGutterWidth1400;
+  }
+  .thumbnails > li {
+    margin-left: @gridGutterWidth1400;
+  }
+  .row-fluid .thumbnails {
+    margin-left: 0;
+  }
+
+}

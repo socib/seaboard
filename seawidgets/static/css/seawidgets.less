@@ -1,0 +1,260 @@
+@import url(http://fonts.googleapis.com/css?family=Raleway:300,700);
+
+html {
+  font-size: 100%;
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background-color: #003a63;
+  color: white;
+  font-family: 'Raleway','Ubuntu','Open Sans', "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+b, strong {
+  font-weight: bold; }
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+img {
+  border: 0;
+  -ms-interpolation-mode: bicubic;
+  vertical-align: middle;
+}
+
+img, object {
+  max-width: 100%;
+}
+
+iframe {
+  max-width: 100%;
+}
+
+h1, h2, h3, h4, h5, p {
+  padding: 0;
+  margin: 0;
+  font-weight: normal;
+}
+
+.well {
+  color: #222;
+}
+
+.well h1, .well h2, .well h3{
+  color: #094f6b;
+}
+
+h1.section {
+  text-align: center;
+  font-size: 32.4px;
+  font-weight: 300;
+  color: #00FCFF;
+  border: 1px solid #B7AAA7;
+  line-height: 48.6px;
+  margin-bottom: 5px;
+}
+
+.prediction h1.section {
+  line-height: 29px;
+  min-height: 57.59px;
+}
+
+#main {
+    margin-top: 10px;
+}
+
+section.info {
+  padding: 0px 0px 0px 0px;
+  clear: both;
+  h1.section {
+    line-height: 33.4px;
+    margin-bottom: 10px;
+  }
+}
+
+footer{
+  color: #003a63;
+  font-size: 11.4px;
+  height: 45px;
+  margin-bottom: 20px;
+
+  .container{
+    background-color: #FFFFFF;
+  }
+  .logos{
+    float: left;
+    padding-top: 5px;
+    img{
+      padding-left: 5px;
+    }
+  }
+  .footer-signature{
+    margin-right: 20px;
+    float: right;
+    line-height: 45px;
+    font-weight: bold;
+  }
+
+  [class*="span"] {
+    margin-bottom: 0px;
+  }
+}
+
+.qrcode{
+  background-color: #FFFFFF;
+  text-align: center;
+}
+
+.widget {
+  padding: 0px 0px;
+  text-align: center;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.widget-text{
+  padding: 0px 20px;
+  text-align: left;
+}
+
+.widget .title{
+  padding: 10px 0px 4px 0px;
+}
+
+
+.widget.status-warning {
+  background-color: #e82711;
+  -webkit-animation: status-warning-background 2s ease infinite;
+  -moz-animation: status-warning-background 2s ease infinite;
+  -ms-animation: status-warning-background 2s ease infinite; }
+  .widget.status-warning .icon-warning-sign {
+    display: inline-block; }
+  .widget.status-warning .title, .widget.status-warning .more-info {
+    color: white; }
+
+.widget.status-danger {
+  color: white;
+  background-color: #eeae32;
+  -webkit-animation: status-danger-background 2s ease infinite;
+  -moz-animation: status-danger-background 2s ease infinite;
+  -ms-animation: status-danger-background 2s ease infinite; }
+  .widget.status-danger .icon-warning-sign {
+    display: inline-block; }
+  .widget.status-danger .title, .widget.status-danger .more-info {
+    color: white; }
+
+.more-info {
+  font-size: 15px;
+  position: absolute;
+  bottom: 32px;
+  left: 0;
+  right: 0; }
+
+.updated-at {
+  font-size: 0.55em;
+}
+
+
+ul.weather-station{
+  padding: 0 0;
+  margin: 0 0;
+}
+
+ul.weather-station li{
+  margin-right: 10px;
+  display: block;
+  float: left;
+}
+
+.rowspan12 {
+  height: 940px;
+}
+
+.rowspan11 {
+  height: 860px;
+}
+
+.rowspan10 {
+  height: 780px;
+}
+
+.rowspan9 {
+  height: 700px;
+}
+
+.rowspan8 {
+  height: 620px;
+}
+
+.rowspan7 {
+  height: 540px;
+}
+
+.rowspan6 {
+  height: 460px;
+}
+
+.rowspan5 {
+  height: 380px;
+}
+
+.rowspan4 {
+  height: 300px;
+}
+
+.rowspan3 {
+  height: 220px;
+}
+
+.rowspan2 {
+  height: 145px;
+}
+
+.rowspan1 {
+  height: 67px;
+}
+
+.row div div.widget{
+  margin-bottom: 5px;
+}
+.row div div.widget:last-child{
+  margin-bottom: 0px;
+}
+
+
+.logos-header img{
+  margin-right: 10px;
+}
+
+.logos-header img:last-child{
+  margin-right: 0px;
+}
+
+.leaflet-popup-content-wrapper{
+  color:#222;
+}
+
+.span-no-bottom-margin{
+  [class*="span"] {
+      margin-bottom: 0px;
+  }
+}
+
+
+@import "../widgets/clock/clock.less";
+@import "../widgets/weather_station/weather_station.less";
+@import "../widgets/weather_forecast/weather_forecast.less";
+@import "../widgets/rss/rss.less";
+@import "../widgets/beach_flag/beach_flag.less";
+@import "../widgets/beamon/beamon.less";
+@import "../widgets/qr/qr.less";
+@import "../widgets/radar/radar.less";
+@import "../widgets/vesselmap/vesselmap.less";
+@import "../widgets/vessel_info/vessel_info.less";
+@import "../widgets/vessel_chart/vessel_chart.less";
+@import "../widgets/vessel_wind/vessel_wind.less";
