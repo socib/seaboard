@@ -66,8 +66,23 @@ class Location(models.Model):
     def __unicode__(self):
         return u"%s - %s" % (self.code, self.name)
 
+    @property
+    def display_name(self):
+        if self.zone.code == self.code:
+            return self.name
+
+        return u"%s - %s" % (self.zone.name, self.name)
+
+
+
     @permalink
     def get_absolute_url(self):
+
+        if self.zone.code == self.code:
+            return ('seawidgets_dash', None, {
+                'zone_code': self.zone.code,
+            })
+
         return ('seawidgets_dash', None, {
             'zone_code': self.zone.code,
             'location_code': self.code,

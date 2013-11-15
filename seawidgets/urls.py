@@ -1,11 +1,13 @@
 from django.conf.urls import patterns, url
+from django.views.generic import ListView
+from models import Location
+
 
 urlpatterns = patterns(
     'seawidgets.views',
-    url(r'^$',
-        view='dash.dash',
-        name='seawidgets_dash',
-        ),
+    url(r'^$',ListView.as_view(
+            queryset=Location.objects.order_by("zone"),
+        )),
     url(r'^beamon/(?P<location>[-\w]+)/(?P<cameras>\w+(,\w+)*)/latest/?$',
         view='beamon.latest',
         name='seawidgets_beamon_latest',
@@ -111,6 +113,14 @@ urlpatterns = patterns(
     url(r'^vessel/current_meteo.json$',
         view='vessel.current_meteo',
         name='seawidgets_vessel_current_meteo',
+        ),
+    url(r'^deployments/stats.json$',
+        view='deployments.current_deployments_stats',
+        name='seawidgets_deployments_stats',
+        ),
+    url(r'^deployments/variables.json$',
+        view='deployments.current_variables',
+        name='seawidgets_deployments_variables',
         ),
 
     url(r'^views/(?P<name>[-\w]+).html$',

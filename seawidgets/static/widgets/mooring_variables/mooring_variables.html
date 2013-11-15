@@ -1,0 +1,21 @@
+<div class="variables-header">
+  <h2 class="title" data-bind="title"></h2>
+</div>
+<table class="table">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Parameter</th>
+      <th>Min</th>
+      <th>Max</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr class="variable-item" data-foreach-variable="variables">
+      <td class="td-center"><img data-bind-src="variable.image | prepend '/static/widgets/mooring_variables/images/' | append '.png'" /></td>
+      <td data-bind="variable.displayName"></td>
+      <td data-bind="variable.min | append ' ' | append variable.inputUnits"></td>
+      <td data-bind="variable.max | append ' ' | append variable.inputUnits"></td>
+    </tr>
+  </tbody>
+</table>

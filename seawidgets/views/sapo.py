@@ -74,8 +74,6 @@ def latest(request, location):
 
     """
     results = []
-    if location == 'socib':
-        location = choice(['snb', 'pdp', 'clm'])
 
     try:
         zone = Zone.objects.get(code__iexact=location)
@@ -145,13 +143,17 @@ def process_image(url, destination):
     if inImage.mode != "RGB":
         inImage = inImage.convert("RGB")
 
-    crop_dimensions = (123, 169, 452, 430)
+    # Illes Balears
+    crop_dimensions = (120, 180, 468, 407)
     if url.find('sapo_n3') > 0:
         # menorca images have another dimensions
         crop_dimensions = (130, 205, 456, 434)
     elif url.find('sapo_n1') > 0:
         # eivissa images have another dimensions
         crop_dimensions = (130, 158, 350, 430)
+    elif url.find('sapo_n2') > 0:
+        # Mallorca
+        crop_dimensions = (123, 169, 452, 430)
     inImage.crop(crop_dimensions).save(settings.STATIC_ROOT + destination)
 
     return inImage

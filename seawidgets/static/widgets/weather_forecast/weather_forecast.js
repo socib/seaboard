@@ -46,7 +46,8 @@
     WeatherForecast.prototype.showData = function(data) {
       this.set('summary', data.daily.summary);
       var that = this;
-      var predictions = _.map(_.first(data.daily.data, 3), function(prediction) {
+      var days = this.get('days') !== undefined ? this.get('days') : 3;
+      var predictions = _.map(_.first(data.daily.data, days), function(prediction) {
         var d = new Date(prediction.time * 1000);
         if (d - new Date().setHours(0, 0, 0, 0) === 0) {
           prediction.time = 'Today';
@@ -54,8 +55,10 @@
           prediction.time = d.format('dddd');
         }
         prediction.humidity = Math.round(prediction.humidity * 100) + ' %';
-        // prediction.temperatureMin += ' °C';
-        // prediction.temperatureMax += ' °C';
+        prediction.temperatureMax = prediction.temperatureMax.toFixed(1);
+        prediction.temperatureMin = prediction.temperatureMin.toFixed(1);
+        prediction.windSpeed = prediction.windSpeed.toFixed(1);
+        prediction.pressure = prediction.pressure.toFixed(1);
         prediction.pressure_units = ' hPa';
         prediction.windSpeed_units = ' km/h';
         prediction.windBearing = that.bearingToCardinal(prediction.windBearing);
