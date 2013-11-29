@@ -7,6 +7,7 @@ from django.utils import simplejson
 from django.conf import settings
 import seawidgets.functions.utils as _utils
 from seawidgets.models import Location
+from django.views.decorators.cache import cache_page
 
 import datetime
 import urllib2
@@ -30,7 +31,7 @@ CONVERSION = {
     'wind_speed': lambda x: round(x * 3.6, 2),
 }
 
-
+@cache_page(60 * 60 * 1, cache="default")
 def station_info(request, location_code, format='html', template='weather_station/station_info.html'):
     """Get current data form weather station and minimum and maximum values for the last 24 hours. It search for all variables listed in STATION_VARIABLES (now: 'air_temperature', 'wind_speed', 'air_pressure', 'relative_humidity', 'rain_accumulation').
     It returns a JSON array with every variable.
@@ -77,27 +78,29 @@ def station_info(request, location_code, format='html', template='weather_statio
     results = []
 
     for instrument in mooring_last_data['jsonInstrumentList']:
-        id_instrument = instrument['id']
-        variable_list = instrument['jsonVariableList']
-        displayName = ''
+        if 'id' in instrument and 'jsonVariableList' in instrument:
+            id_instrument = instrument['id']
+            variable_list = instrument['jsonVariableList']
+            displayName = ''
 
-        # Process variables
-        for standard_name in STATION_VARIABLES:
-            # Get id_variable
-            id_variable = ''
-            for variable_info in variable_list:
-                if variable_info['standardName'] == standard_name:
-                    id_variable = variable_info['id']
-                    displayName = variable_info['displayName']
-                    break
+            # Process variables
+            for standard_name in STATION_VARIABLES:
+                # Get id_variable
+                id_variable = ''
+                for variable_info in variable_list:
+                    if variable_info['standardName'] == standard_name:
+                        id_variable = variable_info['id']
+                        displayName = variable_info['displayName']
+                        break
 
-            if id_variable != '':
-                variable_data = get_variable_data(id_platform, id_instrument, id_variable, standard_name, displayName)
-                if 'error' not in variable_data.keys():
+                if id_variable != '':
+                    variable_data = get_variable_data(id_platform, id_instrument, id_variable, standard_name, displayName)
+                    if 'error' not in variable_data.keys():
+                        # wind_speed hack. Add wind_from_direction.lastSampleValue
+                        if standard_name == 'wind_speed':
+                            variable_data['current']['wind_from_direction'] = get_wind_from_direction(variable_list)
+
                     results.append(variable_data)
-                # wind_speed hack. Add wind_from_direction.lastSampleValue
-                elif standard_name == 'wind_speed':
-                    variable_data['current']['wind_from_direction'] = get_wind_from_direction(variable_list)
 
     if format == 'json':
         json = simplejson.dumps(results)
@@ -109,7 +112,7 @@ def station_info(request, location_code, format='html', template='weather_statio
         }
     return render_to_response(template, kwvars, RequestContext(request))
 
-
+@cache_page(60 * 5, cache="default")
 def station_variable_info(request, location_code='pdp', variable='air_temperature'):
     """Get weather station data for just one variable."""
 
@@ -128,8 +131,14 @@ def station_variable_info(request, location_code='pdp', variable='air_temperatur
     # get instrument and variable list
     url = settings.DATADISCOVERY_URL + '/mooring-last-data?id_platform=' + str(id_platform) + '&mode=catalog'
     mooring_last_data = simplejson.load(urllib2.urlopen(url))
-    id_instrument = mooring_last_data['jsonInstrumentList'][0]['id']
-    variable_list = mooring_last_data['jsonInstrumentList'][0]['jsonVariableList']
+
+    # get first instrument
+    for instrument in mooring_last_data['jsonInstrumentList']:
+        if 'id' in instrument:
+            id_instrument = instrument['id']
+            variable_list = instrument['jsonVariableList']
+            break
+
     displayName = ''
     for variable_info in variable_list:
         if variable_info['standardName'] == variable:
@@ -162,8 +171,14 @@ def plotting_data(request, location_code='pdp', variable='air_temperature'):
     # get instrument and variable list
     url = settings.DATADISCOVERY_URL + '/mooring-last-data?id_platform=' + str(id_platform) + '&mode=catalog'
     mooring_last_data = simplejson.load(urllib2.urlopen(url))
-    id_instrument = mooring_last_data['jsonInstrumentList'][0]['id']
-    variable_list = mooring_last_data['jsonInstrumentList'][0]['jsonVariableList']
+
+    # get first instrument
+    for instrument in mooring_last_data['jsonInstrumentList']:
+        if 'id' in instrument:
+            id_instrument = instrument['id']
+            variable_list = instrument['jsonVariableList']
+            break
+
     for variable_info in variable_list:
         if variable_info['standardName'] == variable:
             id_variable = variable_info['id']
@@ -199,7 +214,7 @@ def get_variable_data(id_platform, id_instrument, id_variable, standard_name, di
         min_x, max_x, min_y, max_y = variable_data[0][0], variable_data[-1][0], variable_data[0][1], variable_data[-1][-1]
         results = {'inputUnits': input_units, 'min': {'value': conversion(min_y, standard_name), 'time': _utils.strftime_from_millis(min_x)}, 'max': {'value': conversion(max_y, standard_name), 'time': _utils.strftime_from_millis(max_x)}, 'current': current, 'display_name': displayName, 'standard_name': standard_name}
     else:
-        results = {'error': 'No data available', 'current': {'value:': 'null', 'time': 0}}
+        results = {'error': 'No data available', 'current': {'value:': 'No data', 'time': 0}, 'display_name': displayName, 'standard_name': standard_name}
 
     return results
 

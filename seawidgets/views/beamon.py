@@ -78,39 +78,47 @@ def latest(request, location, cameras, folder_suffix='', images_folder='latest_i
     :returns: JSON array.
     """
 
-    end_stations = False
-    station = 0
-    images = []
+
+
+    locations = [location]
     if location == 'socib':
-        location = choice(['snb', 'pdp', 'clm'])
+        locations = ['snb', 'pdp', 'clm']
 
-    try:
-        zone = Zone.objects.get(code__iexact=location)
-    except Zone.DoesNotExist:
-        raise Http404
-
-    cameras = cameras.split(",")
-    while not end_stations:
-        station_str = str(station) if station > 0 else ''
-
-        imagespath = '/home/mobims/imageData/' + location + '/sirena/' + location + station_str + folder_suffix + '/' + images_folder + '/'
-
-        if isdir(imagespath):
-            images.extend([{'image': f, 'station': station_str, 'path': imagespath, 'time': image_time_from_filename(join(imagespath, f))} for f in listdir(imagespath) if f.endswith(('_snap.png', '_snap.jpeg', '_snap.jpg')) and isfile(join(imagespath, f)) and in_cameras(f, cameras) and _utils.isimage(join(imagespath, f))])
-        else:
-            if station != 0:
-                end_stations = True
-        station = station + 1
 
     results = []
-    for image in sorted(images):
-        result = {}
-        result['image'] = 'http://www.socib.es/users/mobims/imageArchive/' + location + '/sirena/' + location + image['station'] + folder_suffix + '/' + images_folder + '/' + image['image']
-        result['title'] = image_title_from_filename(zone, image['image'], image['path'])
-        result['time'] = image['time']
-        result['image_tn'] = 'http://www.socib.es/users/mobims/imageArchive/' + location + '/sirena/' + location + image['station'] + '_tn/' + images_folder + '/' + image['image'].replace('.png', '.jpeg')
-        result['camera'] = location + "_" + image['image'][0:image['image'].find('_')]
-        results.append(result)
+    cameras = cameras.split(",")
+
+    for location in locations:
+        try:
+            zone = Zone.objects.get(code__iexact=location)
+        except Zone.DoesNotExist:
+            raise Http404
+
+        end_stations = False
+        station = 0
+        images = []
+
+        while not end_stations:
+            station_str = str(station) if station > 0 else ''
+
+            imagespath = '/home/mobims/imageData/' + location + '/sirena/' + location + station_str + folder_suffix + '/' + images_folder + '/'
+
+            if isdir(imagespath):
+                images.extend([{'image': f, 'station': station_str, 'path': imagespath, 'time': image_time_from_filename(join(imagespath, f))} for f in listdir(imagespath) if f.endswith(('_snap.png', '_snap.jpeg', '_snap.jpg')) and isfile(join(imagespath, f)) and in_cameras(f, cameras) and _utils.isimage(join(imagespath, f))])
+            else:
+                if station != 0:
+                    end_stations = True
+            station = station + 1
+
+
+        for image in sorted(images):
+            result = {}
+            result['image'] = 'http://www.socib.es/users/mobims/imageArchive/' + location + '/sirena/' + location + image['station'] + folder_suffix + '/' + images_folder + '/' + image['image']
+            result['title'] = image_title_from_filename(zone, image['image'], image['path'])
+            result['time'] = image['time']
+            result['image_tn'] = 'http://www.socib.es/users/mobims/imageArchive/' + location + '/sirena/' + location + image['station'] + '_tn/' + images_folder + '/' + image['image'].replace('.png', '.jpeg')
+            result['camera'] = location + "_" + image['image'][0:image['image'].find('_')]
+            results.append(result)
 
     json = simplejson.dumps(results)
     return HttpResponse(json, mimetype='application/json')

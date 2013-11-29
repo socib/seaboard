@@ -1,0 +1,91 @@
+header{
+    height: 115px;
+    background-color: #ffffff;
+    color: #48c3d2;
+    font-size: 12px;
+    text-align: left;
+    line-height: 15px;
+    overflow: hidden;
+
+    h1{
+        color: #003a63;
+        font-size: 37px;
+        font-weight: 300;
+        text-align: left;
+    }
+
+    .proud{
+        width: 400px;
+        height: 100%;
+        float: left;
+    }
+    .logo-socib{
+        float: left;
+        height: 100%;
+        margin: 25px 25px 0px 25px;
+    }
+    .qrcode{
+        float: right;
+        width: 100px;
+        height: 100%;
+        margin: 10px 5px 0px 20px;
+    }
+    .logos{
+        float: right;
+        margin-top: 35px;
+        img{
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 15px;
+        }
+    }
+
+}
+
+.fullheight {
+    height: 100%;
+}
+
+.widget-deployments {
+    margin-top: 60px;
+}
+
+.prediction h1.section {
+    line-height: 48.6px;
+}
+
+h1.weather {
+    border: 1px solid #48c3d2;
+    margin: 0px 0px 10px 0px;
+    text-align: center;
+}
+
+@media (max-width: 960px) {
+    header{
+        font-size: 9px;
+        line-height: 10px;
+        h1 {
+            font-size: 14px;
+            line-height: 15px;
+        }
+        .proud{
+            width: 200px;
+            float: left;
+        }
+        .logo-socib{
+            width: 75px;
+            height: auto;
+        }
+        .qrcode{
+            width: 50px;
+            height: auto;
+        }
+    }
+    .prediction h1.section {
+        line-height: 29px;
+    }
+
+}
+
+@import "../widgets/deployments/deployments.less";
+@import "../widgets/mooring_variables/mooring_variables.less";

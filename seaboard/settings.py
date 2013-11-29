@@ -3,12 +3,12 @@ Django settings for seaboard project.
 Some of them are overwriten in local_settings.
 
 """
-# 
+#
 
 
 # System Prerequisites
 # libxml2-dev libxslt1-dev (for feedparser)
-# libqrencode-dev (per qrencoder) 
+# libqrencode-dev (per qrencoder)
 # nodejs (for lessc)
 # libjpeg libjpeg-dev libfreetype6 libfreetype6-dev zlib1g-dev (for PIL, crop images)
 
@@ -16,6 +16,7 @@ import sys
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
+DEFAULT_CHARSET='utf-8'
 
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
@@ -75,8 +76,8 @@ MEDIA_URL = ''
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/var/www/example.com/static/"
-# STATIC_ROOT = '/home/bfrontera/code/seaboard/static/'
-STATIC_ROOT = ''
+STATIC_ROOT = '/home/bfrontera/code/seaboard/static/'
+# STATIC_ROOT = 'static'
 
 # URL prefix for static files.
 # Example: "http://example.com/static/", "http://static.example.com/"
@@ -87,7 +88,7 @@ STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    '/home/bfrontera/code/seaboard/static/',
+    # '/home/bfrontera/code/seaboard/static/',
 )
 
 # List of finder classes that know how to find static files in
@@ -171,7 +172,7 @@ LOGGING = {
         'simple': {
             'format': '%(levelname)s %(message)s'
         },
-    },    
+    },
     'filters': {
         'require_debug_false': {
             '()': 'django.utils.log.RequireDebugFalse'
@@ -188,7 +189,7 @@ LOGGING = {
             'class': 'logging.StreamHandler',
             'stream': sys.stdout,
             'formatter': 'simple'
-        },        
+        },
     },
     'loggers': {
         'django.request': {
@@ -210,38 +211,39 @@ CACHES = {
     #     'LOCATION': 'unique-seaboard',
     #     'OPTIONS': {
     #         'MAX_ENTRIES': 4000
-    #     }        
+    #     }
     # }
     'default': {
         'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
         'LOCATION': '/var/tmp/django_cache',
         'OPTIONS': {
             'MAX_ENTRIES': 4000
-        }        
+        }
     }
 }
 CACHE_MIDDLEWARE_KEY_PREFIX = 'cache'
 CACHE_MIDDLEWARE_SECONDS = 600
 
 # Seaboard settings
-DATADISCOVERY_URL = 'http://appstest.socib.es/DataDiscovery'
+# DATADISCOVERY_URL = 'http://appstest.socib.es/DataDiscovery'
+DATADISCOVERY_URL = 'http://apps.socib.es/DataDiscovery'
 
 # Remove locations
 LOCATIONS = {
     'pdp': {
         'id_platform': 35,
         'name': 'Platja de Palma',
-        'position': (39.52505, 2.73563),        
+        'position': (39.52505, 2.73563),
     },
     'clm': {
         'id_platform': 36,
         'name': 'Cala Millor',
-        'position': (39.59634, 3.38328),        
+        'position': (39.59634, 3.38328),
     },
     'snb': {
         'id_platform': 64,
         'name': 'Son Bou',
-        'position': (39.89840, 4.07657),        
+        'position': (39.89840, 4.07657),
     },
 }
 

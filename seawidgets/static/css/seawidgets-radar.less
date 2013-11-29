@@ -1,0 +1,100 @@
+header{
+    height: 115px;
+    background-color: #ffffff;
+    color: #48c3d2;
+    font-size: 12px;
+    text-align: left;
+    line-height: 15px;
+    overflow: hidden;
+
+    h1{
+        color: #003a63;
+        font-size: 32px;
+        font-weight: 300;
+        text-align: left;
+    }
+    .logo-location{
+        width: 259px;
+        height: 100%;
+        float: left;
+        overflow: hidden;
+        border-right: 3px solid #003a63;
+        position: relative;
+
+        img{
+            position:absolute; top:50%; height:10em; margin-top:-5em; display: block;
+        }
+    }
+    .proud{
+        width: 400px;
+        height: 100%;
+        float: left;
+    }
+    .logo-socib{
+        float: right;
+        height: 100%;
+        margin: 25px 0px 0px 0px;
+    }
+    .qrcode{
+        float: right;
+        width: 100px;
+        height: 100%;
+        margin: 10px 5px 0px 20px;
+    }
+}
+
+.prediction h1.section {
+  line-height: 29px;
+  min-height: 35px;
+}
+
+section.location {
+  margin-top: 5px;
+  padding: 0px 0px 0px 0px;
+  clear: both;
+  h1.section {
+    line-height: 40px;
+    margin-bottom: 10px;
+  }
+}
+.widget-beamon {
+    .waveforecast {
+        background-image: url(/static/images/waves_forecast_colorscale_126.png);
+        .beamon-header{
+            height: 40px;
+            font-size: 15px;
+            line-height: 40px;
+        }
+        .beamon-image{
+            height: 126px;
+            margin-right: 32px;
+        }
+    }
+}
+
+.fullheight {
+    height: 100%;
+}
+
+@media (max-width: 960px) {
+    header{
+        font-size: 9px;
+        line-height: 10px;
+        h1 {
+            font-size: 14px;
+            line-height: 15px;
+        }
+        .proud{
+            width: 200px;
+            float: left;
+        }
+        .logo-socib{
+            width: 75px;
+            height: auto;
+        }
+        .qrcode{
+            width: 50px;
+            height: auto;
+        }
+    }
+}

@@ -10,7 +10,7 @@ from django.views.decorators.cache import cache_page
 
 # folderbase = '/home/bfrontera/code/seaboard/static/CACHE/'
 folderbase = '/home/vessel/RTDATA/'
-folderbase = '/datos/BaseDatosContinua/SCB/'
+# folderbase = '/datos/BaseDatosContinua/SCB/'
 
 def current_location(request):
     """Read last line from posicion.proc file to get current location, speed, depth... It returs a JSON object.
@@ -70,15 +70,31 @@ def current_location(request):
         return HttpResponse(json, mimetype='application/json')
 
     datafile = open(join(folderpath, filename), 'rb')
-    current_location = _utils.tail(datafile, 2)[0].split(',')
-    # fecha,longitud,latitud,rumbo,velocidad,profundidad,cog,sog,fecha_telegrama    
-    results['time'] = current_location[0]
-    results['long'] = current_location[1]
-    results['lat'] = current_location[2]
-    results['speed'] = current_location[4]
-    results['depth'] = current_location[5]
-    results['cog'] = current_location[6]
-    results['sog'] = current_location[7]
+    positions = _utils.tail(datafile, 5)
+
+    positionA = positions[0].split(',')
+    positionB = positions[-2].split(',')
+
+    # Compare begin and end position:
+    timeA = datetime.datetime.strptime(positionA[0], '%d-%m-%Y %H:%M:%S')
+    timeB = datetime.datetime.strptime(positionB[0], '%d-%m-%Y %H:%M:%S')
+    duration = (timeB - timeA).seconds
+    distance = _utils.haversine(positionA[1], positionA[2], positionB[1], positionB[2])
+    velocity = distance * 1000 / duration
+    print 'Distance of %f km in %d seconds' % (distance, duration)
+    if velocity > 13.3:
+        results['error'] = 'Data not ok. It shows a distance of %f km in %d seconds' % (distance, duration)
+        json = simplejson.dumps(results)
+        return HttpResponse(json, mimetype='application/json')
+
+    # fecha,longitud,latitud,rumbo,velocidad,profundidad,cog,sog,fecha_telegrama
+    results['time'] = positionB[0]
+    results['long'] = positionB[1]
+    results['lat'] = positionB[2]
+    results['speed'] = positionB[4]
+    results['depth'] = positionB[5]
+    results['cog'] = positionB[6]
+    results['sog'] = positionB[7]
 
     datafile.close()
 
@@ -145,7 +161,7 @@ def location(request):
         return HttpResponse(json, mimetype='application/json')
 
     # fecha,longitud,latitud,rumbo,velocidad,profundidad,cog,sog,fecha_telegrama
-  
+
     yesterday = datetime.date.fromordinal(today.toordinal()-1)
     for day in [yesterday, today]:
         folderpath = folderbase + '%s/posicion.proc/' % day.strftime('%m-%Y')
@@ -217,17 +233,33 @@ def trajectory(request):
                 positions = csv.DictReader(infile, delimiter=',')
                 # fecha,longitud,latitud,rumbo,velocidad,profundidad,cog,sog,fecha_telegrama
                 last_time = None
+                last_lon = None
+                last_lat = None
                 for position in positions:
                     # parse date: 18-02-2013 14:47:16
                     try:
                         this_time = datetime.datetime.strptime(position['fecha'], '%d-%m-%Y %H:%M:%S')
-                        if last_time is None or (this_time - last_time).seconds > 600:
-                            coordinates.append([position['longitud'], position['latitud']])
-                            last_time = this_time
+                        duration = (this_time - last_time).seconds if last_time is not None else 1
+                        if last_time is None or duration > 600:
+                            # check if distance is acceptable (in 10 minutes, less than 8 km, 48km/h, 26kn, 13.3 m/s):
+                            distance = _utils.haversine(last_lon, last_lat, position['longitud'], position['latitud'])
+                            velocity = distance * 1000 / duration
+                            if last_lon is None or velocity < 13.3:
+                                coordinates.append([position['longitud'], position['latitud']])
+                                last_time = this_time
+                                last_lon = position['longitud']
+                                last_lat = position['latitud']
+                            # else:
+                            #     print 'Discarted position for velocity: ', velocity, 'm/s'
+                            #     print 'Last position', last_lon, last_lat
+                            #     print 'Current position', position['longitud'], position['latitud']
+
                     except:
                         pass
+
                 # add last
                 coordinates.append([position['longitud'], position['latitud']])
+
 
     results = {}
     results['type'] = "FeatureCollection"
@@ -358,7 +390,7 @@ def termosal(request):
     results['sea_water_temperature'] = []
     results['sea_water_salinity'] = []
     results['sea_water_electrical_conductivity'] = []
-    results['fluor'] = []    
+    results['fluor'] = []
 
     # Test if /home/vessel/RTDATA/mm-YYYY/termosal.proc/ exists
     today = datetime.datetime.today()
@@ -388,7 +420,7 @@ def termosal(request):
             today = datetime.date.fromordinal(today.toordinal()-1)
 
     if not file_found:
-        results['error'] = 'File %s does not exist' % filename 
+        results['error'] = 'File %s does not exist' % filename
         json = simplejson.dumps(results)
         return HttpResponse(json, mimetype='application/json')
 
@@ -432,7 +464,7 @@ def meteo(request):
             "time": [],
             "wind_from_direction": [],
             "sun_radiation": []
-        }    
+        }
 
     """
     results = {}
@@ -443,7 +475,7 @@ def meteo(request):
     results['air_temperature'] = []
     results['humidity'] = []
     results['sun_radiation'] = []
-    results['air_pressure'] = []    
+    results['air_pressure'] = []
 
     # Test if /home/vessel/RTDATA/mm-YYYY/termosal.proc/ exists
     today = datetime.datetime.today()
@@ -495,7 +527,7 @@ def meteo(request):
                         if last_time is None or (this_time - last_time).seconds > 600:
                             results['time'].append(line['fecha_instrumento'])
                             results['wind_speed_mean'].append(line['velocidad_media_viento'])
-                            results['wind_speed'].append(line['velocidad_inst_viento'])                            
+                            results['wind_speed'].append(line['velocidad_inst_viento'])
                             results['wind_from_direction'].append(line['direccion_viento'])
                             results['air_temperature'].append(line['temperatura_aire'])
                             results['humidity'].append(line['humedad'])

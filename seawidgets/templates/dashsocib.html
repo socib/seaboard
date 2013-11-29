@@ -1,0 +1,75 @@
+{% extends "layout-empty.html" %}
+{% load i18n %}
+{% load static %}
+{% load qr_tags %}
+{% load compress %}
+
+{% block title %}{{ location.name }}{% endblock %}
+
+{% block content %}
+<div class="dashsocib">
+  <div class="container">
+    <div class="row">
+      <div class="span12">
+        <header>
+          <div class="logo-socib"><img src="{% get_static_prefix %}images/logo_Socib.png" /></div>
+          <div data-id="proud" data-view="Text" data-title="{{ location.proud_heading }}" data-text="{{ location.proud_body }}" ></div>
+          <div class="logos">
+            <img src="{% get_static_prefix %}images/logo_ministerio_50.png" />
+            <img src="{% get_static_prefix %}images/logo_govern_50.png" />
+          </div>
+        </header>
+      </div>
+    </div>
+    <div class="row">
+      <div class="span8">
+        <section class="status">
+            <h1 class="section">Observation and real time data</h1>
+            <div class="row-fluid">
+              <div class="span6">
+                <div data-id="beamon" data-view="Beamon" data-title="Beach overview" data-location="{{ location.zone.code }}" data-type="latest"  data-cameras="{{ location.latest_cameras }}"></div>
+                <div data-id="mooringvariables" data-view="MooringVariables" data-title="Current mooring data"></div>
+              </div>
+              <div class="span6" style="padding-left:4px;">
+                <h1 class="weather">Parc Bit Weather Station</h1>
+                <div data-id="weather" data-view="WeatherStation" data-location="{{ location.zone.code }}"></div>
+                <div data-id="deployment" data-view="Deployments" data-title="Current deployments"></div>
+              </div>
+            </div>
+        </section>
+      </div>
+      <div class="span4">
+        <div data-id="clock2" data-view="Clock"></div>
+        <section class="prediction">
+          <h1 class="section">Wave and weather forecast</h1>
+          <div data-id="forecast" data-view="WeatherForecast" data-location="{{ location.zone.code }}" data-days="4"></div>
+          <div data-id="waveforecast" data-view="Beamon" data-location="{{ location.zone.code }}" data-type="waveforecast" data-title=""></div>
+        </section>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}
+
+{% block page_js %}
+  {% compress js %}
+    <script src="{% static "js/jquery.backstretch.js" %}" ></script>
+    <script src="{% static "widgets/text/text.js" %}" ></script>
+    <script src="{% static "widgets/clock/clock.js" %}" ></script>
+    <script src="{% static "widgets/beamon/beamon.js" %}" ></script>
+    <script src="{% static "js/modernizr.custom.js" %}"></script>
+    <script src="{% static "js/jquery.bookblock.js" %}"></script>
+    <script src="{% static "widgets/weather_station/weather_station.js" %}" ></script>
+    <script src="{% static "widgets/weather_forecast/weather_forecast.js" %}" ></script>
+    <script src="{% static "widgets/deployments/deployments.js" %}" ></script>
+    <script src="{% static "widgets/mooring_variables/mooring_variables.js" %}" ></script>
+    <script src="{% static "js/seawidgets.application.js" %}" ></script>
+  {% endcompress %}
+{% endblock page_js %}
+
+{% block page_css %}
+  {% compress css %}
+    <link type="text/less" href="{% static "css/seawidgets-dashsocib.less" %}" rel="stylesheet" />
+  {% endcompress %}
+{% endblock page_css %}

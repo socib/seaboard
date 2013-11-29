@@ -48,16 +48,16 @@
       var that = this;
       var predictions = _.map(_.first(data.daily.data, 3), function(prediction) {
         var d = new Date(prediction.time * 1000);
-        if (d - new Date().setHours(0, 0, 0, 0) == 0) {
+        if (d - new Date().setHours(0, 0, 0, 0) === 0) {
           prediction.time = 'Today';
         } else {
           prediction.time = d.format('dddd');
         }
         prediction.humidity = Math.round(prediction.humidity * 100) + ' %';
-        prediction.temperatureMin += ' °C';
-        prediction.temperatureMax += ' °C';
-        prediction.pressure += ' hPa';
-        prediction.windSpeed += ' km/h';
+        // prediction.temperatureMin += ' °C';
+        // prediction.temperatureMax += ' °C';
+        prediction.pressure_units = ' hPa';
+        prediction.windSpeed_units = ' km/h';
         prediction.windBearing = that.bearingToCardinal(prediction.windBearing);
 
         return prediction;
@@ -75,7 +75,7 @@
           'W', 'NW'
       ];
       var c = cardinals.length;
-      var i = parseInt(windBearing / 360 * c + 0.5) % c;
+      var i = parseInt(windBearing / 360 * c + 0.5, 10) % c;
       return cardinals[i];
     };
 

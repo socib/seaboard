@@ -1,0 +1,19 @@
+<div class="deployments-header">
+  <h2 class="title" data-bind="title"></h2>
+</div>
+<table class="table">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Platform type</th>
+      <th>Deployments</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr class="deployment-item" data-foreach-deployment="deployments">
+      <td><img data-bind-src="deployment.image | prepend '/static/widgets/deployments/images/' | append '.png'" /></td>
+      <td data-bind="deployment.type"></td>
+      <td data-bind="deployment.count"></td>
+    </tr>
+  </tbody>
+</table>

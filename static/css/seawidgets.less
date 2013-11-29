@@ -1,4 +1,4 @@
-@import url(http://fonts.googleapis.com/css?family=Lato:300,400,700);
+@import url(http://fonts.googleapis.com/css?family=Raleway:300,700);
 
 html {
   font-size: 100%;
@@ -7,9 +7,9 @@ html {
 
 body {
   margin: 0;
-  background-color: #222222;
+  background-color: #003a63;
   color: white;
-  font-family: 'Lato','Ubuntu','Open Sans', "Helvetica Neue", Helvetica, Arial, sans-serif; 
+  font-family: 'Raleway','Ubuntu','Open Sans', "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 b, strong {
@@ -17,26 +17,27 @@ b, strong {
 
 a {
   text-decoration: none;
-  color: inherit; 
+  color: inherit;
 }
 
 img {
   border: 0;
   -ms-interpolation-mode: bicubic;
-  vertical-align: middle; 
+  vertical-align: middle;
 }
 
 img, object {
-  max-width: 100%; 
+  max-width: 100%;
 }
 
 iframe {
-  max-width: 100%;   
+  max-width: 100%;
 }
 
 h1, h2, h3, h4, h5, p {
   padding: 0;
-  margin: 0; 
+  margin: 0;
+  font-weight: normal;
 }
 
 .well {
@@ -48,55 +49,59 @@ h1, h2, h3, h4, h5, p {
 }
 
 h1.section {
-  text-align: left;
-  color: #094f6b;
-  border-bottom: 1px solid #094f6b;
+  text-align: center;
+  font-size: 32.4px;
+  font-weight: 300;
+  color: #00FCFF;
+  border: 1px solid #B7AAA7;
+  line-height: 48.6px;
   margin-bottom: 5px;
-  font-weight: normal;
 }
 
+.prediction h1.section {
+  line-height: 29px;
+  min-height: 57.59px;
+}
 
 #main {
     margin-top: 10px;
 }
 
-section.status {
-  background-color: #EEEEEE;  
-  padding: 5px 0px 10px 0px;
-  border-bottom: 1px solid #DDD;  
-}
-section.prediction {
-  background-color: #EEEEEE;
-  padding: 5px 0px 10px 0px;
-  border-bottom: 1px solid #DDD;  
-  clear: both;
-}
-section.observation-forecast{
-  background-color: #EEEEEE;
-  padding: 5px 0px 10px 0px;
-  border-bottom: 1px solid #DDD;  
-  clear: both;
-}
-
 section.info {
-  background-color: #BBBBBB;
-  padding: 5px 0px 10px 0px;
+  padding: 0px 0px 0px 0px;
   clear: both;
-  .logos-cols{
-    background-color: #FFFFFF;
-    width: 100%;   
-    text-align: left; 
-    padding: 0px;
-    height: 100%;  
-    img{
-      margin-right: 10px;
-    }
-    
+  h1.section {
+    line-height: 33.4px;
+    margin-bottom: 10px;
   }
 }
 
 footer{
-  background-color: #094f6b;
+  color: #003a63;
+  font-size: 11.4px;
+  height: 45px;
+  margin-bottom: 20px;
+
+  .container{
+    background-color: #FFFFFF;
+  }
+  .logos{
+    float: left;
+    padding-top: 5px;
+    img{
+      padding-left: 5px;
+    }
+  }
+  .footer-signature{
+    margin-right: 20px;
+    float: right;
+    line-height: 45px;
+    font-weight: bold;
+  }
+
+  [class*="span"] {
+    margin-bottom: 0px;
+  }
 }
 
 .qrcode{
@@ -108,13 +113,17 @@ footer{
   padding: 0px 0px;
   text-align: center;
   width: 100%;
-  height: 100%;  
-  background: #094f6b;
+  height: 100%;
   overflow: hidden;
 }
 
+.widget-text{
+  padding: 0px 20px;
+  text-align: left;
+}
+
 .widget .title{
-  padding: 10px 0px;
+  padding: 10px 0px 4px 0px;
 }
 
 
@@ -151,14 +160,6 @@ footer{
 }
 
 
-.widget-text p {
-  text-align: justify;
-  padding: 0px 20px;
-  font-size: 18px;
-  line-height: 22px;
-}
-
-
 ul.weather-station{
   padding: 0 0;
   margin: 0 0;
@@ -169,13 +170,6 @@ ul.weather-station li{
   display: block;
   float: left;
 }
-.widget-weather-station_variable{
-    background-color: #EEEEEE;
-    color: #222;
-    margin-right: 5px;
-
-}
-
 
 .rowspan12 {
   height: 940px;
@@ -226,23 +220,12 @@ ul.weather-station li{
 }
 
 .row div div.widget{
-  margin-bottom: 10px; 
+  margin-bottom: 5px;
 }
 .row div div.widget:last-child{
-  margin-bottom: 0px; 
+  margin-bottom: 0px;
 }
 
-/* waveforecast
-*/
-
-.waveforecast-wrapper{
-  padding-right: 50px; 
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-  background: #ffffff url(/static/images/waves_forecast_colorscale.png) no-repeat right top;
-  width: 100%;
-  height: 100%;
-}
 
 .logos-header img{
   margin-right: 10px;

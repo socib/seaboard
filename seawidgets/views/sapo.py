@@ -74,8 +74,6 @@ def latest(request, location):
 
     """
     results = []
-    if location == 'socib':
-        location = choice(['snb', 'pdp', 'clm'])
 
     try:
         zone = Zone.objects.get(code__iexact=location)
@@ -96,7 +94,7 @@ def latest(request, location):
     for hour in range(6, 30, 2):
         # download image
         image_destination = 'CACHE/img/sapo_' + location + str(forecast_basehour).zfill(2) + '_hs' + str(hour).zfill(2) + '.jpg'
-        if not file_exists_and_not_old(join(settings.STATICFILES_DIRS[0], image_destination)):
+        if not file_exists_and_not_old(join(settings.STATIC_ROOT, image_destination)):
             process_image('%shs%s.jpg' % (zone.sapo_image_path, str(hour).zfill(2)), image_destination)
 
         image_forecast_time = forecast_basedatetime + datetime.timedelta(hours=hour)
@@ -145,13 +143,17 @@ def process_image(url, destination):
     if inImage.mode != "RGB":
         inImage = inImage.convert("RGB")
 
-    crop_dimensions = (123, 169, 452, 430)
+    # Illes Balears
+    crop_dimensions = (120, 180, 468, 407)
     if url.find('sapo_n3') > 0:
         # menorca images have another dimensions
         crop_dimensions = (130, 205, 456, 434)
     elif url.find('sapo_n1') > 0:
         # eivissa images have another dimensions
         crop_dimensions = (130, 158, 350, 430)
-    inImage.crop(crop_dimensions).save(settings.STATICFILES_DIRS[0] + destination)
+    elif url.find('sapo_n2') > 0:
+        # Mallorca
+        crop_dimensions = (123, 169, 452, 430)
+    inImage.crop(crop_dimensions).save(settings.STATIC_ROOT + destination)
 
     return inImage

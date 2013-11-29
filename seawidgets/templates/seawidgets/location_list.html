@@ -1,0 +1,71 @@
+{% extends "layout-empty.html" %}
+{% load i18n %}
+{% load static %}
+{% load qr_tags %}
+{% load compress %}
+
+{% block title %}Seaboard{% endblock %}
+
+{% block content %}
+<div class="container">
+  <!-- div class="row">
+    <div class="span12">
+      <header>
+        <div class="logo-socib"><img src="{% get_static_prefix %}images/logo_Socib.png" /></div>
+        <div data-id="proud" data-view="Text" data-title="SOCIB SeaBoard" data-text="" ></div>
+      </header>
+    </div>
+  </div -->
+<div class="row">
+    <div class="span2">
+    </div>
+    <div class="span8">
+      <header>
+        <div class="logo-socib"><img src="{% get_static_prefix %}images/logo_Socib.png" /></div>
+        <div class="logos">
+          <img src="{% get_static_prefix %}images/logo_ministerio_50.png" />
+          <img src="{% get_static_prefix %}images/logo_govern_50.png" />
+        </div>
+      </header>
+    </div>
+  </div>
+  <div class="row">
+    <div class="span2">
+    </div>
+    <div class="span8">
+      <div class="hero-unit">
+        <h1>SOCIB Seaboard</h1>
+
+        <p>This application shows real time data and forecast from different locations at Balearic Islands coast. It is available in the hall of some hotels and other institutions that collaborate with different SOCIB facilities deeping in Coastal Science advance and to the beach and environment conservation.</p>
+
+        <p>SOCIB, the Balearic Islands Coastal Observing System, is an initiative to deep in linking socio-economic interest and environmental sustainability based on interdisciplinary and integral scientific knowledge.
+        </p>
+      </div>
+
+      <h2>List of seaboard locations</h2>
+      <ul class="nav nav-tabs nav-stacked">
+        {% for location in object_list %}
+            <li><a href="{{ location.get_absolute_url }}">{{ location.display_name }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+    <div class="span2">
+    </div>
+  </div>
+</div>
+{% endblock content %}
+
+{% block page_css %}
+  {% compress css %}
+    <link type="text/less" href="{% static "css/seawidgets-dashsocib.less" %}" rel="stylesheet" />
+  {% endcompress %}
+{% endblock page_css %}
+
+{% block page_js %}
+  {% compress js %}
+    <script src="{% static "widgets/text/text.js" %}" ></script>
+    <script src="{% static "widgets/clock/clock.js" %}" ></script>
+    <script src="{% static "js/modernizr.custom.js" %}"></script>
+    <script src="{% static "js/seawidgets.application.js" %}" ></script>
+  {% endcompress %}
+{% endblock page_js %}

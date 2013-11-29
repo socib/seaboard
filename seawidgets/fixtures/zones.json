@@ -1,0 +1,104 @@
+[
+{
+    "pk": 1, 
+    "model": "seawidgets.zone", 
+    "fields": {
+        "code": "snb", 
+        "name": "Son Bou", 
+        "date_modified": "2013-08-19T10:37:47.035Z", 
+        "beach_flag_url": "http://www.platgesdebalears.com/caplaibFront/playa_basico.en.jsp?cPla=73003&cMun=28&cIsl=ME", 
+        "user_add": 1, 
+        "latlong": "39.89840,4.07657", 
+        "date_added": "2013-05-30T16:22:46.844Z", 
+        "id_platform": 64, 
+        "user_modify": 1, 
+        "sapo_image_path": "http://www.socib.es/sapo2/d.sapo_n3/d.exe/d.map/", 
+        "description": "Ups, aixo podria ser un textarea"
+    }
+},
+{
+    "pk": 2, 
+    "model": "seawidgets.zone", 
+    "fields": {
+        "code": "pdp", 
+        "name": "Platja de Palma", 
+        "date_modified": "2013-08-19T10:43:18.707Z", 
+        "beach_flag_url": "http://www.platgesdebalears.com/caplaibFront/playa_basico.en.jsp?cPla=101&cMun=24&cIsl=MA", 
+        "user_add": 1, 
+        "latlong": "39.52505,2.73563", 
+        "date_added": "2013-05-30T16:23:18.927Z", 
+        "id_platform": 35, 
+        "user_modify": 1, 
+        "sapo_image_path": "http://www.socib.es/sapo2/d.sapo_n2/d.exe/d.map/", 
+        "description": ""
+    }
+},
+{
+    "pk": 3, 
+    "model": "seawidgets.zone", 
+    "fields": {
+        "code": "clm", 
+        "name": "Cala Millor", 
+        "date_modified": "2013-08-21T09:32:30.084Z", 
+        "beach_flag_url": "http://www.platgesdebalears.com/caplaibFront/playa_basico.en.jsp?cPla=53001&cMun=19&cIsl=MA", 
+        "user_add": 1, 
+        "latlong": "39.59634,3.38328", 
+        "date_added": "2013-05-30T16:23:39.049Z", 
+        "id_platform": 36, 
+        "user_modify": 1, 
+        "sapo_image_path": "http://www.socib.es/sapo2/d.sapo_n2/d.exe/d.map/", 
+        "description": ""
+    }
+},
+{
+    "pk": 4, 
+    "model": "seawidgets.zone", 
+    "fields": {
+        "code": "socib", 
+        "name": "SOCIB", 
+        "date_modified": "2013-06-14T12:37:40.369Z", 
+        "beach_flag_url": "http://www.platgesdebalears.com/caplaibFront/playa_basico.en.jsp?cPla=101&cMun=24&cIsl=MA", 
+        "user_add": 1, 
+        "latlong": "39.635733,2.631877", 
+        "date_added": "2013-06-05T16:44:17.570Z", 
+        "id_platform": 88, 
+        "user_modify": 1, 
+        "sapo_image_path": "http://www.socib.es/sapo2/d.sapo_n2/d.exe/d.map/", 
+        "description": ""
+    }
+},
+{
+    "pk": 5, 
+    "model": "seawidgets.zone", 
+    "fields": {
+        "code": "galfi", 
+        "name": "Radar Eivissa", 
+        "date_modified": "2013-06-27T12:22:28.116Z", 
+        "beach_flag_url": "", 
+        "user_add": 1, 
+        "latlong": "38.94933,1.211198", 
+        "date_added": "2013-06-27T12:17:35.158Z", 
+        "id_platform": 144, 
+        "user_modify": 1, 
+        "sapo_image_path": "http://www.socib.es/sapo2/d.sapo_n1/d.exe/d.map/", 
+        "description": ""
+    }
+},
+{
+    "pk": 6, 
+    "model": "seawidgets.zone", 
+    "fields": {
+        "code": "vessel", 
+        "name": "Research vessel", 
+        "date_modified": "2013-07-09T12:40:14.879Z", 
+        "beach_flag_url": "", 
+        "user_add": 1, 
+        "latlong": "", 
+        "date_added": "2013-07-09T12:40:14.879Z", 
+        "id_platform": 145, 
+        "user_modify": 1, 
+        "sapo_image_path": "", 
+        "description": ""
+    }
+}
+]
