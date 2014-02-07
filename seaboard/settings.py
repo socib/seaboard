@@ -14,7 +14,7 @@ Some of them are overwriten in local_settings.
 
 import sys
 
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 DEFAULT_CHARSET='utf-8'
 
