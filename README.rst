@@ -147,10 +147,10 @@ Installation
 
 	3. Prepare gunicorn log folder. Create /var/log/gunicorn and change owner to www-data
 
-	4. Configure supervisor in order to load gunicorn servir with OS. File /etc/supervisor/conf.d/gunicorn-seaboard.conf::
+	4. Configure supervisor in order to load gunicorn servir with OS. File /etc/supervisor/conf.d/gunicorn-gisservices.conf::
 
-		[program:gunicorn-seaboard]
-		command=/path/to/virtualenv/bin/gunicorn -c /var/www/seaboard/seaboard/gunicorn_conf.py seaboard.wsgi:application
+		[program:gunicorn-gisservices]
+		command=/path/to/virtualenv/bin/gunicorn -c /var/www/gisservices/gunicorn_conf.py seaboard.wsgi:application
 		directory=/var/www/seaboard
 		user=www-data
 		autostart=true

@@ -148,7 +148,13 @@ INSTALLED_APPS = (
     'compressor',
     'qrcode',
     'south',
+    'djorm_pool'
 )
+
+DJORM_POOL_OPTIONS = {
+    "pool_size": 20,
+    "max_overflow": 0
+}
 
 COMPRESS_PRECOMPILERS = (
     ('text/less', 'lessc {infile} {outfile}'),
