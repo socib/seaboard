@@ -23,7 +23,7 @@ Installation
 
 - Install python dependencies::
 
-    (virtualenv_name) $ pip install -r requirements.txt
+    (virtualenv_name) $ pip install -e requirements.txt
 
 - Install `lessc <http://lesscss.org/>`_ (via node package manager)::
 
