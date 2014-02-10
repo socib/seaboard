@@ -154,6 +154,10 @@ def process_image(url, destination):
     elif url.find('sapo_n2') > 0:
         # Mallorca
         crop_dimensions = (123, 169, 452, 430)
-    inImage.crop(crop_dimensions).save(settings.STATIC_ROOT + destination)
+
+    try:
+        inImage.crop(crop_dimensions).save(settings.STATIC_ROOT + destination)
+    except IOError:
+        return None
 
     return inImage
