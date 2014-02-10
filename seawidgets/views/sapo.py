@@ -6,7 +6,6 @@ from django.conf import settings
 
 import seawidgets.functions.utils as _utils
 import datetime
-from random import choice
 from os.path import isfile, join, getmtime
 from seawidgets.models import Zone
 
@@ -83,7 +82,7 @@ def latest(request, location):
     # get datetime of last image generation
     page = urllib2.urlopen(zone.sapo_image_path).read()
     position = page.find(str(datetime.datetime.today().year))
-    images_hour_creation = page[position+5:position+7]
+    images_hour_creation = page[position + 5:position + 7]
 
     forecast_basehour = 0
     if int(images_hour_creation) > 14:
@@ -91,7 +90,7 @@ def latest(request, location):
 
     forecast_basedatetime = get_time_prediction(forecast_basehour)
 
-    for hour in range(6, 30, 2):
+    for hour in range(6, 72, 2):
         # download image
         image_destination = 'CACHE/img/sapo_' + location + str(forecast_basehour).zfill(2) + '_hs' + str(hour).zfill(2) + '.jpg'
         if not file_exists_and_not_old(join(settings.STATIC_ROOT, image_destination)):
