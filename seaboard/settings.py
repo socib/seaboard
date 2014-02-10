@@ -10,13 +10,14 @@ Some of them are overwriten in local_settings.
 # libxml2-dev libxslt1-dev (for feedparser)
 # libqrencode-dev (per qrencoder)
 # nodejs (for lessc)
-# libjpeg libjpeg-dev libfreetype6 libfreetype6-dev zlib1g-dev (for PIL, crop images)
+# (for PIL, crop images)
+# libjpeg libjpeg-dev libfreetype6 libfreetype6-dev zlib1g-dev
 
 import sys
 
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
-DEFAULT_CHARSET='utf-8'
+DEFAULT_CHARSET = 'utf-8'
 
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
@@ -26,13 +27,12 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'name',                      # Or path to database file if using sqlite3.
-        # The following settings are not used with sqlite3:
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'name',
         'USER': 'postgres',
         'PASSWORD': 'password',
-        'HOST': 'host',                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
-        'PORT': '5433',                      # Set to empty string for default.
+        'HOST': 'host',
+        'PORT': '5433',
     }
 }
 
@@ -96,7 +96,7 @@ STATICFILES_DIRS = (
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-#    'django.contrib.staticfiles.finders.DefaultStorageFinder',
+    # 'django.contrib.staticfiles.finders.DefaultStorageFinder',
     'compressor.finders.CompressorFinder',
 )
 
@@ -107,7 +107,7 @@ SECRET_KEY = 'wkdgen#&88*cztdg39zy*0^6-4f%_($y@zh!8^z$0#+#d+fa!6'
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
-#     'django.template.loaders.eggs.Loader',
+    # 'django.template.loaders.eggs.Loader',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -126,7 +126,8 @@ ROOT_URLCONF = 'seaboard.urls'
 WSGI_APPLICATION = 'seaboard.wsgi.application'
 
 TEMPLATE_DIRS = (
-    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
+    # Put strings here, like "/home/html/django_templates" or
+    # "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
 )
@@ -148,7 +149,8 @@ INSTALLED_APPS = (
     'compressor',
     'qrcode',
     'south',
-    'djorm_pool'
+    'djorm_pool',
+    'raven.contrib.django.raven_compat',
 )
 
 DJORM_POOL_OPTIONS = {
@@ -190,7 +192,7 @@ LOGGING = {
             'filters': ['require_debug_false'],
             'class': 'django.utils.log.AdminEmailHandler'
         },
-        'console':{
+        'console': {
             'level': 'DEBUG',
             'class': 'logging.StreamHandler',
             'stream': sys.stdout,
@@ -254,6 +256,11 @@ LOCATIONS = {
 }
 
 FORECAST_IO_API = ''
+
+# Defineix el teu valor DSN (see at local_settings)
+RAVEN_CONFIG = {
+    'dsn': '',
+}
 
 try:
     from local_settings import *
