@@ -158,6 +158,7 @@ def process_image(url, destination):
     try:
         inImage.crop(crop_dimensions).save(settings.STATIC_ROOT + destination)
     except IOError:
+        # Do not return any image
         return None
 
     return inImage
