@@ -105,6 +105,12 @@ if (Function.prototype.name === undefined && Object.defineProperty !== undefined
 
     Widget.prototype.onData = function(data) {};
 
+    Widget.prototype.getName = function() {
+      var funcNameRegex = /function ([^\(]{1,})\(/;
+      var results = (funcNameRegex).exec((this).constructor.toString());
+      return (results && results.length > 1) ? results[1].trim() : "";
+    };
+
     return Widget;
 
   })(Batman.View);
