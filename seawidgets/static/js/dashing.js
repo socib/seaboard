@@ -73,7 +73,7 @@ if (Function.prototype.name === undefined && Object.defineProperty !== undefined
       this.receiveData = __bind(this.receiveData, this);
       var type, _base, _name;
 
-      this.constructor.prototype.source = Batman.Filters.underscore(this.constructor.name);
+      this.constructor.prototype.source = Batman.Filters.underscore(this.getName());
       Widget.__super__.constructor.apply(this, arguments);
       this.mixin($(this.node).data());
       (_base = Dashing.widgets)[_name = this.id] || (_base[_name] = []);
