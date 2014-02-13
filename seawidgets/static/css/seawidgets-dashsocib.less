@@ -1,28 +1,30 @@
 header{
-    height: 115px;
     background-color: #ffffff;
-    color: #48c3d2;
-    font-size: 12px;
+    color: #003a63;
+    font-size: 13px;
     text-align: left;
     line-height: 15px;
-    overflow: hidden;
 
     h1{
         color: #003a63;
-        font-size: 37px;
+        font-size: 64px;
         font-weight: 300;
         text-align: left;
+        margin-top: 6px;
     }
 
     .proud{
-        width: 400px;
-        height: 100%;
-        float: left;
+        float:left;
+        margin: 25px 25px 20px 25px;
+        width: auto;
+        p {
+            display: none;
+        }
     }
     .logo-socib{
         float: left;
         height: 100%;
-        margin: 25px 25px 0px 25px;
+        margin: 25px 25px 20px 25px;
     }
     .qrcode{
         float: right;
@@ -33,6 +35,8 @@ header{
     .logos{
         float: right;
         margin-top: 35px;
+        margin-left: 10px;
+
         img{
             display: inline-block;
             vertical-align: middle;
@@ -44,14 +48,6 @@ header{
 
 .fullheight {
     height: 100%;
-}
-
-.widget-deployments {
-    margin-top: 60px;
-}
-
-.prediction h1.section {
-    line-height: 48.6px;
 }
 
 h1.weather {
@@ -70,29 +66,17 @@ h1.weather {
     }
 }
 
-@media (max-width: 960px) {
-    header{
-        font-size: 9px;
-        line-height: 10px;
-        h1 {
-            font-size: 14px;
-            line-height: 15px;
-        }
-        .proud{
-            width: 200px;
-            float: left;
-        }
-        .logo-socib{
-            width: 75px;
-            height: auto;
-        }
-        .qrcode{
-            width: 50px;
-            height: auto;
-        }
+.upper-clock{
+    float: right;
+    .widget-clock{
+        border: none;
     }
-    .prediction h1.section {
-        line-height: 29px;
+}
+
+
+@media (max-width: 960px) {
+    h1.section {
+        font-size: 20px;
     }
 
 }

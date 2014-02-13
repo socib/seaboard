@@ -1,13 +1,21 @@
 # coding: utf-8
-
 from django.http import HttpResponse
 from django.utils import simplejson
 from django.views.decorators.cache import cache_page
-
 from django.conf import settings
-
 import urllib2
 import re
+from collections import Counter, OrderedDict
+
+PLATFORM_TYPES = (
+    'Glider',
+    'Research Vessel',
+    'Surface drifter',
+    'Profiler drifter',
+    'Coastal Station',
+    'Oceanographic Buoy',
+    'Sea Level',
+    'Weather Station')
 
 
 @cache_page(60 * 60 * 2, cache="default")
@@ -15,28 +23,25 @@ def current_deployments_stats(request):
     """Get current SOCIB deployments stats (how many drifters, argo, gliders, RV, moorings...).
 
     """
+    cnt = Counter(PLATFORM_TYPES)
+    cnt.subtract(cnt)  # init whit zeroes
+
+    # Add deployments
     url = settings.DATADISCOVERY_URL + '/list-deployments?state=active'
     deployments = simplejson.load(urllib2.urlopen(url))
-    stats = {}
+    platforms = [deployment['platform']['platformType'] for deployment in deployments]
+    cnt.update(platforms)
 
-    for deployment in deployments:
-        platformType = deployment['platform']['platformType']
-        if platformType in stats.keys():
-            stats[platformType] += 1
-        else:
-            stats[platformType] = 1
-
+    # Add moorings
     url = settings.DATADISCOVERY_URL + '/list-moorings'
     moorings = simplejson.load(urllib2.urlopen(url))
-    for mooring in moorings:
-        platformType = mooring['platformType']
-        if platformType in stats.keys():
-            stats[platformType] += 1
-        else:
-            stats[platformType] = 1
+    platforms = [mooring['platformType'] for mooring in moorings]
+    cnt.update(platforms)
 
+    results = OrderedDict(sorted(cnt.items(), key=lambda item: item[1], reverse=True))
 
-    return HttpResponse(simplejson.dumps(stats), mimetype='application/json')
+    return HttpResponse(simplejson.dumps(results), mimetype='application/json')
+
 
 @cache_page(60 * 20, cache="default")
 def current_variables(request):
@@ -71,7 +76,6 @@ def current_variables(request):
         }
     }
 
-
     url = settings.DATADISCOVERY_URL + '/list-moorings?units=user'
     moorings = simplejson.load(urllib2.urlopen(url))
     for mooring in moorings:
@@ -81,6 +85,11 @@ def current_variables(request):
                 if variable['standardName'] in variables.keys():
                     try:
                         lastSampleValue = float(re.search('([^\s]+)', variable['lastSampleValue']).group(0))
+                        if variable['standardName'] == 'water_surface_height_above_reference_datum':
+                            lastSampleValue = round(lastSampleValue, 2)
+                        else:
+                            lastSampleValue = round(lastSampleValue, 1)
+
                     except ValueError:
                         continue
 
@@ -104,6 +113,5 @@ def current_variables(request):
                     result_variable['min'] = min_value
                     result_variable['max'] = max_value
                     result_variable['inputUnits'] = variable['inputUnits']
-
 
     return HttpResponse(simplejson.dumps(variables), mimetype='application/json')

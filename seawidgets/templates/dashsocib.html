@@ -12,13 +12,17 @@
     <div class="row">
       <div class="span12">
         <header>
-          <div class="logo-socib"><img src="{% get_static_prefix %}images/logo_Socib.png" /></div>
-          <div data-id="proud" data-view="Text" data-title="{{ location.proud_heading }}" data-text="{{ location.proud_body }}" ></div>
-          <div class="logos">
-            <img src="{% get_static_prefix %}images/logo_ministerio_50.png" />
-            <img src="{% get_static_prefix %}images/logo_govern_50.png" />
-          </div>
+            <div class="logo-socib"><img src="{% get_static_prefix %}images/logo_Socib.png" /></div>
+            <div data-id="proud" data-view="Text" data-title="{{ location.proud_heading }}" data-text="{{ location.proud_body }}" ></div>
+            <div class="logos">
+              <img src="{% get_static_prefix %}images/logo_ministerio_50.png" />
+              <img src="{% get_static_prefix %}images/logo_govern_50.png" />
+            </div>
+            <div style="clear: both; margin-bottom: 10px;"></div>
         </header>
+      </div>
+      <div class="span4 upper-clock">
+        <div data-id="clock2" data-view="Clock"></div>
       </div>
     </div>
     <div class="row">
@@ -28,7 +32,7 @@
             <div class="row-fluid">
               <div class="span6">
                 <div data-id="beamon" data-view="Beamon" data-title="Beach overview" data-location="{{ location.zone.code }}" data-type="latest"  data-cameras="{{ location.latest_cameras }}"></div>
-                <div data-id="mooringvariables" data-view="MooringVariables" data-title="Current mooring data"></div>
+                <div data-id="mooringvariables" data-view="MooringVariables" data-title="Balearic sea state"></div>
               </div>
               <div class="span6" style="padding-left:4px;">
                 <h1 class="weather">Parc Bit Weather Station</h1>
@@ -39,9 +43,8 @@
         </section>
       </div>
       <div class="span4">
-        <div data-id="clock2" data-view="Clock"></div>
         <section class="prediction">
-          <h1 class="section">Wave and weather forecast</h1>
+          <h1 class="section">Forecast</h1>
           <div data-id="forecast" data-view="WeatherForecast" data-location="{{ location.zone.code }}" data-days="4"></div>
           <div data-id="waveforecast" data-view="Beamon" data-location="{{ location.zone.code }}" data-type="waveforecast" data-title=""></div>
         </section>

@@ -20,7 +20,7 @@ def dash(request, zone_code='socib', location_code='', template='dash.html'):
     :param template:
     """
 
-    logger.info('Enter dash with zone %s and location %s' % (zone_code, location_code))
+    logger.debug('Enter dash with zone %s and location %s' % (zone_code, location_code))
     # If not location_code given, search default location for zone (same code as zone)
     if len(location_code) == 0:
         location_code = zone_code
@@ -76,7 +76,7 @@ def status(request):
     results = {}
 
     try:
-        location_list = Location.objects.all()
+        Location.objects.all()  # just check database
         results = {'ok': 'server up and running!'}
     except Exception:
         results = {'error': 'database lookup did not work'}

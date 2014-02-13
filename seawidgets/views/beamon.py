@@ -220,7 +220,9 @@ def image_title(zone, image, camera):
         if date_search:
             date = date_search.group(1)
             date_object = _utils.utc_to_local(datetime.datetime.strptime(date, '%Y-%m-%d-%H-%M'))
-            title = '%s - %s: %s' % (zone.name, camera, date_object.strftime('%d/%m/%Y %H:%M'))
+            title = '%s - Cam %s: %s' % (zone.name,
+                camera.replace('c', ''),
+                date_object.strftime('%d/%m/%Y %H:%M'))
     except:
         pass
 
@@ -241,7 +243,9 @@ def image_title_from_filename(zone, image, imagepath):
     try:
         time_object = time.localtime(getmtime(join(imagepath, image)))
         camera = image[0:image.find('_')]
-        title = '%s - %s: %s' % (zone.name, camera, time.strftime('%d/%m/%Y %H:%M', time_object))
+        title = '%s - Cam %s: %s' % (zone.name,
+            camera.replace('c', ''),
+            time.strftime('%d/%m/%Y %H:%M', time_object))
     except:
         pass
 
