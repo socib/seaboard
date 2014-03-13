@@ -9,7 +9,7 @@
 {% block content %}
 <div class="container">
   <div class="row">
-    <div class="span12">
+    <div class="span12" style="margin-bottom: 0;">
       <header>
         <div class="logo-location"><img src="{% get_static_prefix %}images/logo-{{ location.code }}.png" title="{{ location.name }}" /></div>
         <div data-id="proud" data-view="Text" data-title="{{ location.proud_heading }}" data-text="{{ location.proud_body }}" ></div>
@@ -23,27 +23,31 @@
       <section class="status">
           <h1 class="section">Observation and real time data</h1>
           <div class="row-fluid">
-            <div class="span6">
+            <div class="span6"  style="padding-right:4px;">
               <div data-id="beamon" data-view="Beamon" data-location="{{ location.zone.code }}" data-cameras="{{ location.timelapse_cameras }}" data-type="timelapse" data-title="Beach evolution"></div>
               <div data-id="beamon-second" data-view="Beamon" data-title="Beach overview" data-location="{{ location.zone.code }}" data-type="latest"  data-cameras="{{ location.latest_cameras }}"></div>
+              {% if location.beach_information %}
+              <div data-id="beachinfo" data-view="Text" data-title="Beach information" data-text="{{ location.beach_information }}" style="height: 122px; overflow: hidden;"></div>
+              {% endif %}
             </div>
             <div class="span6" style="padding-left:4px;">
-              <div data-id="weather" data-view="WeatherStation" data-location="{{ location.zone.code }}"></div>
+              <div data-id="weather" data-view="WeatherStation" data-location="{{ location.zone.code }}" data-title="Hotel weather station"></div>
               <div data-id="beach" data-view="BeachFlag" data-location="{{ location.zone.code }}" data-title="Beach alerts"></div>
               <section class="info">
                 <h1 class="section">More information</h1>
-                <iframe src="http://player.vimeo.com/video/55355735?autoplay={{ video_autoplay }}&amp;loop=1" width="100%" height="185" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+                <div class="widget" style="padding-top: 19px; padding-bottom: 19px;">
+                  <iframe src="http://player.vimeo.com/video/55355735?autoplay={{ video_autoplay }}&amp;loop=1" width="100%" height="185" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+                </div>
               </section>
             </div>
           </div>
       </section>
     </div>
     <div class="span4">
-      <div data-id="clock2" data-view="Clock"></div>
       <section class="prediction">
-        <h1 class="section">Wave and weather forecast</h1>
-        <div data-id="forecast" data-view="WeatherForecast" data-location="{{ location.zone.code }}"></div>
-        <div data-id="waveforecast" data-view="Beamon" data-location="{{ location.zone.code }}" data-type="waveforecast" data-title=""></div>
+        <h1 class="section">Forecast</h1>
+        <div data-id="forecast" data-view="WeatherForecast" data-location="{{ location.zone.code }}" data-title="Weather forecast"></div>
+        <div data-id="waveforecast" data-view="Beamon" data-location="{{ location.zone.code }}" data-type="waveforecast" data-title="Waves forecast"></div>
       </section>
     </div>
   </div>
@@ -62,10 +66,8 @@
           <img src="{% get_static_prefix %}images/logo_puertos.png" />
         </div>
       </div>
-      <div class="span2">
-        <div class="footer-signature">
-          SOCIB - {% now "Y" %}
-        </div>
+      <div class="span2 custom-clock">
+        <div data-id="clock2" data-view="Clock"></div>
       </div>
     </div>
   </div>

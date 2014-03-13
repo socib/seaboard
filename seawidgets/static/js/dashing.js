@@ -106,9 +106,18 @@ if (Function.prototype.name === undefined && Object.defineProperty !== undefined
     Widget.prototype.onData = function(data) {};
 
     Widget.prototype.getName = function() {
-      var funcNameRegex = /function ([^\(]{1,})\(/;
-      var results = (funcNameRegex).exec((this).constructor.toString());
-      return (results && results.length > 1) ? results[1].trim() : "";
+      var funcNameRegex, results;
+
+      if ((this.constructor.name !== null)) {
+        return this.constructor.name;
+      }
+      funcNameRegex = /function ([^\(]{1,})\(/;
+      results = funcNameRegex.exec(this.constructor.toString());
+      if (results && results.length > 1) {
+        return results[1].trim();
+      } else {
+        return "";
+      }
     };
 
     return Widget;

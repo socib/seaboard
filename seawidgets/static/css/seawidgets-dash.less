@@ -1,11 +1,7 @@
 header{
-    height: 115px;
-    background-color: #ffffff;
-    color: #003a63;
     font-size: 13px;
     text-align: left;
     line-height: 15px;
-    overflow: hidden;
 
     h1{
         color: #003a63;
@@ -14,21 +10,29 @@ header{
         text-align: left;
     }
     .logo-location{
-        width: 259px;
-        height: 100%;
+        height: 80px;
         float: left;
         overflow: hidden;
-        border-right: 3px solid #003a63;
         position: relative;
+        margin-top: 25px;
 
         img{
             height: 100%;
         }
     }
     .proud{
-        width: 400px;
-        height: 100%;
-        float: left;
+        float:left;
+        margin: 20px 15px 0 25px;
+        width: auto;
+        max-width: 650px;
+        box-shadow: none;
+        background: none;
+        .title{
+            font-size: 2.5em;
+            font-weight: bold;
+            border: none;
+            text-align: left;
+        }
     }
     .logo-socib{
         float: right;
@@ -42,22 +46,27 @@ header{
         margin: 10px 5px 0px 20px;
     }
 }
-.beamon-second{
-    margin-top: 32px;
-}
 
-.fullheight {
-    height: 100%;
-}
+.custom-clock{
+    float: right;
+    text-align: right;
+    .widget-clock{
+        border: none;
+        text-align: right;
+        width: auto;
+        box-shadow: none;
+        background: none;
+        float: right;
+        padding: 0;
+        margin: 0;
 
-.prediction h1.section {
-    min-height: 57.59px;
-}
-
-
-@media (max-width: 1400px) {
-    .prediction h1.section {
-        line-height: 29px;
+        div{
+            text-align: right;
+            h1, h2 {
+                font-size: 17px;
+                min-width: 0;
+            }
+        }
     }
 }
 
@@ -68,10 +77,6 @@ header{
         h1 {
             font-size: 14px;
             line-height: 15px;
-        }
-        .proud{
-            width: 200px;
-            float: left;
         }
         .logo-socib{
             width: 75px;

@@ -1,12 +1,9 @@
 header{
-    background-color: #ffffff;
-    color: #003a63;
     font-size: 13px;
     text-align: left;
     line-height: 15px;
 
     h1{
-        color: #003a63;
         font-size: 64px;
         font-weight: 300;
         text-align: left;
@@ -15,16 +12,23 @@ header{
 
     .proud{
         float:left;
-        margin: 25px 25px 20px 25px;
+        margin: 20px 15px 0 25px;
         width: auto;
+        box-shadow: none;
+        background: none;
         p {
             display: none;
+        }
+        .title{
+            font-size: 4.5em;
+            font-weight: bold;
+            border: none;
         }
     }
     .logo-socib{
         float: left;
         height: 100%;
-        margin: 25px 25px 20px 25px;
+        margin: 10px 25px 0 25px;
     }
     .qrcode{
         float: right;
@@ -34,7 +38,7 @@ header{
     }
     .logos{
         float: right;
-        margin-top: 35px;
+        margin-top: 25px;
         margin-left: 10px;
 
         img{
@@ -46,15 +50,6 @@ header{
 
 }
 
-.fullheight {
-    height: 100%;
-}
-
-h1.weather {
-    border: 1px solid #48c3d2;
-    margin: 0px 0px 10px 0px;
-    text-align: center;
-}
 .widget-beamon {
     .waveforecast {
         background-size: 50px 225px;
@@ -66,10 +61,31 @@ h1.weather {
     }
 }
 
-.upper-clock{
+.widget-deployments{
+    padding-bottom: 33px;
+}
+
+.widget-mooring-variables{
+    padding-bottom: 19px;
+}
+
+
+.custom-clock{
     float: right;
+    text-align: right;
+    margin-top: -20px;
     .widget-clock{
         border: none;
+        text-align: right;
+        width: auto;
+        box-shadow: none;
+        background: none;
+        float: right;
+        padding: 0;
+
+        div{
+            text-align: right;
+        }
     }
 }
 

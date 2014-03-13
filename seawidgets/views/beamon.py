@@ -77,13 +77,9 @@ def latest(request, location, cameras, folder_suffix='', images_folder='latest_i
     :param images_folder: optional. Folder that contains images (useful to get resized images instead original)
     :returns: JSON array.
     """
-
-
-
     locations = [location]
     if location == 'socib':
         locations = ['snb', 'pdp', 'clm']
-
 
     results = []
     cameras = cameras.split(",")
@@ -109,7 +105,6 @@ def latest(request, location, cameras, folder_suffix='', images_folder='latest_i
                 if station != 0:
                     end_stations = True
             station = station + 1
-
 
         for image in sorted(images):
             result = {}
@@ -181,7 +176,7 @@ def today(request, location, cameras, folder_suffix=''):
     results = []
 
     today = datetime.datetime.today()
-    yesterday = datetime.date.fromordinal(today.toordinal()-1)
+    yesterday = datetime.date.fromordinal(today.toordinal() - 1)
 
     logger.info('Enter beamon_today. Cameras %s' % cameras)
 

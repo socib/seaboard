@@ -55,8 +55,8 @@
           prediction.time = d.format('dddd');
         }
         prediction.humidity = Math.round(prediction.humidity * 100) + ' %';
-        prediction.temperatureMax = prediction.temperatureMax.toFixed(1);
-        prediction.temperatureMin = prediction.temperatureMin.toFixed(1);
+        prediction.temperatureMax = prediction.temperatureMax.toFixed(1) + ' °C';
+        prediction.temperatureMin = prediction.temperatureMin.toFixed(1) + ' °C';
         prediction.windSpeed = prediction.windSpeed.toFixed(1);
         prediction.pressure = prediction.pressure.toFixed(1);
         prediction.pressure_units = ' hPa';

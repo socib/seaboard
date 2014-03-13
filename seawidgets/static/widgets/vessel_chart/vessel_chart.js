@@ -55,7 +55,7 @@
       var x = d.parseFormat(data.time, 'dd-mm-yyyy HH:MM:ss').getTime();
       var y = parseFloat(data[this.get('id')]);
       if ( series.xData[series.xData.length - 1] != x){
-        series.addPoint([x, y], true, true);        
+        series.addPoint([x, y], true, true);
       }
 
     };
@@ -65,6 +65,9 @@
       var variableTitle = this.get('title');
 
       $(this.node).highcharts('StockChart', {
+        scrollbar: {
+          enabled: false
+        },
         navigator: {
           enabled: false
         },

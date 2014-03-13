@@ -1,5 +1,15 @@
 @import url(http://fonts.googleapis.com/css?family=Raleway:300,700);
 
+/* Variables */
+
+@main-background-color: #FFFFFF;
+@secondary-background-color: #465A68;  /* #b7aaa7;*/
+@widget-background-color: #EEE;  /* B7AAA7  917d7d de hero unit */
+@text-color: #303030;
+@title-color: #003a63;
+@secondary-title-color: #303030;
+
+
 html {
   font-size: 100%;
   -webkit-text-size-adjust: 100%;
@@ -7,7 +17,7 @@ html {
 
 body {
   margin: 0;
-  background-color: #003a63;
+  background-color: @secondary-background-color;
   color: white;
   font-family: 'Raleway','Ubuntu','Open Sans', "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
@@ -52,15 +62,37 @@ h1.section {
   text-align: center;
   font-size: 32.4px;
   font-weight: 300;
-  color: #00FCFF;
-  border: 1px solid #B7AAA7;
+  color: @title-color;
+  border-bottom: 2px solid #B7AAA7;
   line-height: 48.6px;
-  margin-bottom: 5px;
+  margin-bottom: 15px;
+}
+
+#main {
+    margin: auto;
+    max-width: 1310px;
+    padding: 0 20px;
+    background-color: @main-background-color;
+    color: @text-color;
 }
 
 
-#main {
-    margin-top: 10px;
+header{
+  .proud{
+    padding: 0px 20px;
+    text-align: left;
+    .title{
+      color: @secondary-background-color;
+    }
+  }
+}
+
+section.status{
+  padding-right: 10px;
+}
+
+section.prediction{
+  padding-left: 10px;
 }
 
 section.info {
@@ -73,14 +105,10 @@ section.info {
 }
 
 footer{
-  color: #003a63;
   font-size: 11.4px;
   height: 45px;
   margin-bottom: 20px;
 
-  .container{
-    background-color: #FFFFFF;
-  }
   .logos{
     float: left;
     padding-top: 5px;
@@ -106,20 +134,29 @@ footer{
 }
 
 .widget {
-  padding: 0px 0px;
   text-align: center;
-  width: 100%;
   height: 100%;
   overflow: hidden;
-}
+  margin-bottom: 20px;
+  padding: 10px 10px;
+  background-color: @widget-background-color;
+  -webkit-box-shadow: 0 3px 5px rgba(0,0,0,0.6);
+  -moz-box-shadow: 0 3px 5px rgba(0,0,0,0.6);
+  box-shadow: 0 3px 5px rgba(0,0,0,0.6);
 
-.widget-text{
-  padding: 0px 20px;
-  text-align: left;
-}
+  .title{
+    padding: 0px;
+    color: @title-color;
+    border-bottom: 1px solid @title-color;
+    font-size: 25.1px;
+    margin-bottom: 10px;
+    text-align: center;
+  }
 
-.widget .title{
-  padding: 10px 0px 4px 0px;
+  &:hover {
+    background-color: #b7aaa7;
+    box-shadow: 4px 3px 10px rgba(0, 0, 0, 0.6);
+  }
 }
 
 
@@ -215,14 +252,6 @@ ul.weather-station li{
   height: 67px;
 }
 
-.row div div.widget{
-  margin-bottom: 5px;
-}
-.row div div.widget:last-child{
-  margin-bottom: 0px;
-}
-
-
 .logos-header img{
   margin-right: 10px;
 }
@@ -243,7 +272,8 @@ ul.weather-station li{
 
 
 .hero-unit {
-  background-color: #917d7d;
+  background-color: #465a68;
+  color: #FFF;
   p {
     margin-top: 10px;
   }

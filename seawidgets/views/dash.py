@@ -5,6 +5,7 @@ from django.http import Http404, HttpResponse
 from django.shortcuts import render_to_response
 from django.utils import simplejson
 from django.contrib.staticfiles.views import serve
+from django.conf import settings
 
 from seawidgets.models import Location
 
@@ -46,6 +47,8 @@ def dash(request, zone_code='socib', location_code='', template='dash.html'):
         template = 'sandbox.html'
 
     video_autoplay = '1'
+    if settings.DEBUG:
+        video_autoplay = '0'
     if request.GET.get('autoplay'):
         video_autoplay = request.GET.get('autoplay')
 

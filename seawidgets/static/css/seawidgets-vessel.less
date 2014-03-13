@@ -1,3 +1,13 @@
+/* Variables */
+
+@main-background-color: #FFFFFF;
+@secondary-background-color: #465A68;  /* #b7aaa7;*/
+@widget-background-color: #EEE;  /* B7AAA7  917d7d de hero unit */
+@text-color: #303030;
+@title-color: #003a63;
+@secondary-title-color: #303030;
+
+
 html {
   font-size: 100%;
   -webkit-text-size-adjust: 100%;
@@ -5,7 +15,7 @@ html {
 
 body {
   margin: 0;
-  background-color: #003a63;
+  background-color: @secondary-background-color;
   color: white;
   font-family: 'Ubuntu','Open Sans', "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
@@ -50,21 +60,20 @@ h1.section {
   text-align: left;
   font-size: 32.4px;
   font-weight: 300;
-  color: #00FCFF;
-  border: 1px solid #B7AAA7;
+  color: @title-color;
+  border-bottom: 2px solid #B7AAA7;
   line-height: 48.6px;
-  margin-bottom: 5px;
-  padding-left: 20px;
-}
-
-.prediction h1.section {
-  line-height: 29px;
-  min-height: 57.59px;
+  margin-bottom: 15px;
 }
 
 #main {
-    margin-top: 10px;
+    margin: auto;
+    max-width: 1310px;
+    padding: 0 20px;
+    background-color: @main-background-color;
+    color: @text-color;
 }
+
 
 section.info {
   padding: 0px 0px 0px 0px;
@@ -78,7 +87,6 @@ section.info {
 footer{
   color: #003a63;
   font-size: 11.4px;
-  height: 20px;
   margin-bottom: 20px;
 
   .container{
@@ -105,44 +113,36 @@ footer{
   text-align: center;
 }
 
-.widget {
-  padding: 0px 0px;
-  text-align: center;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-}
-
 .widget-text{
   padding: 0px 20px;
   text-align: left;
 }
 
-.widget .title{
-  padding: 10px 0px 4px 0px;
+.widget {
+  text-align: center;
+  height: 100%;
+  overflow: hidden;
+  margin-bottom: 20px;
+  padding: 10px 10px;
+  background-color: @widget-background-color;
+  -webkit-box-shadow: 0 3px 5px rgba(0,0,0,0.6);
+  -moz-box-shadow: 0 3px 5px rgba(0,0,0,0.6);
+  box-shadow: 0 3px 5px rgba(0,0,0,0.6);
+
+  .title{
+    padding: 0px;
+    color: @title-color;
+    border-bottom: 1px solid @title-color;
+    font-size: 25.1px;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+
+  &:hover {
+    background-color: #b7aaa7;
+    box-shadow: 4px 3px 10px rgba(0, 0, 0, 0.6);
+  }
 }
-
-
-.widget.status-warning {
-  background-color: #e82711;
-  -webkit-animation: status-warning-background 2s ease infinite;
-  -moz-animation: status-warning-background 2s ease infinite;
-  -ms-animation: status-warning-background 2s ease infinite; }
-  .widget.status-warning .icon-warning-sign {
-    display: inline-block; }
-  .widget.status-warning .title, .widget.status-warning .more-info {
-    color: white; }
-
-.widget.status-danger {
-  color: white;
-  background-color: #eeae32;
-  -webkit-animation: status-danger-background 2s ease infinite;
-  -moz-animation: status-danger-background 2s ease infinite;
-  -ms-animation: status-danger-background 2s ease infinite; }
-  .widget.status-danger .icon-warning-sign {
-    display: inline-block; }
-  .widget.status-danger .title, .widget.status-danger .more-info {
-    color: white; }
 
 .more-info {
   font-size: 15px;
@@ -157,15 +157,97 @@ footer{
 }
 
 
-ul.weather-station{
-  padding: 0 0;
-  margin: 0 0;
+.logos-header img{
+  margin-right: 10px;
 }
 
-ul.weather-station li{
-  margin-right: 10px;
-  display: block;
-  float: left;
+.logos-header img:last-child{
+  margin-right: 0px;
+}
+
+.leaflet-popup-content-wrapper{
+  color:#222;
+}
+
+
+header{
+    font-size: 13px;
+    text-align: left;
+    line-height: 15px;
+
+    .proud{
+        float:left;
+        margin: 15px 15px 0 25px;
+        width: auto;
+        box-shadow: none;
+        background: none;
+        p {
+            display: none;
+        }
+        .title{
+            font-size: 3em;
+            font-weight: bold;
+            border: none;
+        }
+    }
+    .logo-socib{
+        float: left;
+        height: 100%;
+        margin: 10px 25px 0 25px;
+    }
+    .qrcode{
+        float: right;
+        width: 100px;
+        height: 100%;
+        margin: 10px 5px 0px 20px;
+    }
+    .logos{
+        float: right;
+        margin-top: 25px;
+        margin-left: 10px;
+
+        img{
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 15px;
+        }
+    }
+    .clock{
+        margin: 15px 15px 0 25px;
+        line-height: 3em;
+        float: right;
+        border: none;
+        border: none;
+        text-align: right;
+        width: auto;
+        box-shadow: none;
+        background: none;
+    }
+}
+
+
+
+@media (max-width: 960px) {
+    header{
+        font-size: 9px;
+        line-height: 10px;
+        h1 {
+            font-size: 14px;
+            line-height: 15px;
+        }
+        .proud{
+            width: 200px;
+            float: left;
+        }
+        .logo-socib{
+            width: 75px;
+            height: auto;
+        }
+        .qrcode{
+            width: 50px;
+            height: auto;
+        }
+    }
 }
 
 .rowspan12 {
@@ -216,143 +298,6 @@ ul.weather-station li{
   height: 67px;
 }
 
-.row div div.widget{
-  margin-bottom: 5px;
-}
-
-.logos-header img{
-  margin-right: 10px;
-}
-
-.logos-header img:last-child{
-  margin-right: 0px;
-}
-
-.leaflet-popup-content-wrapper{
-  color:#222;
-}
-
-.span-no-bottom-margin{
-  [class*="span"] {
-      margin-bottom: 0px;
-  }
-}
-
-
-
-header{
-    height: 115px;
-    background-color: #ffffff;
-    color: #48c3d2;
-    font-size: 12px;
-    text-align: left;
-    line-height: 15px;
-    overflow: hidden;
-
-    h1{
-        color: #003a63;
-        font-size: 37px;
-        font-weight: 300;
-        text-align: left;
-    }
-    .logo-location{
-        width: 259px;
-        height: 100%;
-        float: left;
-        overflow: hidden;
-        border-right: 3px solid #003a63;
-        position: relative;
-
-        img{
-            position:absolute; top:50%; height:10em; margin-top:-5em; display: block;
-        }
-    }
-    .proud{
-        width: 60%;
-        height: 100%;
-        float: left;
-        display: table;
-        h1{
-            vertical-align: middle;
-            display: table-cell;
-        }
-    }
-
-    .logo-socib{
-        float: left;
-        height: 100%;
-        margin: 25px 0px 0px 30px;
-    }
-    .qrcode{
-        float: right;
-        width: 100px;
-        height: 100%;
-        margin: 10px 5px 0px 20px;
-    }
-    .clock{
-        width: 20%;
-        height: 100%;
-        float: left;
-        border: none;
-    }
-}
-
-.prediction h1.section {
-  line-height: 29px;
-  min-height: 35px;
-}
-
-section.location {
-  margin-top: 5px;
-  padding: 0px 0px 0px 0px;
-  clear: both;
-  h1.section {
-    line-height: 40px;
-    margin-bottom: 10px;
-  }
-}
-.widget-beamon {
-    .waveforecast {
-        background-image: url(/static/images/waves_forecast_colorscale_126.png);
-        .beamon-header{
-            height: 40px;
-            font-size: 15px;
-            line-height: 40px;
-        }
-        .beamon-image{
-            height: 126px;
-            margin-right: 32px;
-        }
-    }
-}
-
-.fullheight {
-    height: 100%;
-}
-
-
-@media (max-width: 960px) {
-    header{
-        font-size: 9px;
-        line-height: 10px;
-        h1 {
-            font-size: 14px;
-            line-height: 15px;
-        }
-        .proud{
-            width: 200px;
-            float: left;
-        }
-        .logo-socib{
-            width: 75px;
-            height: auto;
-        }
-        .qrcode{
-            width: 50px;
-            height: auto;
-        }
-    }
-}
 
 @import "../widgets/clock/clock.less";
 @import "../widgets/weather_station/weather_station.less";

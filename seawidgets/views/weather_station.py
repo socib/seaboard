@@ -31,6 +31,7 @@ CONVERSION = {
     'wind_speed': lambda x: round(x * 3.6, 2),
 }
 
+
 @cache_page(60 * 60 * 1, cache="default")
 def station_info(request, location_code, format='html', template='weather_station/station_info.html'):
     """Get current data form weather station and minimum and maximum values for the last 24 hours. It search for all variables listed in STATION_VARIABLES (now: 'air_temperature', 'wind_speed', 'air_pressure', 'relative_humidity', 'rain_accumulation').
@@ -111,6 +112,7 @@ def station_info(request, location_code, format='html', template='weather_statio
             'data': results
         }
     return render_to_response(template, kwvars, RequestContext(request))
+
 
 @cache_page(60 * 5, cache="default")
 def station_variable_info(request, location_code='pdp', variable='air_temperature'):
@@ -214,7 +216,13 @@ def get_variable_data(id_platform, id_instrument, id_variable, standard_name, di
         min_x, max_x, min_y, max_y = variable_data[0][0], variable_data[-1][0], variable_data[0][1], variable_data[-1][-1]
         results = {'inputUnits': input_units, 'min': {'value': conversion(min_y, standard_name), 'time': _utils.strftime_from_millis(min_x)}, 'max': {'value': conversion(max_y, standard_name), 'time': _utils.strftime_from_millis(max_x)}, 'current': current, 'display_name': displayName, 'standard_name': standard_name}
     else:
-        results = {'error': 'No data available', 'current': {'value:': 'No data', 'time': 0}, 'display_name': displayName, 'standard_name': standard_name}
+        results = {
+            'error': 'No data available',
+            'current': {'value': 'No data', 'time': 0},
+            'min': {'value': 'No data', 'time': 0},
+            'max': {'value': 'No data', 'time': 0},
+            'display_name': displayName,
+            'standard_name': standard_name}
 
     return results
 

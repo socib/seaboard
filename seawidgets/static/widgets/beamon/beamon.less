@@ -1,7 +1,6 @@
+
 .widget-beamon {
-  background: inherit;
   overflow: hidden;
-  padding: 0px 0px !important;
 
   .beamon-image{
     /*width: 100%;*/
@@ -18,41 +17,19 @@
     border: 2px solid #ffffff;
   }
 
-  .beamon-header{
-    text-align: center;
+  .overlay{
+    margin: 10px auto;
+    color: @secondary-title-color;
     font-size: 17px;
-    color: #48c3d2;
-    border: 1px solid #48c3d2;
-    margin: 0px 0px 10px 0px;
-    padding-bottom: 10px;
-
-      .title {
-        color: #FFFFFF;
-        font-size: 25.1px;
-        padding-bottom: 0px;
-        font-weight: normal;
-      }
   }
+
   .waveforecast {
     background-image: url(/static/images/waves_forecast_colorscale.png);
     background-repeat: no-repeat;
-    background-position: right bottom;
+    background-position: right bottom 30px;
     margin-top: 6px;
     background-size: 50px 185px;
 
-    .beamon-header{
-      margin-bottom: 10px;
-      height: 33.4px;
-      padding-bottom: 0px;
-      .overlay{
-        line-height: 33.4px;
-      }
-
-
-      .title {
-        display: none;
-      }
-    }
     .beamon-image{
       margin-right: 50px;
     }
