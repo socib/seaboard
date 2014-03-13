@@ -153,6 +153,9 @@ def process_image(url, destination):
     elif url.find('sapo_n2') > 0:
         # Mallorca
         crop_dimensions = (123, 169, 452, 430)
+    elif url.find('/sapo/d.sapo/d.exe/d.map') > 0:
+        # Badia Palma
+        crop_dimensions = (120, 179, 445, 402)
 
     try:
         inImage.crop(crop_dimensions).save(settings.STATIC_ROOT + destination)

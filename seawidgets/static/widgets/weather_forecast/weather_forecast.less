@@ -1,5 +1,3 @@
-@wf-widgetColor:  #48c3d2;
-
 @-webkit-keyframes rotation {
     from{
         -webkit-transform: rotate(0deg);
@@ -19,30 +17,24 @@
 }
 
 .widget-weather-forecast{
-  color: @wf-widgetColor;
   position: relative;
-  margin-bottom: 0px !important;
-
 
   .wf-weeksummary{
     text-align: center;
-    font-size: 18px;
+    font-size: 14px;
     line-height: 22px;
     margin: 10px 5px;
-    color: #EEE;
+    min-height: 44px;
+    color: @secondary-title-color;
   }
 
   .wf-prediction {
-    border: 1px solid @wf-widgetColor;
-    margin-bottom: 8px;
-    height: 81px;
-    overflow: hidden;
+    margin-bottom: 4px;
 
     .wf-summary{
       font-size: 13px;
-      color: #FFF;
-      background-color: @wf-widgetColor;
-      border-left: 1px solid @wf-widgetColor;
+      color: @widget-background-color;
+      background-color: @secondary-background-color;
       white-space: nowrap;
     }
 
@@ -53,34 +45,26 @@
       width: 100%;
     }
     .wf-table-variables {
-      overflow: hidden;
       font-size: 11.3px;
-      height: 100%;
       width: 100%;
       table-layout: fixed;
+      border: 1px solid @secondary-background-color;
 
       .wf-variable-name {
-          border-left: 1px solid @wf-widgetColor;
+          border-left: 1px solid @secondary-background-color;
           font-size: 11.3px;
-          color: #FFFFFF;
-          /*
-          background-position-x: center;
-          background-position-y: 5px;*/
           background-position: 50% 10%;
           background-repeat: no-repeat;
-          padding-top: 19px;
+          padding-top: 20px;
+          padding-bottom: 4px;
           line-height: 10px;
 
 
           &.wf-temperature {
             background-image: url('/static/widgets/weather_forecast/images/air_temperature.png');
-
-            /*background-position-x: 20px;
-            background-position-y: 9px;*/
-            background-position: 20px 9px;
-            font-size: 19.4px;
+            /* background-position: 20px 9px;
             padding-top: 7px;
-            padding-left: 25px;
+            padding-left: 25px;*/
           }
           &.wf-wind {
             background-image: url('/static/widgets/weather_forecast/images/wind_speed.png');
@@ -93,15 +77,15 @@
           }
       }
       .wf-variable{
-        border-left: 1px solid @wf-widgetColor;
+        border-left: 1px solid @secondary-background-color;
         margin: 0px;
         height: 100%;
         font-size: 14.6px;
         line-height: 14px;
         vertical-align: top;
-        color: #FFFFFF;
+        padding-bottom: 6px;
           .wf-units{
-            color: @wf-widgetColor;
+            color: @secondary-title-color;
             font-size: 9.7px;
             line-height: 13px;
           }
@@ -113,34 +97,35 @@
             vertical-align: middle;
           }
           &.wf-pressure {
-            font-size: 11.5px;
+            font-size: 12.5px;
           }
           .wf-max-temp{
             color: #ff2b06;
           }
           .wf-min-temp{
-            color: @wf-widgetColor;
+            color: #003a63;
           }
       }
     }
   }
 
   .wf-prediction:first-child {
-    border: 1px solid #b7aaa7;
+
     .wf-summary{
-      background-color: #b7aaa7;
-      border-left: 1px solid #b7aaa7;
+      background-color: @title-color;
     }
     .wf-day{
-      color: #FFFFFF;
+      color: @title-color;
     }
     .wf-table-variables {
+      border: 1px solid @title-color;
+
       .wf-variable-name {
-          border-left: 1px solid #b7aaa7;
+          border-left: 1px solid @title-color;
       }
 
       .wf-variable {
-          border-left: 1px solid #b7aaa7;
+          border-left: 1px solid @title-color;
       }
     }
 
@@ -162,7 +147,7 @@
   }
 
   li.wf-variable {
-    border: 1px solid @wf-widgetColor;
+    border: 1px solid @secondary-title-color;
     display: block;
     float: left;
     list-style:none;
@@ -197,7 +182,7 @@
       margin-top: 5px;
       width: 0px;
       height: 40px;
-      padding-right: 30px;
+      padding-right: 50px;
 
 
   }
@@ -263,7 +248,6 @@
     line-height: 10px;
     float: right;
     margin-top: 0px;
-    color: #FFFFFF;
   }
 
   @media (max-width: 767px) {

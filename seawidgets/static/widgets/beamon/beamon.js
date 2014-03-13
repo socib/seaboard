@@ -85,14 +85,16 @@
 
     Beamon.prototype.showNoImage = function() {
       var no_image = '/static/widgets/beamon/images/no_image.png';
-      if (this.get('type') != undefined && this.get('type') == 'waveforecast') {
+      if (this.get('type') !== undefined && this.get('type') == 'waveforecast') {
         no_image = '/static/widgets/beamon/images/no_image_sapo.png';
       }
 
-      $(this.node).find('.beamon-image').backstretch(no_image, ['Waves forecast'] ,{
+      $(this.node).find('.beamon-image').backstretch(no_image, ['No image available'] , [], {
         fade: 750,
         duration: 1000
       });
+      $(this.node).find('.situation').remove();
+
     };
 
 

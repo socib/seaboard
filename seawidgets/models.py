@@ -43,6 +43,7 @@ class Location(models.Model):
     zone = models.ForeignKey(Zone)
 
     description = models.CharField(_('description'), max_length=250, blank=True)
+    beach_information = models.TextField(_('beach_information'), blank=True)
     location = models.CharField(_('location'), max_length=50, blank=True, null=True)
 
     # dash configuration
@@ -72,8 +73,6 @@ class Location(models.Model):
             return self.name
 
         return u"%s - %s" % (self.zone.name, self.name)
-
-
 
     @permalink
     def get_absolute_url(self):

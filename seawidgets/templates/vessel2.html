@@ -26,8 +26,8 @@
           <div data-id="depth" data-view="VesselInfo" data-title="Depth"></div>
       </section>
     </div>
-    <div class="span10 rowspan6">
-      <div data-id="map" data-view="Vesselmap" data-title="Map"></div>
+    <div class="span10" style="height: 517px;">
+      <div data-id="map" data-view="Vesselmap" data-title="Map" ></div>
     </div>
   </div>
   <div class="row">
@@ -73,22 +73,23 @@
       </div>
     </div>
   </div>
-</div>
-<footer>
-  <div class="container">
-    <div class="row">
-      <div class="span8">
-        <img src="{% get_static_prefix %}images/logo_ministerio.png" />
-        <img src="{% get_static_prefix %}images/logo_govern.png" />
-      </div>
-      <div class="span4">
-        <div class="footer-signature">
-          SOCIB - 2013
+  <footer>
+    <div class="container">
+      <div class="row">
+        <div class="span8">
+          <img src="{% get_static_prefix %}images/logo_ministerio.png" />
+          <img src="{% get_static_prefix %}images/logo_govern.png" />
+        </div>
+        <div class="span4">
+          <div class="footer-signature">
+            SOCIB - 2013
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</footer>
+  </footer>
+  <div class="clearfix"></div>
+</div>
 
 {% endblock content %}
 

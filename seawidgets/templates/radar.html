@@ -18,46 +18,27 @@
       </header>
     </div>
   </div>
-  <div class="row">
-    <div class="span7">
-      <section class="status">
-        <h1 class="section">Observation and real time data</h1>
-        <div class="row-fluid">
-          <div class="span12">
-            <div data-id="radar" data-view="Radar" data-title="Radar"></div>
-          </div>
-        </div>
-        <div class="row-fluid">
-          <div class="span4">
-            <div data-id="weather-temp" data-view="WeatherStationVariable" data-location="{{ location.zone.code }}" data-variable="air_temperature"></div>
-          </div>
-          <div class="span4">
-            <div data-id="weather-pre" data-view="WeatherStationVariable" data-location="{{ location.zone.code }}" data-variable="air_pressure"></div>
-          </div>
-          <div class="span4">
-            <div data-id="weather-wind" data-view="WeatherStationVariable" data-location="{{ location.zone.code }}" data-variable="wind_speed"></div>
-          </div>
-        </div>
-      </section>
+  <section class="prediction">
+    <h1 class="section">Forecast</h1>
+    <div class="row-fluid">
+      <div class="span5" style="margin-bottom: 0;">
+        <div data-id="waveforecast" data-view="Beamon" data-location="{{ location.zone.code }}" data-type="waveforecast" data-title="Waves forecast"></div>
+      </div>
+      <div class="span7" style="margin-bottom: 0;">
+        <div data-id="forecast" data-view="WeatherForecast" data-location="{{ location.zone.code }}" data-title="Weather forecast"></div>
+      </div>
     </div>
-    <div class="span5">
-      <div data-id="clock2" data-view="Clock"></div>
-      <section class="prediction">
-        <h1 class="section">Wave and weather forecast</h1>
-        <div data-id="forecast" data-view="WeatherForecast" data-location="{{ location.zone.code }}"></div>
-        <div class="row-fluid">
-          <div class="span6">
-            <div data-id="waveforecast" data-view="Beamon" data-location="{{ location.zone.code }}" data-type="waveforecast" data-title=""></div>
-          </div>
-          <div class="span6">
-            <section class="location">
-              <h1 class="section">Location</h1>
-              <img src="http://maps.googleapis.com/maps/api/staticmap?size=208x126&maptype=satellite&markers=color:blue%7C{{ location.location }}&sensor=false&zoom=9" title="{{ location.name }}" />
-            </section>
-          </div>
-      </section>
-    </div>
-  </div>
+  </section>
+  <section class="status">
+    <h1 class="section">Observation and real time data</h1>
+    <div class="row-fluid">
+      <div class="span7">
+          <div data-id="radar" data-view="Radar" data-title="Radar" data-title="HF Radar"></div>
+      </div>
+      <div class="span5">
+        <div data-id="weather" data-view="WeatherStation" data-location="{{ location.zone.code }}" data-title="Weather station"></div>
+      </div>
+  </section>
 </div>
 <footer>
   <div class="container">
@@ -73,10 +54,8 @@
           <img src="{% get_static_prefix %}images/logo_puertos.png" />
         </div>
       </div>
-      <div class="span2">
-        <div class="footer-signature">
-          SOCIB - 2013
-        </div>
+      <div class="span2 custom-clock">
+        <div data-id="clock2" data-view="Clock"></div>
       </div>
     </div>
   </div>

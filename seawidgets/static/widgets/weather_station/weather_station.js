@@ -27,7 +27,7 @@
       if (typeof val === 'undefined') {
         return void 0;
       }
-      if (val.lenght == 0) {
+      if (val.lenght === 0) {
         return void 0;
       }
       if (val == '-') {
@@ -61,16 +61,6 @@
     };
 
     WeatherStation.prototype.showData = function(data) {
-      /*var variables = []
-      var variable;
-      for(i=0,len=data.length;i<len;i++){
-        variable = data[i];
-        variable.current.value = variable.current.value + ' ' + variable.inputUnits;
-        variable.min.value = variable.min.value + ' ' + variable.inputUnits;
-        variable.max.value = variable.max.value + ' ' + variable.inputUnits;
-        variables.push(variable);
-      }*/
-
       this.set('variables', data);
 
       if (this.$bookBlock) {

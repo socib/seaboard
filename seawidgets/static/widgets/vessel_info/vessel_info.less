@@ -3,16 +3,13 @@
 .widget-vessel-info{
 
   h2 {
-    color: #FFFFFF;
-    font-size: 25.1px;
+    font-size: 23.1px;
     padding-bottom: 0px;
-    border: 1px solid #B7AAA7;
     margin-bottom: 4px;
+    color: @title-color;
   }
 
   .weather-data{
-        color: #48c3d2;
-        border: 1px solid #48c3d2;
         position: relative;
         padding-top: 10px;
         text-align: center;
@@ -20,7 +17,7 @@
         .wsv-current{
             font-size: 2.2em;
             min-height: 95px;
-            line-height: 95px;
+            line-height: 65px;
             span {
                 text-align: center !important;
             }
@@ -33,9 +30,8 @@
         }
         .wsv-min,.wsv-max{
             display: inline-block;
-            color: #FFFFFF;
             span{
-                color: #48c3d2;
+                font-weight: bold;
             }
         }
     }
@@ -45,7 +41,6 @@
             font-size: 1.8em;
             text-align: left;
             line-height: 1.8em;
-            /* height: 47px;*/
         }
         .wsv-min,.wsv-max{
             display: none;
@@ -56,11 +51,17 @@
         .wsv-current{
             height: 65px;
             min-height: 65px;
-            line-height: 65px;
+            line-height: 45px;
         }
         .wsv-min,.wsv-max{
             display: none;
         }
 
     }
+    &.air_pressure{
+        .wsv-maxmin{
+            font-size: 12px;
+        }
+    }
+
 }
