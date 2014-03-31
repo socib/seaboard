@@ -74,7 +74,7 @@
 
     Dashing.on('ready', function() {
         getFirstData();
-        setInterval(refreshData, 6000 * 1); // call every minute
+        setInterval(refreshData, 10000 * 1); // call every 10 seconds
     });
 
 
