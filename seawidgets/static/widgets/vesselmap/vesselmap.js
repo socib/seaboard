@@ -95,8 +95,6 @@
 
         this.map.fitBounds(this.trajectory_layer.getBounds());
 
-        console.log('Map added recieved data');
-        console.log(data);
       }
 
 

@@ -262,6 +262,9 @@ RAVEN_CONFIG = {
     'dsn': '',
 }
 
+# at vessel, replace this for '/datos/BaseDatosContinua/SCB/' in local_settings
+VESSEL_DATA_ROOT = '/home/vessel/RTDATA/'
+
 try:
     from local_settings import *
 except:
