@@ -25,14 +25,38 @@
     'sea_water_temperature': '°C',
     'sea_water_salinity': 'psu',
     'sea_water_electrical_conductivity': 'ms cm-1',
-    'speed': 'm s-1',
-    'wind_speed': 'm s-1',
+    'fluor': 'V',
+    'depth': 'm',
+    'speed': 'kn',
+    'wind_speed': 'kn',
     'wind_speed_mean': 'm s-1',
     'air_pressure': 'hPa',
     'humidity': '%',
     'air_temperature': '°C',
     'sun_radiation': 'W m^2-1'
-  }
+  };
+
+  var decimals = {
+    'sea_water_temperature': 1,
+    'sea_water_salinity': 1,
+    'sea_water_electrical_conductivity': 1,
+    'fluor': 3,
+    'depth': 2,
+    'speed': 1,
+    'wind_speed': 1,
+    'wind_speed_mean': 1,
+    'air_pressure': 0,
+    'humidity': 0,
+    'air_temperature': 1,
+    'sun_radiation': 1
+  };
+
+
+  var conversions = {
+    'wind_speed': function (value){
+      return (value / 1852) * 3600;
+    }
+  };
 
   Dashing.VesselChart = (function(_super) {
     __extends(VesselChart, _super);
@@ -48,21 +72,26 @@
     };
 
     VesselChart.prototype.onData = function(data) {
+      var variables = this.get('variables').split(",");
       var chart = $(this.node).highcharts();
-      var series = chart.series[0];
-
       var d = new Date();
       var x = d.parseFormat(data.time, 'dd-mm-yyyy HH:MM:ss').getTime();
-      var y = parseFloat(data[this.get('id')]);
-      if ( series.xData[series.xData.length - 1] != x){
-        series.addPoint([x, y], true, true);
+      for (var v = 0, l = variables.length; v < l; v++) {
+        var standardName = variables[v];
+        var serie = chart.series[v];
+        var y = parseFloat(data[standardName]);
+        if (standardName in conversions){
+          y = conversions[standardName].call(this, y);
+        }
+        if (serie.xData[serie.xData.length - 1] != x) {
+          serie.addPoint([x, y], true, true);
+        }
       }
-
     };
 
     VesselChart.prototype.initialData = function(data) {
-      var standardName = this.get('id');
-      var variableTitle = this.get('title');
+      var variables = this.get('variables').split(",");
+      var chartTitle = this.get('title');
 
       $(this.node).highcharts('StockChart', {
         scrollbar: {
@@ -72,31 +101,65 @@
           enabled: false
         },
         title: {
-          text: variableTitle
+          text: chartTitle
         },
         global: {
           useUTC: false
         },
-        series: [{
-          name: variableTitle,
-          data: (function() {
+        series: (function() {
+          var series = [];
+          for (var v = 0, l = variables.length; v < l; v++) {
+            var standardName = variables[v];
+            var serie = {
+              name: standardName,
+              yAxis: v,
+              tooltip: {
+                valueSuffix: " " + inputUnits[standardName],
+                valueDecimals: decimals[standardName],
+              },
+            };
             var variable_data = data[standardName];
             var length = variable_data.length;
-            var series_data = [];
+            serie.data = [];
             var d = new Date();
             for (var i = 0; i < length; i++) {
-              series_data.push([d.parseFormat(data.time[i], 'dd-mm-yyyy HH:MM:ss').getTime(), parseFloat(variable_data[i])]);
+              var value = parseFloat(variable_data[i]);
+              if (standardName in conversions){
+                value = conversions[standardName].call(this, value);
+              }
+              serie.data.push([d.parseFormat(data.time[i], 'dd-mm-yyyy HH:MM:ss').getTime(), value]);
             }
-            return series_data;
-          })(),
-          tooltip: {
-            yDecimals: 2
+            series.push(serie);
           }
-        }],
+          return series;
+        })(),
+        yAxis: (function() {
+          var axis_list = [];
+          for (var v = 0, l = variables.length; v < l; v++) {
+            var standardName = variables[v];
+            var even = (v % 2 !== 0);
+            var axis = {
+              title: {
+                text: standardName,
+                style: {
+                  color: Highcharts.getOptions().colors[v]
+                },
+              },
+              labels: {
+                format: '{value}' + inputUnits[standardName],
+                style: {
+                  color: Highcharts.getOptions().colors[v]
+                }
+              },
+              opposite: even,
+            };
+            axis_list.push(axis);
+          }
+          return axis_list;
+        })(),
         rangeSelector: {
           enabled: false
-        },
-
+        }
       });
     };
 

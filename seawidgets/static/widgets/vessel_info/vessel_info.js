@@ -9,6 +9,7 @@
     'sea_water_temperature': '°C',
     'sea_water_salinity': 'psu',
     'sea_water_electrical_conductivity': 'ms cm-1',
+    'fluor': 'V',
     'depth': 'm',
     'speed': 'kn',
     'wind_speed': 'kn',

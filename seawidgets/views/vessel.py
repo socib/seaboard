@@ -80,7 +80,7 @@ def current_location(request):
     duration = (timeB - timeA).seconds
     distance = _utils.haversine(positionA[1], positionA[2], positionB[1], positionB[2])
     velocity = distance * 1000 / duration
-    print 'Distance of %f km in %d seconds' % (distance, duration)
+
     if velocity > 13.3:
         results['error'] = 'Data not ok. It shows a distance of %f km in %d seconds' % (distance, duration)
         json = simplejson.dumps(results)
@@ -433,7 +433,7 @@ def termosal(request):
                             results['sea_water_temperature'].append(line['temperatura_remota'])
                             results['sea_water_salinity'].append(line['salinidad'])
                             results['sea_water_electrical_conductivity'].append(line['conductividad'])
-                            results['append'].fluor(line['fluor'])
+                            results['fluor'].append(line['fluor'])
                             last_time = this_time
                     except:
                         pass
