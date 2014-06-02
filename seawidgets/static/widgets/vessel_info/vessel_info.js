@@ -51,6 +51,9 @@
     },
     'humidity': function (value){
       return formatNumber(value);
+    },
+    'fluor': function (value){
+      return formatNumber(value, 2);
     }
   };
 
@@ -96,8 +99,8 @@
       item.current.time = data.time;
       if (this.get('id') == 'position'){
         item.current.value = data.long + ',' + data.lat;
-        item.current.dispvalue = this.decimalDegrees2DMS(data.long, 'Longitude') + ' <br /> ' +
-                             this.decimalDegrees2DMS(data.lat, 'Latitude');
+        item.current.dispvalue = this.decimalDegrees2DMS(data.lat, 'Latitude') + ' <br /> ' +
+                             this.decimalDegrees2DMS(data.long, 'Longitude');
       }else{
         item.current.value = data[this.get('id')];
         item.current.dispvalue = this.unitConversion(data[this.get('id')]);
@@ -142,8 +145,8 @@
       item.current.time = data.time[length - 1];
       if (this.get('id') == 'position'){
         item.current.value = data['long'][length - 1] + ',' + data['lat'][length - 1];
-        item.current.dispvalue = this.decimalDegrees2DMS(data['long'][length - 1],'Longitude') + '<br/>' +
-                             this.decimalDegrees2DMS(data['lat'][length - 1],'Latitude');
+        item.current.dispvalue = this.decimalDegrees2DMS(data['lat'][length - 1],'Latitude') + '<br/>' +
+                             this.decimalDegrees2DMS(data['long'][length - 1],'Longitude');
       }else{
         item.current.value = data[this.get('id')][length - 1];
         item.current.dispvalue = this.unitConversion(data[this.get('id')][length - 1]);
@@ -194,6 +197,7 @@
           else
               direction = "";
       }
+      degrees = Math.abs(degrees);
       notation = degrees + "° " + minutes + "' " + direction;
       return notation;
     };

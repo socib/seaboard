@@ -593,7 +593,7 @@ def current_meteo(request):
     current_meteo = _utils.tail(datafile, 2)[0].split(',')
     results['time'] = current_meteo[7].replace('\n', '')
     results['wind_speed'] = current_meteo[1]
-    results['wind_from_direction'] = current_meteo[2]
+    results['wind_from_direction'] = current_meteo[3]
     results['air_temperature'] = current_meteo[4]
     results['humidity'] = current_meteo[5]
     results['air_pressure'] = current_meteo[6]

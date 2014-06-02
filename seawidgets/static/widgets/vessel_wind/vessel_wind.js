@@ -23,8 +23,9 @@
       if (!data.error){
         if (data.wind_from_direction){
           var wind_value = Math.round(parseFloat(data.wind_from_direction));
+          var arrow_rotate = wind_value - 180;
           $(this.node).find('.wind-arrow').css({
-              transform: 'rotate('+ wind_value +'deg)'
+              transform: 'rotate('+ arrow_rotate +'deg)'
           });
           this.set('wind_from_direction', wind_value + '°');
         }
@@ -37,8 +38,9 @@
         if (data.wind_from_direction){
           var length = data.wind_from_direction.length;
           var wind_value = Math.round(parseFloat(data.wind_from_direction[length - 1]));
+          var arrow_rotate = wind_value - 180;
           $(this.node).find('.wind-arrow').css({
-              transform: 'rotate('+ wind_value +'deg)'
+              transform: 'rotate('+ arrow_rotate +'deg)'
           });
           this.set('wind_from_direction',wind_value + '°');
         }

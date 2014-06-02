@@ -72,19 +72,21 @@
     };
 
     VesselChart.prototype.onData = function(data) {
-      var variables = this.get('variables').split(",");
-      var chart = $(this.node).highcharts();
-      var d = new Date();
-      var x = d.parseFormat(data.time, 'dd-mm-yyyy HH:MM:ss').getTime();
-      for (var v = 0, l = variables.length; v < l; v++) {
-        var standardName = variables[v];
-        var serie = chart.series[v];
-        var y = parseFloat(data[standardName]);
-        if (standardName in conversions){
-          y = conversions[standardName].call(this, y);
-        }
-        if (serie.xData[serie.xData.length - 1] != x) {
-          serie.addPoint([x, y], true, true);
+      if (data.time){
+        var variables = this.get('variables').split(",");
+        var chart = $(this.node).highcharts();
+        var d = new Date();
+        var x = d.parseFormat(data.time, 'dd-mm-yyyy HH:MM:ss').getTime();
+        for (var v = 0, l = variables.length; v < l; v++) {
+          var standardName = variables[v];
+          var serie = chart.series[v];
+          var y = parseFloat(data[standardName]);
+          if (standardName in conversions){
+            y = conversions[standardName].call(this, y);
+          }
+          if (serie.xData[serie.xData.length - 1] != x) {
+            serie.addPoint([x, y], true, true);
+          }
         }
       }
     };

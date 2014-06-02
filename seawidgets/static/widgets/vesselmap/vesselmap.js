@@ -89,7 +89,9 @@
             "coordinates": [data.long, data.lat]
           }
         };
-        this.map.removeLayer(this.endPoint_layer);
+        if (this.endPoint_layer){
+          this.map.removeLayer(this.endPoint_layer);
+        }
         this.endPoint_layer = L.geoJson(geojsonFeature, this.endPoint_options);
         this.endPoint_layer.addTo(this.map);
 
@@ -132,19 +134,22 @@
           "weight": 3,
           "opacity": 1
         };
+        if (featurecollection.features){
+          this.trajectory = featurecollection.features[0];
+          this.trajectory_layer = L.geoJson(this.trajectory, {
+            style: myStyle
+          });
 
-        this.trajectory = featurecollection.features[0];
-        this.trajectory_layer = L.geoJson(this.trajectory, {
-          style: myStyle
-        });
+          this.trajectory_layer.addTo(this.map);
 
-        this.trajectory_layer.addTo(this.map);
+          if (featurecollection.features.length > 1){
+            this.endPoint_layer = L.geoJson(featurecollection.features[1], this.endPoint_options);
+            this.endPoint_layer.addTo(this.map);
+          }
 
-        this.endPoint_layer = L.geoJson(featurecollection.features[1], this.endPoint_options);
+          this.map.fitBounds(this.trajectory_layer.getBounds());
+        }
 
-        this.endPoint_layer.addTo(this.map);
-
-        this.map.fitBounds(this.trajectory_layer.getBounds());
       }).bind(this));
 
 
