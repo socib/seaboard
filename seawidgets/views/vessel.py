@@ -88,11 +88,11 @@ def current_location(request):
 
     # fecha,longitud,latitud,rumbo,velocidad,profundidad,cog,fecha_telegrama
     results['time'] = positionB[0]
-    results['long'] = positionB[1]
-    results['lat'] = positionB[2]
-    results['speed'] = positionB[4]
-    results['depth'] = positionB[5]
-    results['cog'] = positionB[6]
+    results['long'] = float(positionB[1])
+    results['lat'] = float(positionB[2])
+    results['speed'] = float(positionB[4])
+    results['depth'] = float(positionB[5])
+    results['cog'] = float(positionB[6])
 
     datafile.close()
 
@@ -106,7 +106,6 @@ def location(request):
     Example::
 
         {
-            "sog": [],
             "long": [],
             "depth": [],
             "cog": [],
@@ -123,7 +122,6 @@ def location(request):
     results['speed'] = []
     results['depth'] = []
     results['cog'] = []
-    results['sog'] = []
 
     # Test if /home/vessel/RTDATA/mm-YYYY/termosal.proc/ exists
     today = datetime.datetime.today()
@@ -171,6 +169,10 @@ def location(request):
                     try:
                         this_time = datetime.datetime.strptime(line['fecha'], '%d-%m-%Y %H:%M:%S')
                         if last_time is None or (this_time - last_time).seconds > 600:
+                            for field in line.keys():
+                                if len(field) < 5 or field[0:5] != 'fecha':
+                                    line[field] = float(line[field])
+
                             results['time'].append(line['fecha'])
                             results['long'].append(line['longitud'])
                             results['lat'].append(line['latitud'])
@@ -298,10 +300,10 @@ def current_termosal(request):
     Example::
 
         {
-            "fluor": "0",
-            "sea_water_temperature": "25.581",
-            "sea_water_salinity": "37.333",
-            "sea_water_electrical_conductivity": "56.846",
+            "fluor": 0,
+            "sea_water_temperature": 25.581,
+            "sea_water_salinity": 37.333,
+            "sea_water_electrical_conductivity": 56.846,
             "time": "12-07-2013 20:22:03"
         }
 
@@ -350,11 +352,13 @@ def current_termosal(request):
     datafile = open(join(folderpath, filename), 'r')
     current_termosal = _utils.tail(datafile, 2)[0].split(',')
 
-    results['time'] = current_termosal[1]
-    results['sea_water_temperature'] = current_termosal[7]
-    results['sea_water_salinity'] = current_termosal[3]
-    results['sea_water_electrical_conductivity'] = current_termosal[5]
-    results['fluor'] = current_termosal[6]
+    salinity = float(current_termosal[3])
+    if salinity > 34 and salinity < 40:
+        results['time'] = current_termosal[1]
+        results['sea_water_temperature'] = float(current_termosal[7])
+        results['sea_water_salinity'] = salinity
+        results['sea_water_electrical_conductivity'] = float(current_termosal[5])
+        results['fluor'] = float(current_termosal[6])
 
     datafile.close()
 
@@ -429,12 +433,17 @@ def termosal(request):
                     try:
                         this_time = datetime.datetime.strptime(line['fecha_instrumento'], '%d-%m-%Y %H:%M:%S')
                         if last_time is None or (this_time - last_time).seconds > 600:
-                            results['time'].append(line['fecha_instrumento'])
-                            results['sea_water_temperature'].append(line['temperatura_remota'])
-                            results['sea_water_salinity'].append(line['salinidad'])
-                            results['sea_water_electrical_conductivity'].append(line['conductividad'])
-                            results['fluor'].append(line['fluor'])
-                            last_time = this_time
+                            for field in line.keys():
+                                if len(field) < 5 or field[0:5] != 'fecha':
+                                    line[field] = float(line[field])
+
+                            if line['salinidad'] > 34 and line['salinidad'] < 40:
+                                results['time'].append(line['fecha_instrumento'])
+                                results['sea_water_temperature'].append(line['temperatura_remota'])
+                                results['sea_water_salinity'].append(line['salinidad'])
+                                results['sea_water_electrical_conductivity'].append(line['conductividad'])
+                                results['fluor'].append(line['fluor'])
+                                last_time = this_time
                     except:
                         pass
 
@@ -449,24 +458,20 @@ def meteo(request):
 
         {
             "wind_speed": [],
-            "wind_speed_mean": [],
+            "wind_from_direction": [],
             "air_pressure": [],
             "humidity": [],
             "air_temperature": [],
             "time": [],
-            "wind_from_direction": [],
-            "sun_radiation": []
         }
 
     """
     results = {}
     results['time'] = []
-    results['wind_speed_mean'] = []
     results['wind_speed'] = []
     results['wind_from_direction'] = []
     results['air_temperature'] = []
     results['humidity'] = []
-    results['sun_radiation'] = []
     results['air_pressure'] = []
 
     # Test if /home/vessel/RTDATA/mm-YYYY/termosal.proc/ exists
@@ -515,6 +520,10 @@ def meteo(request):
                     try:
                         this_time = datetime.datetime.strptime(line['fecha_instrumento'], '%d-%m-%Y %H:%M:%S')
                         if last_time is None or (this_time - last_time).seconds > 600:
+                            for field in line.keys():
+                                if len(field) < 5 or field[0:5] != 'fecha':
+                                    line[field] = float(line[field])
+
                             results['time'].append(line['fecha_instrumento'])
                             results['wind_speed'].append(line['velocidad_real_viento'])
                             results['wind_from_direction'].append(line['direccion_real_viento'])
@@ -534,25 +543,21 @@ def current_meteo(request):
     Example::
 
         {
-            "wind_speed": "1.613",
-            "wind_speed_mean": "1.613",
-            "air_pressure": "1016.424",
-            "humidity": "87.49",
-            "air_temperature": "19.415",
-            "time": "11-06-2013 07:47:54",
-            "wind_from_direction": "348.125",
-            "sun_radiation": "0"
+            "wind_speed": 1.613,
+            "air_pressure": 1016.424,
+            "humidity": 87.49,
+            "air_temperature": 19.415,
+            "time": "11-06-2013 07:47:54,
+            "wind_from_direction": 348.125,
         }
 
     """
     results = {}
     results['time'] = 0
-    results['wind_speed_mean'] = 'N/A'
     results['wind_speed'] = 'N/A'
     results['wind_from_direction'] = 'N/A'
     results['air_temperature'] = 'N/A'
     results['humidity'] = 'N/A'
-    results['sun_radiation'] = 'N/A'
     results['air_pressure'] = 'N/A'
 
     # Test if /home/vessel/RTDATA/mm-YYYY/meteo.proc/ exists
@@ -592,11 +597,11 @@ def current_meteo(request):
     datafile = open(join(folderpath, filename), 'r')
     current_meteo = _utils.tail(datafile, 2)[0].split(',')
     results['time'] = current_meteo[7].replace('\n', '')
-    results['wind_speed'] = current_meteo[1]
-    results['wind_from_direction'] = current_meteo[3]
-    results['air_temperature'] = current_meteo[4]
-    results['humidity'] = current_meteo[5]
-    results['air_pressure'] = current_meteo[6]
+    results['wind_speed'] = float(current_meteo[1])
+    results['wind_from_direction'] = float(current_meteo[3])
+    results['air_temperature'] = float(current_meteo[4])
+    results['humidity'] = float(current_meteo[5])
+    results['air_pressure'] = float(current_meteo[6])
 
     datafile.close()
 
