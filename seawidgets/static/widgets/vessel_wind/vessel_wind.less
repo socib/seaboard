@@ -6,19 +6,18 @@
     h2 {
         font-size: 16px;
         padding-bottom: 0px;
-        margin-bottom: 4px;
+        height: 20px;
+        line-height: 20px;
         color: @title-color;
     }
 
     .wind-direction{
         position: relative;
-        padding-top: 10px;
         text-align: center;
         width: 99%;
         position: relative;
         .wind-value{
-            padding-bottom: 10px;
-            min-height: 95px;
+            height: 100px;
             line-height: 65px;
             width: 100%;
             z-index: 10;
@@ -28,18 +27,14 @@
         }
         .wind-arrow{
             background: url('/static/widgets/vessel_wind/images/wind_arrow.png') no-repeat center center;
-            min-height: 95px;
+            height: 100px;
             width: 100%;
             z-index: 1;
             position: absolute;
-            bottom: 15px;
+            bottom: 0;
         }
     }
     .warning{
-        position: absolute;
-        bottom: 0;
-        right: 0;
-        padding-right: 10px;
-        font-size: 0.65em;
+        display: none;
     }
 }

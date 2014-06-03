@@ -8,8 +8,8 @@
 {% block title %}{{ location.name }}{% endblock %}
 
 {% block content %}
-<div class="container">
-  <div class="row">
+<div class="container-fluid">
+  <div class="row-fluid">
     <div class="span12">
       <header>
         <div class="logo-socib"><img src="{% get_static_prefix %}images/logo_Socib.png" /></div>
@@ -18,43 +18,39 @@
       </header>
     </div>
   </div>
-  <div class="row">
+  <div class="row-fluid">
     <div class="span2">
       <section class="status">
+          <h1 class="section" id="vessel-position">Position<span class="updated-at"></span></h1>
           <div data-id="position" data-view="VesselInfo" data-title="Position"></div>
           <div data-id="speed" data-view="VesselInfo" data-title="Speed" ></div>
           <div data-id="depth" data-view="VesselInfo" data-title="Depth"></div>
       </section>
     </div>
-    <div class="span10" style="height: 517px;">
+    <div class="span8" style="height: 535px;">
       <div data-id="map" data-view="Vesselmap" data-title="Map" ></div>
     </div>
+    <div class="span2">
+      <h1 class="section" id="vessel-termosal">Thermosal<span class="updated-at"></span></h1>
+      <div data-id="sea_water_temperature" data-view="VesselInfo" data-title="Temperature"></div>
+      <div data-id="sea_water_salinity" data-view="VesselInfo" data-title="Salinity"></div>
+      <div data-id="fluor" data-view="VesselInfo" data-title="Fluor"></div>
+    </div>
   </div>
-  <div class="row">
+  <div class="row-fluid">
     <div class="span8">
-      <h1 class="section">Thermosal<span class="pull-right updated-at" id="last-vessel-termosal"></span></h1>
+      <h1 class="section">Graphs</h1>
       <div class="row-fluid">
-        <div class="span4">
-          <div data-id="sea_water_temperature" data-view="VesselInfo" data-title="Temperature"></div>
-        </div>
-        <div class="span4">
-          <div data-id="sea_water_salinity" data-view="VesselInfo" data-title="Salinity"></div>
-        </div>
-        <div class="span4">
-          <div data-id="fluor" data-view="VesselInfo" data-title="Fluor"></div>
-        </div>
-      </div>
-      <div class="row-fluid">
-        <div class="span6 rowspan3">
+        <div class="span6 rowspan4">
           <div data-id="termosal" data-view="VesselChart" data-title="Thermosal" data-variables="sea_water_temperature,sea_water_salinity,fluor"></div>
         </div>
-        <div class="span6 rowspan3">
+        <div class="span6 rowspan4">
           <div data-id="meteo" data-view="VesselChart" data-title="Weather Station" data-variables="air_pressure,air_temperature,wind_speed"></div>
         </div>
       </div>
     </div>
     <div class="span4 pull-right  span-no-bottom-margin">
-      <h1 class="section">Weather<span class="pull-right updated-at" id="last-vessel-meteo"></span></h1>
+      <h1 class="section" id="vessel-meteo">Weather<span class="updated-at"></span></h1>
       <div class="row-fluid">
         <div class="span6">
           <div data-id="air_temperature" data-view="VesselInfo" data-title="Temperature"></div>
@@ -74,8 +70,8 @@
     </div>
   </div>
   <footer>
-    <div class="container">
-      <div class="row">
+    <div class="container-fluid">
+      <div class="row-fluid">
         <div class="span8">
           <img src="{% get_static_prefix %}images/logo_ministerio.png" />
           <img src="{% get_static_prefix %}images/logo_govern.png" />

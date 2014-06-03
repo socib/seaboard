@@ -46,6 +46,14 @@ h1, h2, h3, h4, h5, p {
   padding: 0;
   margin: 0;
   font-weight: normal;
+
+  &.error {
+    color: #e60000 !important;
+  }
+}
+
+[class*="span"] {
+  margin-bottom: 0px;
 }
 
 .well {
@@ -68,7 +76,7 @@ h1.section {
 
 #main {
     margin: auto;
-    max-width: 1310px;
+    max-width: 95%;
     padding: 0 20px;
     background-color: @main-background-color;
     color: @text-color;
@@ -154,6 +162,14 @@ footer{
 .updated-at {
   font-size: 0.45em;
   padding-right: 10px;
+  display: block;
+  width: 100%;
+  text-align: right;
+  margin-top: -20px;
+  height: 40px;
+}
+#vessel-meteo .updated-at {
+  margin-top: -40px;
 }
 
 
@@ -227,29 +243,29 @@ header{
 
 
 
-@media (max-width: 960px) {
-    header{
-        font-size: 9px;
-        line-height: 10px;
-        h1 {
-            font-size: 14px;
-            line-height: 15px;
-        }
-        .proud{
-            width: 200px;
-            float: left;
-        }
-        .logo-socib{
-            width: 75px;
-            height: auto;
-        }
-        .qrcode{
-            width: 50px;
-            height: auto;
-        }
-    }
+
+@media (max-width: 1280px) {
+  .updated-at {
+    font-size: 10px;
+  }
+  header{
+      font-size: 9px;
+      line-height: 10px;
+      h1 {
+          font-size: 14px;
+          line-height: 15px;
+      }
+      .proud{
+          float: left;
+      }
+  }
 }
 
+@media (max-width: 767px) {
+  [class*="span"] {
+    margin-bottom: 20px;
+  }
+}
 .rowspan12 {
   height: 940px;
 }
@@ -283,7 +299,7 @@ header{
 }
 
 .rowspan4 {
-  height: 300px;
+  height: 290px;
 }
 
 .rowspan3 {

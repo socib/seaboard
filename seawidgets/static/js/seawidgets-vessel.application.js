@@ -25,23 +25,37 @@
         $.getJSON('/vessel/current_location.json', function(data) {
             // refresh other widgets
             receiveData(['map','position', 'speed', 'cog', 'sog','depth'], data);
+            if (data.error){
+                $("#vessel-position").attr('title','Error: ' + data.error);
+                $("#vessel-position").addClass('error');
+            } else {
+                $("#vessel-position").find('.updated-at').html('Updated at ' + data.time);
+                $("#vessel-position").removeClass('error');
+                $("#vessel-position").attr('title','');
+            }
         });
         $.getJSON('/vessel/current_termosal.json', function(data) {
             // refresh widgets with termosal information
             receiveData(['termosal', 'sea_water_temperature', 'sea_water_salinity', 'sea_water_electrical_conductivity', 'fluor'],data);
             if (data.error){
-                $("#last-vessel-termosal").html('Error: ' + data.error);
+                $("#vessel-termosal").attr('title','Error: ' + data.error);
+                $("#vessel-termosal").addClass('error');
             } else {
-                $("#last-vessel-termosal").html('Updated at ' + data.time);
+                $("#vessel-termosal").find('.updated-at').html('Updated at ' + data.time);
+                $("#vessel-termosal").removeClass('error');
+                $("#vessel-termosal").attr('title','');
             }
         });
         $.getJSON('/vessel/current_meteo.json', function(data) {
             // refresh widgets with meteo information
             receiveData(['meteo', 'wind_speed', 'wind_speed_mean', 'humidity', 'air_pressure', 'air_temperature', 'sun_radiation','wind_from_direction'],data);
             if (data.error){
-                $("#last-vessel-meteo").html('Error: ' + data.error);
+                $("#vessel-meteo").attr('title','Error: ' + data.error);
+                $("#vessel-meteo").addClass('error');
             } else {
-                $("#last-vessel-meteo").html('Updated at ' + data.time);
+                $("#vessel-meteo").find('.updated-at').html('Updated at ' + data.time);
+                $("#vessel-meteo").removeClass('error');
+                $("#vessel-meteo").attr('title','');
             }
         });
     }
@@ -50,23 +64,34 @@
         $.getJSON('/vessel/location.json', function(data) {
             // refresh widgets
             initialData(['position', 'speed', 'cog', 'sog','depth'],data);
+            if (data.error){
+                $("#vessel-position").attr('title','Error: ' + data.error);
+                $("#vessel-position").addClass('error');
+            } else {
+                $("#vessel-position").removeClass('error');
+                $("#vessel-position").attr('title','');
+            }
         });
         $.getJSON('/vessel/termosal.json', function(data) {
             // refresh widgets with termosal information
             initialData(['termosal', 'sea_water_temperature', 'sea_water_salinity', 'sea_water_electrical_conductivity', 'fluor'],data);
             if (data.error){
-                $("#last-vessel-termosal").html('Error: ' + data.error);
+                $("#vessel-termosal").attr('title','Error: ' + data.error);
+                $("#vessel-termosal").addClass('error');
             } else {
-                $("#last-vessel-termosal").html('Updated at ' + data.time[data.time.length - 1]);
+                $("#vessel-termosal").removeClass('error');
+                $("#vessel-termosal").attr('title','');
             }
         });
         $.getJSON('/vessel/meteo.json', function(data) {
             // refresh widgets with meteo information
             initialData(['meteo', 'wind_speed', 'wind_speed_mean', 'humidity', 'air_pressure', 'air_temperature', 'sun_radiation','wind_from_direction'],data);
             if (data.error){
-                $("#last-vessel-meteo").html('Error: ' + data.error);
+                $("#vessel-meteo").attr('title','Error: ' + data.error);
+                $("#vessel-meteo").addClass('error');
             } else {
-                $("#last-vessel-meteo").html('Updated at ' + data.time[data.time.length - 1]);
+                $("#vessel-meteo").removeClass('error');
+                $("#vessel-meteo").attr('title','');
             }
         });
     }

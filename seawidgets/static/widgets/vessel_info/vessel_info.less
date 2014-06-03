@@ -1,11 +1,13 @@
 /* Base is at weather_station */
 
 .widget-vessel-info{
+  margin-bottom: 10px;
 
   h2 {
     font-size: 16px;
     padding-bottom: 0px;
-    margin-bottom: 4px;
+    height: 20px;
+    line-height: 20px;
     color: @title-color;
   }
 
@@ -16,8 +18,9 @@
 
         .wsv-current{
             font-size: 2.2em;
-            min-height: 75px;
+            height: 60px;
             line-height: 60px;
+            overflow: hidden;
             span {
                 text-align: center !important;
             }
@@ -40,6 +43,7 @@
             font-size: 1.8em;
             text-align: left;
             line-height: 1.8em;
+            height: 100px;
         }
         .wsv-min,.wsv-max{
             display: none;
@@ -48,9 +52,8 @@
     }
     &.depth{
         .wsv-current{
-            height: 65px;
-            min-height: 65px;
-            line-height: 45px;
+            height: 100px;
+            line-height: 80px;
         }
         .wsv-min,.wsv-max{
             display: none;

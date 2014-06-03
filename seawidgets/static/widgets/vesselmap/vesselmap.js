@@ -59,6 +59,9 @@
       if (!this.trajectory) {
         return;
       }
+      if (data.error){
+        return;
+      }
       var coordinates = this.trajectory.geometry.coordinates;
       var last_coordinates = coordinates[coordinates.length - 1];
       if (last_coordinates[0] != data.long && last_coordinates[1] != data.lat) {
