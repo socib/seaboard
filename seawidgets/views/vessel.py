@@ -295,6 +295,168 @@ def trajectory(request):
     return HttpResponse(json, mimetype='application/json')
 
 
+@cache_page(60 * 25, cache="default")
+def termosal_trajectory(request, parameter):
+    """Get GeoJSON with the trajectory of the vessel in last two days."""
+
+    today = datetime.datetime.today()
+    folderpath = folderbase + '%s/posicion.proc/' % today.strftime('%m-%Y')
+    if not isdir(folderpath):
+        found = False
+        yesterday = datetime.date.fromordinal(today.toordinal() - 1)
+        if today.month != yesterday.month:
+            folderpath = folderbase + '%s/posicion.proc/' % yesterday.strftime('%m-%Y')
+            if isdir(folderpath):
+                today = yesterday  # prepare to search the correct file
+                found = True
+
+        if not found:
+            results = {'error': 'Folder %s does not exist' % folderpath}
+            json = simplejson.dumps(results)
+            return HttpResponse(json, mimetype='application/json')
+
+    current_month = today.month
+    file_found = False
+    while today.month == current_month and not file_found:
+        filename = '%s.posicion.proc' % today.strftime('%d%m%Y')
+        if isfile(join(folderpath, filename)):
+            file_found = True
+        else:
+            today = datetime.date.fromordinal(today.toordinal() - 1)
+
+    if not file_found:
+        results = {'error': 'File %s does not exist' % filename}
+        json = simplejson.dumps(results)
+        return HttpResponse(json, mimetype='application/json')
+
+    trajectory = []
+    yesterday = datetime.date.fromordinal(today.toordinal() - 1)
+
+    for day in [yesterday, today]:
+        filename = '%s.posicion.proc' % day.strftime('%d%m%Y')
+        termosal_filename = '%s.termosal.proc' % day.strftime('%d%m%Y')
+        termosal_folderpath = folderpath.replace('posicion', 'termosal')
+        termosal_file = None
+        termosal_data = None
+        if isfile(join(termosal_folderpath, termosal_filename)):
+            termosal_file = open(join(termosal_folderpath, termosal_filename), 'rb')
+            termosal_lines = csv.DictReader(
+                termosal_file,
+                delimiter=',')
+            termosal_data = [[
+                datetime.datetime.strptime(tline['fecha_instrumento'], '%d-%m-%Y %H:%M:%S'),
+                tline[parameter]] for tline in termosal_lines]
+            termosal_file.close()
+
+        if isfile(join(folderpath, filename)):
+            with open(join(folderpath, filename), 'rb') as infile:
+                positions = csv.DictReader(infile, delimiter=',')
+                # fecha,longitud,latitud,rumbo,velocidad,profundidad,cog,fecha_telegrama
+                last_time = None
+                last_lon = None
+                last_lat = None
+                last_termosal_index = 0
+                termosal_len = len(termosal_data)
+                for position in positions:
+                    # parse date: 18-02-2013 14:47:16
+                    try:
+                        this_time = datetime.datetime.strptime(position['fecha'], '%d-%m-%Y %H:%M:%S')
+                        duration = (this_time - last_time).seconds if last_time is not None else 1
+                        if last_time is None or duration > 600:
+                            # check if distance is acceptable (in 10 minutes, less than 8 km, 48km/h, 26kn, 13.3 m/s):
+                            distance = _utils.haversine(last_lon, last_lat, position['longitud'], position['latitud'])
+                            velocity = distance * 1000 / duration
+                            if last_lon is None or velocity < 13.3:
+                                # coordinates.append([position['longitud'], position['latitud']])
+                                point = {
+                                    'latitud': float(position['latitud']),
+                                    'longitud': float(position['longitud']),
+                                    'time': this_time,
+                                    parameter: 'N/A',
+                                }
+                                # search termosal parameter
+                                if last_termosal_index < termosal_len:
+                                    for termosal in termosal_data[last_termosal_index:]:
+                                        if termosal[0] >= this_time:
+                                            point[parameter] = float(termosal[1])
+                                            break
+                                        last_termosal_index = last_termosal_index + 1
+
+                                trajectory.append(point)
+                                last_time = this_time
+                                last_lon = position['longitud']
+                                last_lat = position['latitud']
+                            # else:
+                            #     print 'Discarted position for velocity: ', velocity, 'm/s'
+                            #     print 'Last position', last_lon, last_lat
+                            #     print 'Current position', position['longitud'], position['latitud']
+
+                    except:
+                        pass
+
+    # end for day
+    # add last point
+    point = {
+        'latitud': float(position['latitud']),
+        'longitud': float(position['longitud']),
+        'time': this_time,
+        parameter: 0,
+    }
+    if last_termosal_index < termosal_len:
+        for termosal in termosal_data[last_termosal_index:]:
+            point[parameter] = float(termosal[1])
+            if termosal[0] >= this_time:
+                break
+    trajectory.append(point)
+
+    results = {}
+    results['type'] = "FeatureCollection"
+    results['features'] = []
+    prev_point = None
+    for point in trajectory:
+        if prev_point:
+            feature = {
+                "type": "Feature",
+                "geometry": {
+                    "type": "LineString",
+                    "coordinates": [
+                        [prev_point['longitud'], prev_point['latitud']],
+                        [point['longitud'], point['latitud']]
+                    ],
+                },
+                "properties": {
+                    "name": "SOCIB Vessel trajectory with " + parameter,
+                    "time": point['time'].strftime('%d-%m-%Y %H:%M:%S'),
+                    parameter: point[parameter]
+                }
+            }
+            results['features'].append(feature)
+        prev_point = point
+
+    results['features'].append({
+                               "type": "Feature",
+                               "geometry": {
+                                   "type": "Point",
+                                   "coordinates": [position['longitud'], position['latitud']]
+                               },
+                               "properties": {
+                                   "PLAT_SPEED": "%s m s-1" % position['velocidad'],
+                                   "LON": "%s degree_east" % position['longitud'],
+                                   "PLAT_COUR_OG": "%s degree" % position['cog'],
+                                   "SEA_FLOOR_DEPTH": "%s m" % position['profundidad'],
+                                   "LAT": "%s degree_north" % position['latitud'],
+                                   "time": position['fecha'],
+                                   "PLAT_COUR": "%s degree" % position['rumbo'],
+                                   "html": "<div class=\"popup_content\"><strong>time</strong>: %s<br/><strong>position</strong>: N%s E%s     <br/><strong>speed</strong>: %s m s-1 <br/><strong>course</strong>: %s degree<br/><strong>depth</strong>: %s m <br/><strong>course OG</strong>: %s degree</div>" % (position['fecha'], position['latitud'], position['longitud'], position['velocidad'], position['rumbo'], position['profundidad'], position['cog'],)
+                               }
+                               })
+
+    results['bbox'] = [90.0, 180.0, -90.0, -180.0]
+
+    json = simplejson.dumps(results)
+    return HttpResponse(json, mimetype='application/json')
+
+
 def current_termosal(request):
     """Get last lecture of termosal. It returns a JSON object.
     Example::

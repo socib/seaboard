@@ -158,9 +158,9 @@
           if (item.max.value == -Infinity) { item.max.value = 'N/A'; }
           item.min.dispvalue = this.unitConversion(item.min.value);
           item.max.dispvalue = this.unitConversion(item.max.value);
-          index_min = data[this.get('id')].indexOf(item.min.value.toString());
+          index_min = data[this.get('id')].indexOf(item.min.value);
           item.min.time = data.time[index_min];
-          index_max = data[this.get('id')].indexOf(item.max.value.toString());
+          index_max = data[this.get('id')].indexOf(item.max.value);
           item.max.time = data.time[index_max];
         }
       }

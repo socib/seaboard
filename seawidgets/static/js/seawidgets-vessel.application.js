@@ -1,3 +1,4 @@
+var lastLocation, lastTermosal, lastMeteo = null;
 (function() {
 
     function receiveData(variables, data) {
@@ -23,6 +24,7 @@
     // Refresh vessel data, and send it to the widgets
     function refreshData() {
         $.getJSON('/vessel/current_location.json', function(data) {
+            lastLocation = data;
             // refresh other widgets
             receiveData(['map','position', 'speed', 'cog', 'sog','depth'], data);
             if (data.error){
@@ -35,6 +37,7 @@
             }
         });
         $.getJSON('/vessel/current_termosal.json', function(data) {
+            lastTermosal = data;
             // refresh widgets with termosal information
             receiveData(['termosal', 'sea_water_temperature', 'sea_water_salinity', 'sea_water_electrical_conductivity', 'fluor'],data);
             if (data.error){
@@ -47,6 +50,7 @@
             }
         });
         $.getJSON('/vessel/current_meteo.json', function(data) {
+            lastMeteo = data;
             // refresh widgets with meteo information
             receiveData(['meteo', 'wind_speed', 'wind_speed_mean', 'humidity', 'air_pressure', 'air_temperature', 'sun_radiation','wind_from_direction'],data);
             if (data.error){

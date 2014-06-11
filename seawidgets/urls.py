@@ -5,8 +5,8 @@ from models import Location
 
 urlpatterns = patterns(
     'seawidgets.views',
-    url(r'^$',ListView.as_view(
-            queryset=Location.objects.order_by("zone"),
+    url(r'^$', ListView.as_view(
+        queryset=Location.objects.order_by("zone"),
         )),
     url(r'^beamon/(?P<location>[-\w]+)/(?P<cameras>\w+(,\w+)*)/latest/?$',
         view='beamon.latest',
@@ -96,6 +96,10 @@ urlpatterns = patterns(
     url(r'^vessel/trajectory.json$',
         view='vessel.trajectory',
         name='seawidgets_vessel_trajectory',
+        ),
+    url(r'^vessel/(?P<parameter>[-\w]+)_trajectory.json$',
+        view='vessel.termosal_trajectory',
+        name='seawidgets_vessel_termosal_trajectory',
         ),
     url(r'^vessel/current_termosal.json$',
         view='vessel.current_termosal',
