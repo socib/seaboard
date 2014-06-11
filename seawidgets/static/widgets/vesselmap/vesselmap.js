@@ -198,9 +198,17 @@
           .domain(this.scaleDomainVariable)
           .range(colorPalette);
 
+        var getColor = function(value){
+          if (isNaN(value)){
+            return "#FFFFFF";
+          }else{
+            return colorscale(value);
+          }
+        };
+
         var getStyle = function(feature) {
           return {
-            "color": colorscale(feature.properties[parameter]),
+            "color": getColor(feature.properties[parameter]),
             "weight": 3,
             "opacity": 1
           };

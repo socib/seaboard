@@ -356,7 +356,10 @@ def termosal_trajectory(request, parameter):
                 last_lon = None
                 last_lat = None
                 last_termosal_index = 0
-                termosal_len = len(termosal_data)
+                if termosal_data:
+                    termosal_len = len(termosal_data)
+                else:
+                    termosal_len = 0
                 for position in positions:
                     # parse date: 18-02-2013 14:47:16
                     try:
