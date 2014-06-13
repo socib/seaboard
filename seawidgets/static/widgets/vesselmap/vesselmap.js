@@ -102,7 +102,7 @@
           "type": "Feature",
           "properties": {
             "name": "New position at " + data.time,
-            "html": "<div class=\"popup_content\"><strong>time</strong>: " + data.time + "<br/><strong>position</strong>: N" + data.lat + " E" + data.long + "     <br/><strong>speed</strong>: " + data.speed + " m s-1 <br/><strong>depth</strong>: " + data.depth + " m <br/><strong>speed OG</strong>: " + data.sog + " m s-1 <br/><strong>course OG</strong>: " + data.cog + " degree</div>"
+            "html": "<div class=\"popup_content\"><strong>time</strong>: " + data.time + "<br/><strong>position</strong>: N" + data.lat + " E" + data.long + "     <br/><strong>speed</strong>: " + data.speed + " kn <br/><strong>depth</strong>: " + data.depth + " m <br/><strong>course OG</strong>: " + data.cog + " degree</div>"
           },
           "geometry": {
             "type": "Point",

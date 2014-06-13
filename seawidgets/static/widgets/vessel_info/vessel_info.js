@@ -183,16 +183,16 @@
       // subseconds = Math.abs((submin-minutes) * 60);
       direction = "";
       if (type == "Longitude"){
-        if (degrees < 0)
+        if (value < 0)
             direction = "W";
-        else if (degrees > 0)
+        else if (value > 0)
             direction = "E";
         else
             direction = "";
       } else if (type == "Latitude"){
-          if (degrees < 0)
+          if (value < 0)
               direction = "S";
-          else if (degrees > 0)
+          else if (value > 0)
               direction = "N";
           else
               direction = "";

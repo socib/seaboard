@@ -285,7 +285,7 @@ def trajectory(request):
                                    "LAT": "%s degree_north" % position['latitud'],
                                    "time": position['fecha'],
                                    "PLAT_COUR": "%s degree" % position['rumbo'],
-                                   "html": "<div class=\"popup_content\"><strong>time</strong>: %s<br/><strong>position</strong>: N%s E%s     <br/><strong>speed</strong>: %s m s-1 <br/><strong>course</strong>: %s degree<br/><strong>depth</strong>: %s m <br/><strong>course OG</strong>: %s degree</div>" % (position['fecha'], position['latitud'], position['longitud'], position['velocidad'], position['rumbo'], position['profundidad'], position['cog'],)
+                                   "html": "<div class=\"popup_content\"><strong>time</strong>: %s<br/><strong>position</strong>: N%s E%s     <br/><strong>speed</strong>: %s kn <br/><strong>depth</strong>: %s m <br/><strong>course OG</strong>: %s degree</div>" % (position['fecha'], position['latitud'], position['longitud'], position['velocidad'], position['profundidad'], position['cog'],)
                                }
                                })
 
@@ -449,8 +449,7 @@ def termosal_trajectory(request, parameter):
                                    "SEA_FLOOR_DEPTH": "%s m" % position['profundidad'],
                                    "LAT": "%s degree_north" % position['latitud'],
                                    "time": position['fecha'],
-                                   "PLAT_COUR": "%s degree" % position['rumbo'],
-                                   "html": "<div class=\"popup_content\"><strong>time</strong>: %s<br/><strong>position</strong>: N%s E%s     <br/><strong>speed</strong>: %s m s-1 <br/><strong>course</strong>: %s degree<br/><strong>depth</strong>: %s m <br/><strong>course OG</strong>: %s degree</div>" % (position['fecha'], position['latitud'], position['longitud'], position['velocidad'], position['rumbo'], position['profundidad'], position['cog'],)
+                                   "html": "<div class=\"popup_content\"><strong>time</strong>: %s<br/><strong>position</strong>: N%s E%s     <br/><strong>speed</strong>: %s kn <br/><strong>depth</strong>: %s m <br/><strong>course OG</strong>: %s degree</div>" % (position['fecha'], position['latitud'], position['longitud'], position['velocidad'], position['profundidad'], position['cog'],)
                                }
                                })
 
