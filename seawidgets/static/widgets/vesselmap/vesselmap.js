@@ -19,6 +19,11 @@
       child.__super__ = parent.prototype;
       return child;
     };
+  var inputUnits = {
+    'temperatura': '°C',
+    'salinidad': 'psu',
+    'fluor': 'V',
+  };
 
   var colorPalette = ["#000080", "#0000f1", "#0063ff", "#00d4ff", "#47ffb8", "#b8ff47", "#ffd500", "#ff6300", "#f10000", "#800000"];
 
@@ -79,8 +84,7 @@
           } else if (parameter == 'fluor') {
             currentValue = lastTermosal['fluor'];
           }
-        } catch (Exception) {
-        }
+        } catch (Exception) {}
 
         var geojsonFeature = {
           "type": "Feature",
@@ -136,8 +140,8 @@
         maxZoom: 12
       });
       var baseMaps = {
-          "Continents": continentsLayer,
-          "Bathymetry": bathymetryLayer
+        "Continents": continentsLayer,
+        "Bathymetry": bathymetryLayer
       };
       L.control.layers(baseMaps).addTo(this.map);
       continentsLayer.addTo(this.map);
@@ -150,8 +154,8 @@
         useDMS: true,
       }).addTo(this.map);
 
-      this.loadTrajectory('temperatura');
-      $('.leaflet-control-thermosal-parameters.temperatura').addClass('active');
+      this.loadTrajectory('salinidad');
+      $('.leaflet-control-thermosal-parameters.salinidad').addClass('active');
 
     };
 
@@ -198,10 +202,10 @@
           .domain(this.scaleDomainVariable)
           .range(colorPalette);
 
-        var getColor = function(value){
-          if (isNaN(value)){
+        var getColor = function(value) {
+          if (isNaN(value)) {
             return "#FFFFFF";
-          }else{
+          } else {
             return colorscale(value);
           }
         };
@@ -228,6 +232,9 @@
         });
         this.trajectory_layer.addTo(this.map);
         this.map.fitBounds(this.trajectory_layer.getBounds());
+
+        this.addLegend(min, max, colorPalette, colorscale);
+
       }).bind(this));
     };
 
@@ -239,6 +246,39 @@
         feature,
         this.endPoint_options);
       this.endPoint_layer.addTo(this.map);
+    };
+
+    Vesselmap.prototype.addLegend = function(min, max, colorPalette, colorscale) {
+      try {
+        // add canvas to container
+        if (this.canvas)
+          this.canvas.remove();
+        this.canvas = $("<canvas class='vesselmap-legend'></canvas>");
+        $(this.map.getContainer()).append(this.canvas);
+        this.canvas.get()[0].width = this.canvas.width();
+        this.canvas.get()[0].height = this.canvas.height();
+        this.ctx = this.canvas.get()[0].getContext("2d");
+      } catch (error) {
+        console.log('2d canvas is not supported');
+        return;
+      }
+      var width = 30;
+      var height = this.canvas.height() - 20;
+      var lingrad = this.ctx.createLinearGradient(0, height - 10, 0, 10);
+      for (var i = 0, l = colorPalette.length; i < l; i++) {
+        lingrad.addColorStop(i / (l - 1), colorPalette[i]);
+      }
+      this.ctx.fillStyle = lingrad;
+      this.ctx.fillRect(5, 5, width + 5, height + 5);
+      this.ctx.fillStyle = "#222";
+      this.ctx.textAlign = 'left';
+      var ticks = colorscale.nice().ticks(6);
+      var datascale = d3.scale.linear()
+        .domain([min, max])
+        .range([0, height]);
+      for (i = 0, l = ticks.length; i < l; i++) {
+        this.ctx.fillText(ticks[i].toFixed(2) + ' ' + inputUnits[this.activeParameter], width + 15, 5 + height - datascale(ticks[i]));
+      }
     };
 
     return Vesselmap;
