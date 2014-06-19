@@ -436,11 +436,21 @@ def termosal_trajectory(request, parameter):
             results['features'].append(feature)
         prev_point = point
 
+    latitud = position['latitud']
+    if point['latitud'] < 0:
+        latitud = "S" + str(point['latitud'])
+    else:
+        latitud = "N" + str(point['latitud'])
+    if point['longitud'] < 0:
+        longitud = "W" + str(point['longitud'])
+    else:
+        longitud = "E" + str(point['longitud'])
+
     results['features'].append({
                                "type": "Feature",
                                "geometry": {
                                    "type": "Point",
-                                   "coordinates": [position['longitud'], position['latitud']]
+                                   "coordinates": [point['longitud'], point['latitud']]
                                },
                                "properties": {
                                    "PLAT_SPEED": "%s m s-1" % position['velocidad'],
@@ -449,7 +459,7 @@ def termosal_trajectory(request, parameter):
                                    "SEA_FLOOR_DEPTH": "%s m" % position['profundidad'],
                                    "LAT": "%s degree_north" % position['latitud'],
                                    "time": position['fecha'],
-                                   "html": "<div class=\"popup_content\"><strong>time</strong>: %s<br/><strong>position</strong>: N%s E%s     <br/><strong>speed</strong>: %s kn <br/><strong>depth</strong>: %s m <br/><strong>course OG</strong>: %s degree</div>" % (position['fecha'], position['latitud'], position['longitud'], position['velocidad'], position['profundidad'], position['cog'],)
+                                   "html": "<div class=\"popup_content\"><strong>time</strong>: %s<br/><strong>position</strong>: %s %s     <br/><strong>speed</strong>: %s kn <br/><strong>depth</strong>: %s m <br/><strong>course OG</strong>: %s degree</div>" % (position['fecha'], latitud, longitud, position['velocidad'], position['profundidad'], position['cog'],)
                                }
                                })
 
