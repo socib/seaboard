@@ -50,7 +50,7 @@ class Location(models.Model):
     proud_heading = models.CharField(_('proud heading'), max_length=100, blank=True)
     proud_body = models.CharField(_('proud body'), max_length=600, blank=True)
     timelapse_cameras = models.CharField(_('timelapse cameras'), max_length=50, blank=True)
-    latest_cameras = models.CharField(_('latest cameras'), max_length=50, blank=True)
+    latest_cameras = models.CharField(_('latest cameras'), max_length=100, blank=True)
     rss_url = models.CharField(_('RSS url'), max_length=250, blank=True)
     dash_template = models.CharField(_('Dash template'), max_length=100, blank=True)
 
