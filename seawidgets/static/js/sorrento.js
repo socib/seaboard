@@ -144,7 +144,7 @@ function wind() {
             layers: 'wind',
             format: 'image/png',
             transparent: true,
-            colorscalerange: '0,2',
+            colorscalerange: 'auto',
             abovemaxcolor: "extend",
             belowmincolor: "extend",
             markerscale: 15,
@@ -211,7 +211,7 @@ function aviso() {
         params: {
             layers: "surface_geostrophic_sea_water_velocity",
             transparent: true,
-            colorscalerange: '-20,100',
+            colorscalerange: 'auto',
             markerscale: 15,
             markerspacing: 12,
             markerclipping: true,
