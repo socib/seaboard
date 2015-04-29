@@ -9,7 +9,7 @@ var Sorrento = function(wms_server, layers, container) {
         container: container,
         layers: layers,
         mapOptions: {
-            center: [39.56, 1.85],
+            center: [39.6556, 1.8783],
             zoom: 9,
             timeDimensionOptions: {
                 timeInterval: "P1M/" + endDate.toISOString(),
