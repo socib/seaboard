@@ -1,13 +1,18 @@
 from django.conf.urls import patterns, url
 from django.views.generic import ListView
 from models import Location
-
+from views import services
 
 urlpatterns = patterns(
     'seawidgets.views',
+    url(r'^services/wms-proxy/?(?P<path>.*)$',
+        services.proxy_to,
+        {'target_url': None}),
+    url(r'^services/dd/?(?P<path>.*)$',
+        services.proxy_to,
+        {'target_url': 'http://apps.socib.es/DataDiscovery/'}),
     url(r'^$', ListView.as_view(
-        queryset=Location.objects.order_by("zone"),
-        )),
+        queryset=Location.objects.order_by("zone"),)),
     url(r'^beamon/(?P<location>[-\w]+)/(?P<cameras>\w+(,\w+)*)/latest/?$',
         view='beamon.latest',
         name='seawidgets_beamon_latest',
