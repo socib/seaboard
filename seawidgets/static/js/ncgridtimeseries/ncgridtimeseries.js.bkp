@@ -1,0 +1,501 @@
+
+var NCWMSGridTimeseriesViewer = function(options) {
+    this.container = options.container || 'map';
+    this.wms_server = options.wms_server;
+    this.layer = options.layer;
+    this.variable_name = options.variable_name || this.layer;
+    this.style = options.style || 'boxfill/rainbow';
+    this.extra_layer_params = options.extra_layer_params || {};
+    this.map_center = options.map_center || [39.4, 2.9];
+    this.map_zoom = options.map_zoom || 6;
+    this.auto_bounds = options.auto_bounds || false;
+
+    this.proxy = options.proxy || null;
+
+    // to be retrieved from threadds:
+    this.date_range = null;
+    this.datesWithData = null;
+    this.units = null;
+    this.currentdate = null;
+
+    this.colors = options.colors || ["#2f7ed8", "#0d233a", "#8bbc21", "#910000", "#1aadce", "#492970", "#f28f43", "#77a1e5", "#c42525", "#a6c96a"];
+    this.currentColor = 0;
+
+    this.map = options.map || this.createMap();
+
+    if (this.map) {
+        this.map.removeEventListener('dblclick');
+        this.map.on('dblclick', (function(e) {
+            var point = e.containerPoint;
+            var bbox = this.map.getBounds().toBBoxString();
+            var size = this.map.getPixelBounds().getSize();
+            point.x = Math.round(point.x);
+            point.y = Math.round(point.y);
+            if (this.chart)
+                this.chart.showLoading();
+            this.loadData(point, bbox, size, (function(data) {
+                this.showData(data);
+                this.chart.hideLoading();
+            }).bind(this));
+            return false;
+        }).bind(this));
+    }
+};
+
+NCWMSGridTimeseriesViewer.prototype.getNextColor = function() {
+    return this.colors[this.currentColor++ % this.colors.length];
+};
+
+NCWMSGridTimeseriesViewer.prototype.getMap = function() {
+    return this.map;
+};
+
+NCWMSGridTimeseriesViewer.prototype.showData = function(data) {
+    var color = this.getNextColor();
+    this.addSerie(data.time, data.values, data.latitude + ', ' + data.longitude, data.url, color);
+    if (this.map) {
+        var circle = L.circleMarker([data.latitude, data.longitude], {
+            color: '#FFFFFF',
+            fillColor: color,
+            fillOpacity: 0.8,
+            radius: 5,
+            weight: 2,
+        }).addTo(this.map);
+    }
+};
+
+NCWMSGridTimeseriesViewer.prototype.loadData = function(point, bbox, size, callback) {
+    if (this.date_range !== null) {
+        this.loadData_(point, bbox, size, callback);
+    } else {
+        this.loadDateRange((function() {
+            this.loadData_(point, bbox, size, callback);
+        }).bind(this));
+    }
+};
+
+
+NCWMSGridTimeseriesViewer.prototype.loadData_ = function(point, bbox, size, callback) {
+    var url = this.wms_server + '?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetFeatureInfo&SRS=EPSG:4326';
+    url = url + '&LAYER=' + this.layer;
+    url = url + '&QUERY_LAYERS=' + this.layer;
+    url = url + '&X=' + point.x + '&Y=' + point.y + '&I=' + point.x + '&J=' + point.y;
+    url = url + '&BBOX=' + bbox;
+    url = url + '&WIDTH=' + size.x + '&HEIGHT=' + size.y;
+    url = url + '&INFO_FORMAT=text/xml';
+    var url_without_time = url;
+    url = url + '&TIME=' + this.date_range.min.format('yyyy-mm-dd') + '/' + this.date_range.max.format('yyyy-mm-dd');
+
+    if (this.proxy) url = this.proxy + '?url=' + encodeURIComponent(url);
+
+    $.get(url, (function(data) {
+        var result = {
+            time: [],
+            values: []
+        };
+
+        // Add min and max values to be able to get more data later
+        if (this.date_range.min > this.minmaxdate_range.min) {
+            result.time.push(this.minmaxdate_range.min);
+            result.values.push(null);
+        }
+
+        $(data).find('FeatureInfo').each(function() {
+            var this_time = $(this).find('time').text();
+            var this_data = $(this).find('value').text();
+            try {
+                this_data = parseFloat(this_data);
+            } catch (e) {
+                this_data = null;
+            }
+            result.time.push(this_time);
+            result.values.push(this_data);
+        });
+
+        if (this.date_range.max < this.minmaxdate_range.max) {
+            result.time.push(this.minmaxdate_range.max);
+            result.values.push(null);
+        }
+
+        result.longitude = $(data).find('longitude').text();
+        try {
+            result.longitude = parseFloat(result.longitude).toFixed(4);
+        } catch (e) {}
+        result.latitude = $(data).find('latitude').text();
+        try {
+            result.latitude = parseFloat(result.latitude).toFixed(4);
+        } catch (e) {}
+        result.url = url_without_time;
+
+        if (callback !== undefined) {
+            callback(result);
+        }
+    }).bind(this));
+};
+
+
+NCWMSGridTimeseriesViewer.prototype.loadMoreData_ = function(url, mindate, maxdate, callback) {
+    url = url + '&TIME=' + mindate.format('yyyy-mm-dd') + '/' + maxdate.format('yyyy-mm-dd');
+
+    if (this.proxy) url = this.proxy + '?url=' + encodeURIComponent(url);
+
+    $.get(url, (function(data) {
+        var result = {
+            time: [],
+            values: []
+        };
+
+        $(data).find('FeatureInfo').each(function() {
+            var this_time = $(this).find('time').text();
+            var this_data = $(this).find('value').text();
+            try {
+                this_data = parseFloat(this_data);
+            } catch (e) {
+                this_data = null;
+            }
+            result.time.push(this_time);
+            result.values.push(this_data);
+        });
+
+        if (callback !== undefined) {
+            callback(result);
+        }
+    }).bind(this));
+};
+
+NCWMSGridTimeseriesViewer.prototype.loadDateRange = function(callback) {
+    var url = this.wms_server + '?service=WMS&version=1.1.1&request=GetMetadata&item=layerDetails';
+    url = url + '&layerName=' + this.layer;
+    if (this.proxy) url = this.proxy + '?url=' + encodeURIComponent(url);
+    $.getJSON(url, (function(data) {
+        this.datesWithData = data.datesWithData;
+        this.minmaxdate_range = this.calculateMinMaxDate_();
+        var max = this.minmaxdate_range.max;
+        var min = new Date(Date.UTC(max.getUTCFullYear(), max.getUTCMonth(), max.getUTCDate()));
+        min.setUTCMonth(min.getUTCMonth() - 2);
+        if (min < this.minmaxdate_range.min) {
+            min = this.minmaxdate_range.min;
+        }
+        min = this.convertToDateWithData_(min);
+        this.date_range = {
+            min: min,
+            max: max
+        };
+        this.currentdate = data.nearestTimeIso;
+        // If map, also set extend to its bbox
+        if (this.map && this.auto_bounds) {
+            var southWest = L.latLng(data.bbox[1], data.bbox[0]);
+            var northEast = L.latLng(data.bbox[3], data.bbox[2]);
+            var bounds = L.latLngBounds(southWest, northEast);
+            this.map.fitBounds(bounds);
+        }
+        // also save this variable units
+        this.units = data.units;
+        if (callback !== undefined) {
+            callback();
+        }
+    }).bind(this));
+};
+
+
+NCWMSGridTimeseriesViewer.prototype.calculateMinMaxDate_ = function() {
+
+    var minyear = null;
+    var maxyear = null;
+    var minmonth = null;
+    var maxmonth = null;
+    var minday = null;
+    var maxday = null;
+
+    for (var year in this.datesWithData) {
+        year = parseInt(year);
+        if (minyear === null || year < minyear) minyear = year;
+        if (maxyear === null || year > maxyear) maxyear = year;
+    }
+
+    for (var month in this.datesWithData[minyear]) {
+        month = parseInt(month);
+        if (minmonth === null || month < minmonth) minmonth = month;
+    }
+
+    for (month in this.datesWithData[maxyear]) {
+        month = parseInt(month);
+        if (maxmonth === null || month > maxmonth) maxmonth = month;
+    }
+
+    for (var day in this.datesWithData[minyear][minmonth]) {
+        day = parseInt(day);
+        if (minday === null || this.datesWithData[minyear][minmonth][day] < minday)
+            minday = this.datesWithData[minyear][minmonth][day];
+    }
+
+    for (var day in this.datesWithData[maxyear][maxmonth]) {
+        day = parseInt(day);
+        if (maxday === null || this.datesWithData[maxyear][maxmonth][day] > maxday)
+            maxday = this.datesWithData[maxyear][maxmonth][day];
+    }
+
+    var min = new Date(Date.UTC(minyear, minmonth, minday));
+    min.setUTCDate(min.getUTCDate() + 1);
+    return {
+        min: min,
+        max: new Date(Date.UTC(maxyear, maxmonth, maxday))
+    };
+};
+
+NCWMSGridTimeseriesViewer.prototype.convertToDateWithData_ = function(date) {
+    var dateFound = false;
+    var year, month, day;
+    while (!dateFound) {
+        year = date.getUTCFullYear();
+        while (!(year in this.datesWithData)) {
+            year++;
+            date.setUTCMonth(0);
+        }
+        date.setUTCFullYear(year);
+
+        month = date.getUTCMonth();
+        while (!(month in this.datesWithData[year])) {
+            month++;
+            date.setUTCDate(1);
+            if (month > 11) {
+                return this.minmaxdate_range.max;
+            }
+        }
+        date.setUTCMonth(month);
+
+        day = date.getUTCDate();
+        while (this.datesWithData[year][month].indexOf(day) == -1) {
+            day++;
+            if (day > 31) {
+                date.setUTCMonth(month + 1);
+                break;
+            }
+        }
+        if (this.datesWithData[year][month].indexOf(day) > -1) {
+            date.setUTCDate(day);
+            dateFound = true;
+        }
+    }
+    return date;
+};
+
+NCWMSGridTimeseriesViewer.prototype.checkLoadNewData = function(min, max) {
+    min = new Date(min);
+    max = new Date(max);
+
+    var afterLoadData = function(serie, data) {
+        this.updateSerie(serie, data.time, data.values);
+        this.chart.hideLoading();
+    };
+    var i, l, serie;
+
+    min = this.convertToDateWithData_(min);
+    max = this.convertToDateWithData_(max);
+
+    if (min < this.date_range.min) {
+        var old_min = this.date_range.min;
+        this.date_range.min = min;
+        this.chart.showLoading();
+        for (i = 0, l = this.chart.series.length; i < l; i++) {
+            serie = this.chart.series[i];
+            if (serie.name != "Navigator")
+                this.loadMoreData_(serie.options.custom.url, min, old_min, afterLoadData.bind(this, serie));
+        }
+    }
+    if (max > this.date_range.max) {
+        var old_max = this.date_range.max;
+        this.date_range.max = max;
+        this.chart.showLoading();
+        for (i = 0, l = this.chart.series.length; i < l; i++) {
+            serie = this.chart.series[i];
+            if (serie.name != "Navigator")
+                this.loadMoreData_(serie.options.custom.url, old_max, max, afterLoadData.bind(this, serie));
+        }
+    }
+};
+
+
+NCWMSGridTimeseriesViewer.prototype.createMap = function() {
+    var myOptions = {
+        zoom: this.map_zoom,
+        fullscreenControl: true,
+        center: this.map_center
+    };
+    var map = L.map(this.container, myOptions);
+
+    // Add OSM and emodnet bathymetry to map
+    var osmLayer = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+    });
+    var bathymetryLayer = L.tileLayer.wms("http://admin.n4m5.eu/geoserver/wms", {
+        layers: 'emodnet:mean_singlecolour',
+        format: 'image/png',
+        transparent: true,
+        attribution: "Emodnet bathymetry",
+        opacity: 0.3
+    });
+    var bathymetryLayer2 = L.tileLayer.wms("http://admin.n4m5.eu/geoserver/wms", {
+        layers: 'emodnet:mean_singlecolour',
+        format: 'image/png',
+        transparent: true,
+        attribution: "Emodnet bathymetry",
+        opacity: 0.3
+    });
+    var osmBathymetry = L.layerGroup([osmLayer, bathymetryLayer2]);
+    osmBathymetry.addTo(map);
+    var baseMaps = {
+        "Emodnet bathymetry": bathymetryLayer,
+        "Emodnet bathymetry + OSM": osmBathymetry
+    };
+
+    var wms_options = {
+        layers: this.layer,
+        format: 'image/png',
+        transparent: true,
+        styles: this.style
+    };
+
+    for (var attribute in this.extra_layer_params){
+        wms_options[attribute] = this.extra_layer_params[attribute];
+    }
+    var variableLayer = L.nonTiledLayer.wms(this.wms_server, wms_options);
+    var overlayMaps = {};
+    overlayMaps[this.variable_name] = variableLayer;
+    var variableLegend = L.control({
+        position: 'bottomright'
+    });
+    variableLegend.onAdd = (function(map) {
+        var palette = this.style.substring(this.style.indexOf('/'));
+        var colorscalerange = this.extra_layer_params.colorscalerange || 'default';
+        var src = this.wms_server + "?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetLegendGraphic&LAYER=" + this.layer + "&PALETTE=" + palette +  "&COLORSCALERANGE=" + colorscalerange;
+        var div = L.DomUtil.create('div', 'info legend');
+        div.innerHTML +=
+            '<img src="' + src + '" alt="legend">';
+        return div;
+    }).bind(this);
+    variableLayer.addTo(map);
+    L.control.layers(baseMaps, overlayMaps).addTo(map);
+    L.control.coordinates({
+        position: "bottomleft",
+        decimals: 3,
+        labelTemplateLat: "Latitude: {y}",
+        labelTemplateLng: "Longitude: {x}",
+        useDMS: false,
+        enableUserInput: false
+    }).addTo(map);
+    variableLegend.addTo(map);
+    return map;
+};
+
+
+NCWMSGridTimeseriesViewer.prototype.createChart = function() {
+    var chart_container = $('#' + this.container).parent().find('.chart');
+    if (!chart_container.length){
+        chart_container = $('#' + this.container).parent().append("<div class='chart'></div>");
+    }
+    chart_container.highcharts('StockChart', {
+        chart: {
+            zoomType: 'x'
+        },
+        rangeSelector: {
+            selected: 2,
+            buttons: [{
+                type: 'day',
+                count: 3,
+                text: '3d'
+            }, {
+                type: 'day',
+                count: 7,
+                text: '7d'
+            }, {
+                type: 'month',
+                count: 1,
+                text: '1m'
+            }, {
+                type: 'month',
+                count: 3,
+                text: '3m'
+            }, {
+                type: 'month',
+                count: 6,
+                text: '6m'
+            }, {
+                type: 'year',
+                count: 1,
+                text: '1y'
+            }, {
+                type: 'all',
+                text: 'All'
+            }]
+        },
+        xAxis: {
+            events: {
+                afterSetExtremes: (function(e) {
+                    this.checkLoadNewData(e.min, e.max);
+                }).bind(this)
+            }
+        },
+        title: {
+            text: this.variable_name
+        },
+        series: [],
+    });
+    return chart_container.highcharts();
+};
+
+NCWMSGridTimeseriesViewer.prototype.addSerie = function(time, variableData, position, url, color) {
+    var serie = this.createSerie(time, variableData, position, url, color);
+    if (!this.chart)
+        this.chart = this.createChart();
+    this.chart.addSeries(serie);
+};
+
+NCWMSGridTimeseriesViewer.prototype.createSerie = function(time, variableData, position, url, color) {
+    return {
+        name: this.variable_name + ' at ' + position,
+        type: 'line',
+        color: color,
+        data: (function() {
+            var length = time.length;
+            var data = new Array(length);
+            var this_time = new Date();
+            var this_data = null;
+            for (var i = 0; i < length; i++) {
+                this_time = (new Date(time[i])).getTime();
+                this_data = variableData[i];
+                if (isNaN(this_data))
+                    this_data = null;
+                data[i] = [this_time, this_data];
+            }
+            return data;
+        })(),
+        tooltip: {
+            valueDecimals: 2,
+            valueSuffix: ' ' + this.units,
+            xDateFormat: '%A, %b %e, %H:%M'
+        },
+        custom: {
+            variable: this.variable_name,
+            position: position,
+            url: url
+        }
+    };
+};
+
+NCWMSGridTimeseriesViewer.prototype.updateSerie = function(serie, time, variableData) {
+    var length = time.length;
+    var new_data = new Array(length);
+    var this_time = new Date();
+    var this_data = null;
+    for (var i = 0; i < length; i++) {
+        this_time = (new Date(time[i])).getTime();
+        this_data = variableData[i];
+        if (isNaN(this_data))
+            this_data = null;
+        new_data[i] = [this_time, this_data];
+    }
+    var old_data = serie.options.data;
+    serie.options.data = old_data.concat(new_data).sort();
+    serie.setData(serie.options.data);
+};
