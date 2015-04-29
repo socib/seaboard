@@ -12,7 +12,17 @@ from django.views.decorators.cache import cache_page
 import datetime
 import urllib2
 
-STATION_VARIABLES = ['air_temperature', 'wind_speed', 'air_pressure', 'relative_humidity', 'rain_accumulation']
+STATION_VARIABLES = [
+    'air_temperature',
+    'wind_speed',
+    'air_pressure',
+    'relative_humidity',
+    'rain_accumulation',
+    'sea_surface_wave_significant_height',
+    'sea_surface_wave_from_direction',
+    'sea_water_speed',
+    'direction_of_sea_water_velocity',
+]
 
 INPUT_UNITS = {
     'air_temperature': '°C',

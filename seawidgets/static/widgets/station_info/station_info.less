@@ -1,0 +1,170 @@
+.widget-station-info{
+  position: relative;
+
+  .bb-bookblock {
+    height: 175px;
+  }
+
+  h2.weather-title{
+    font-size: 25.1px;
+    padding-bottom: 0px;
+    margin-bottom: 10px;
+    font-weight: bold;
+  }
+
+  .weather-data{
+    width: 100%;
+  }
+
+  .weather-icon {
+    width: 50px;
+    margin-right: 10px;
+  }
+
+  .weather-data, .weather-icon {
+    float: left;
+    height: 114px;
+    position: relative;
+    padding-top: 10px;
+  }
+
+  .bb-item{
+      background-repeat: no-repeat;
+      background-position: left bottom;
+
+      &.air_temperature {
+        background-image: url('/static/widgets/weather_station/images/air_temperature_partial.png');
+      }
+      &.rain_accumulation {
+        background-image: url('/static/widgets/weather_station/images/rain_accumulation_partial.png');
+      }
+      &.relative_humidity {
+        background-image: url('/static/widgets/weather_station/images/relative_humidity_partial.png');
+      }
+      &.air_pressure {
+        background-image: url('/static/widgets/weather_station/images/air_pressure_partial.png');
+      }
+      &.wind_speed{
+        background-image: url('/static/widgets/weather_station/images/wind_speed_partial.png');
+      }
+  }
+
+  .weather-data {
+
+    .ws-currentvalue{
+      font-size: 60px;
+      line-height: 62px;
+    }
+    .wsv-maxmin{
+      width: 100%;
+      text-align: center;
+      font-size: 14px;
+      margin-top: 20px;
+      .wsv-max,.wsv-min{
+        font-size: 13px;
+        span{
+          font-weight: bold;
+          color: @secondary-title-color;
+        }
+      }
+    }
+
+    &.air_temperature, &.relative_humidity {
+      .ws-currentunits{
+        font-size: 62px;
+        line-height: 64px;
+      }
+    }
+
+    &.air_pressure, &.wind_speed {
+      .ws-currentvalue{
+        font-size: 52.15px;
+        line-height: 54px;
+      }
+      .ws-currentunits{
+        font-size: 28.3px;
+        line-height: 26px;
+      }
+      .wsv-max .ws-units, .wsv-min .ws-units{
+        display: none;
+      }
+      .ws-wind-direction{
+        display: block;
+      }
+    }
+
+
+    &.rain_accumulation {
+      .wsv-max .ws-units, .wsv-min .ws-units{
+        display: none;
+      }
+    }
+
+  }
+
+  .weather-icon {
+    background-repeat: no-repeat;
+    background-position: center center;
+
+      &.air_temperature {
+        background-image: url('/static/widgets/weather_station/images/air_temperature.png');
+      }
+      &.rain_accumulation {
+        background-image: url('/static/widgets/weather_station/images/rain_accumulation.png');
+      }
+      &.relative_humidity {
+        background-image: url('/static/widgets/weather_station/images/relative_humidity.png');
+      }
+      &.air_pressure {
+        background-image: url('/static/widgets/weather_station/images/air_pressure.png');
+      }
+      &.wind_speed{
+        background-image: url('/static/widgets/weather_station/images/wind_speed.png');
+      }
+  }
+
+}
+
+
+.widget-weather-station_variable{
+  .weather-data {
+    padding-right: 50px;
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+
+      &.air_temperature {
+        background-image: url('/static/widgets/weather_station/images/air_temperature_sm_white.png');
+        .ws-currentvalue{
+          font-size: 45px;
+          line-height: 90px;
+        }
+        .ws-currentunits{
+          font-size: 45px;
+          line-height: 51px;
+        }
+      }
+      &.air_pressure {
+        background-image: url('/static/widgets/weather_station/images/air_pressure_sm_white.png');
+        .ws-currentvalue{
+          font-size: 44.15px;
+          line-height: 50px;
+        }
+        .ws-currentunits{
+          font-size: 22.3px;
+          line-height: 24px;
+        }
+      }
+      &.wind_speed{
+        background-image: url('/static/widgets/weather_station/images/wind_speed_sm_white.png');
+        .ws-currentvalue{
+          font-size: 44.15px;
+          line-height: 50px;
+        }
+        .ws-currentunits{
+          font-size: 22.3px;
+          line-height: 24px;
+        }
+      }
+  }
+
+}

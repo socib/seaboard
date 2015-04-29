@@ -1,0 +1,17 @@
+<h2 class="title" data-bind="title"></h2>
+<table class="table">
+  <thead>
+    <tr>      
+      <th>Parámetro</th>
+      <th>Valor actual</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr class="parameter-item" data-foreach-item="variables">      
+      <td data-bind="item.display_name"></td>
+      <td><span data-bind="item.current.value" data-bind-title="item.current.time" class="ws-currentvalue"></span> <span data-bind="item.inputUnits" class="ws-currentunits"></span> <span data-bind="item.current.wind_from_direction | displayWindDirection" class="ws-currentunits ws-wind-direction"></span>
+      </td>
+    </tr>
+  </tbody>
+</table>
+

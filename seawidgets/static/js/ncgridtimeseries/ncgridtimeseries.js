@@ -10,7 +10,7 @@ var NCWMSGridTimeseriesViewer = function(options) {
         this.default_range_selector = options.default_range_selector;
     }
     this.proxy = options.proxy || null;
-    this.colors = options.colors || ["#2f7ed8", "#0d233a", "#8bbc21", "#910000",  "#492970", "#f28f43", "#77a1e5", "#c42525", "#a6c96a"];
+    this.colors = options.colors || ["#f28f43", "#c42525", "#77a1e5", "#910000", "#2f7ed8", "#0d233a", "#8bbc21", "#492970", "#a6c96a"];
     this.currentColor = 0;
     this.createMap(options.map);
     this.pendingLayers = 0;
@@ -418,11 +418,20 @@ NCWMSGridTimeseriesViewer.prototype.createMap = function(map) {
         var mapOptions = {
             fullscreenControl: true,
             timeDimension: true,
-            timeDimensionControl: true,
+            // timeDimensionControl: true,
             center: [39.4, 2.9],
             zoom: 6
         };
         this.map = L.map(this.container, $.extend({}, mapOptions, this.mapOptions));
+
+        L.Control.TimeDimensionCustom = L.Control.TimeDimension.extend({
+            _getDisplayDateFormat: function(date){
+                return date.format("yyyy-mm-dd HH:MM 'UTC'", true);
+            }    
+        });
+        var timeDimensionControl = new L.Control.TimeDimensionCustom(this.mapOptions.timeDimensionControlOptions);
+        this.map.addControl(timeDimensionControl);
+
 
         if (this.baseMaps == undefined) {
 
