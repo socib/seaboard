@@ -1,7 +1,7 @@
 var Sorrento = function(wms_server, layers, container) {
     this.wms_server = wms_server;
     var currentTime = new Date();
-    currentTime.setUTCHours(0, 0, 0, 0);
+    currentTime.setUTCMinutes(0, 0, 0);
     var endDate = new Date(currentTime.getTime());
     L.TimeDimension.Util.addTimeDuration(endDate, "P3D", true);
 
@@ -13,7 +13,7 @@ var Sorrento = function(wms_server, layers, container) {
             zoom: 9,
             timeDimensionOptions: {
                 timeInterval: "P1M/" + endDate.toISOString(),
-                period: "PT6H",
+                period: "PT1H",
                 currentTime: currentTime.getTime()
             },
             timeDimensionControlOptions: {

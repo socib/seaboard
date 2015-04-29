@@ -539,8 +539,8 @@ NCWMSGridTimeseriesViewer.prototype.addLegend = function(layer, map) {
         if (layer.params.numcolorbands) {
             src += '&numcolorbands=' + layer.params.numcolorbands;
         }
-        div.innerHTML +=
-            '<img class="legend-img" src="' + src + '" alt="legend">';
+        div.innerHTML +=            
+            '<img class="legend-img" src="' + src + '" alt="legend" style="height: 220px;">';
     }
 
     return div_wrapper;
