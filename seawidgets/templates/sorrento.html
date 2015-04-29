@@ -77,8 +77,13 @@
 
   <div class="row-fluid">
     <div class="span4" style="padding-left:4px;">
-      <h1 class="section">Datos Boya Sa Dragonera</h1>
-      <div data-id="weather" data-view="WeatherStation" data-location="{{ location.zone.code }}" data-title=""></div>
+      <h1 class="section">Simulación vertido</h1>
+      <img src="http://socib.es/files/images_fotos/modelling/modelo_vertido_sorrento.gif" class="img-responsive" />
+      <p>
+      Simulación de la trayectoria de un vertido realizado a las 12.00 horas de 29/04/2015. <br />
+      Los contornos corresponden a la probabilidad acumulada de todas las particulas (verde 50% y rojo 90%).<br /> 
+      Simulación valida para 24 horas.
+      </p>
     </div>    
     <div class="span4">
       <section class="status">
@@ -96,14 +101,16 @@
     </div>  
     <div class="span4">
       <section class="status">
+          <h1 class="section">Datos Boya Sa Dragonera</h1>
+          <div data-id="weather" data-view="WeatherStation" data-location="{{ location.zone.code }}" data-title=""></div>
+
           <h1 class="section">Contribuciones</h1>
           <div class="well">
             Algunos datos que se muestran en esta página web provienen de:
-            <ul class="nav nav-tabs nav-stacked">            
-              <li><a href="http://wwww.puertos.es">
-              <img src="http://www.puertos.es/Style%20Library/ca-ES/Puertos/Images/logopuertosreducido.png" />
-              </a></li>
-            </ul>
+            <a href="http://wwww.puertos.es" style="display: block; margin: auto; text-align: center;">
+              <img src="http://www.puertos.es/Style%20Library/ca-ES/Puertos/Images/logopuertosreducido.png"
+              />
+            </a>
           </div>
       </section>
     </div>  
