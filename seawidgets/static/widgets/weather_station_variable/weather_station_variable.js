@@ -21,6 +21,9 @@
 
     WeatherStationVariable.prototype.refreshData = function() {      
       var url = '/weather/' + this.get('location') + '/' + this.get('variable') + '.json';      
+      if (this.get('units')){
+        url += '?units=' + this.get('units');
+      }
       var that = this;
       $.getJSON(url, function(data) {
         that.showData(data);

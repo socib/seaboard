@@ -42,18 +42,18 @@
       <h1 class="section">Datos Boya Sa Dragonera</h1>
       <div class="row-fluid">
         <div class="span6">        
-          <div data-id="weather" data-view="WeatherStationVariable" data-location="{{ location.zone.code }}" data-variable="wind_speed" data-title="Viento"></div>
+          <div data-id="weather" data-view="WeatherStationVariable" data-location="{{ location.zone.code }}" data-variable="wind_speed" data-title="Viento" data-units="scientific"></div>
         </div>
         <div class="span6">        
-          <div data-id="weather" data-view="WeatherStationVariable" data-location="{{ location.zone.code }}" data-variable="sea_water_speed" data-title="Corriente"></div>
+          <div data-id="weather" data-view="WeatherStationVariable" data-location="{{ location.zone.code }}" data-variable="sea_water_speed" data-title="Corriente" data-units="scientific"></div>
         </div>        
       </div>
       <div class="row-fluid">
         <div class="span6">        
-          <div data-id="weather" data-view="WeatherStationVariable" data-location="{{ location.zone.code }}" data-variable="sea_surface_wave_significant_height" data-title="Oleaje"></div>
+          <div data-id="weather" data-view="WeatherStationVariable" data-location="{{ location.zone.code }}" data-variable="sea_surface_wave_significant_height" data-title="Oleaje (alt. sig.)" data-units="scientific"></div>
         </div>      
         <div class="span6">        
-          <div data-id="weather" data-view="WeatherStationVariable" data-location="{{ location.zone.code }}" data-variable="sea_water_temperature" data-title="Temp. Agua"></div>
+          <div data-id="weather" data-view="WeatherStationVariable" data-location="{{ location.zone.code }}" data-variable="sea_water_temperature" data-title="Temp. Agua" data-units="scientific"></div>
         </div>
       </div>
       <div class="row-fluid">
@@ -70,20 +70,12 @@
         <div class="span12">
           <section class="status">
               <h1 class="section" id="vessel-position">Herramientas y enlaces</h1>
-              <div class="panel panel-primary">
-                <div class="panel-heading">
-                  <h3 class="panel-title">OBSERVACIÓN</h3>
-                </div>
-                <div class="panel-body">                  
-                    <ul class="nav nav-tabs nav-stacked">                
-                      <li><a href="http://socib.es/?seccion=observingFacilities&facility=mooring&id=18">Boya Sa Dragonera en web SOCIB</a></li>
-                      <li><a href="http://portus.puertos.es/">Web Puertos del Estado</a></li>
-                      <li><a href="http://socib.es/?seccion=observingFacilities&facility=satimages&img=alt1bal">Altimetría / Corrientes geostróficas desde satélite</a></li>
-                      <li><a href="http://www.marinetraffic.com/es/ais/home/centerx:1.974955/centery:39.62157/zoom:8/mmsi:224583000/shipid:167569">Seguimiento del remolcador Clara Campoamor en Marine Traffic</a></li>
-                    </ul>
-                  </div>
-              </div>
                 <ul class="nav nav-tabs nav-stacked">                
+                <li class="nav-header">OBSERVACIÓN</li>
+                <li><a href="http://socib.es/?seccion=observingFacilities&facility=mooring&id=18">Boya Sa Dragonera en web SOCIB</a></li>
+                <li><a href="http://portus.puertos.es/">Web Puertos del Estado</a></li>
+                <li><a href="http://socib.es/?seccion=observingFacilities&facility=satimages&img=alt1bal">Altimetría / Corrientes geostróficas desde satélite</a></li>
+                <li><a href="http://www.marinetraffic.com/es/ais/home/centerx:1.974955/centery:39.62157/zoom:8/mmsi:224583000/shipid:167569">Seguimiento del remolcador Clara Campoamor en Marine Traffic</a></li>
                 <li class="nav-header">PREDICCIÓN</li>
                 <li><a href="http://socib.es/?seccion=modelling&facility=lw4nc">Corrientes</a></li>
                 <li><a href="http://socib.es/?seccion=modelling&facility=sapo">Oleaje</a></li>
