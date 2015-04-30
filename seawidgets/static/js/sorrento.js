@@ -50,7 +50,7 @@ function currents() {
         url: wms_server,
         params: {
             layers: "sea_surface_velocity",
-            colorscalerange: "auto",
+            colorscalerange: "0,1",
             markerscale: 15,
             markerspacing: 12,
             markerclipping: true,
@@ -77,7 +77,7 @@ function sapo() {
         params: {
             layers: "significant_wave_height",
             styles: 'shadefill/scb_bugnylorrd',
-            colorscalerange: '0,3',
+            colorscalerange: '0,2',
             abovemaxcolor: "extend",
             belowmincolor: "extend",
             numcolorbands: 100,
