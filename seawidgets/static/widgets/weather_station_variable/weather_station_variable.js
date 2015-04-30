@@ -40,6 +40,10 @@
       }      */
 
       this.set('item',data);
+      if (this.get('title') == ''){
+        this.set('title', data.display_name);
+      }
+
     };
 
     return WeatherStationVariable;

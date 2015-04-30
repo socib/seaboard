@@ -22,11 +22,14 @@ STATION_VARIABLES = [
     'sea_surface_wave_from_direction',
     'sea_water_speed',
     'direction_of_sea_water_velocity',
+    'sea_water_temperature',
 ]
 
 INPUT_UNITS = {
     'air_temperature': '°C',
+    'sea_water_temperature': '°C',
     'wind_speed': 'km/h',
+    'sea_water_speed': 'cm/s',
 }
 
 DISPLAY_NAMES = {
@@ -110,8 +113,12 @@ def station_info(request, location_code, format='html', template='weather_statio
                         # wind_speed hack. Add wind_from_direction.lastSampleValue
                         if standard_name == 'wind_speed':
                             variable_data['current']['wind_from_direction'] = get_wind_from_direction(variable_list)
-
-                    results.append(variable_data)
+                        if standard_name == 'sea_water_speed':
+                            variable_data['current']['direction_of_sea_water_velocity'] = get_direction_variable(
+                                variable_list, 'direction_of_sea_water_velocity')
+                        if standard_name == 'sea_surface_wave_significant_height':
+                            variable_data['current']['sea_surface_wave_from_direction'] = get_direction_variable(
+                                variable_list, 'sea_surface_wave_from_direction')
 
     if format == 'json':
         json = simplejson.dumps(results)
@@ -162,6 +169,13 @@ def station_variable_info(request, location_code='pdp', variable='air_temperatur
     # wind_speed hack. Add wind_from_direction.lastSampleValue
     if variable == 'wind_speed':
         variable_data['current']['wind_from_direction'] = get_wind_from_direction(variable_list)
+
+    if variable == 'sea_water_speed':
+        variable_data['current']['direction_of_sea_water_velocity'] = get_direction_variable(
+            variable_list, 'direction_of_sea_water_velocity')
+    if variable == 'sea_surface_wave_significant_height':
+        variable_data['current']['sea_surface_wave_from_direction'] = get_direction_variable(
+            variable_list, 'sea_surface_wave_from_direction')
 
     json = simplejson.dumps(variable_data)
     return HttpResponse(json, mimetype='application/json')
@@ -246,5 +260,12 @@ def conversion(x, standard_name):
 def get_wind_from_direction(variable_list):
     for variable_info in variable_list:
         if variable_info['standardName'] == 'wind_from_direction':
+            return variable_info['lastSampleValue']
+    return ''
+
+
+def get_direction_variable(variable_list, variable_direction_name):
+    for variable_info in variable_list:
+        if variable_info['standardName'] == variable_direction_name:
             return variable_info['lastSampleValue']
     return ''

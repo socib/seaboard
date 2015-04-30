@@ -1,7 +1,10 @@
-<h2 class="weather-title" data-bind="item.display_name"></h2>
+<h2 class="weather-title" data-bind="title"></h2>
 
-<div class="weather-data" data-bind-class="item.standard_name | prepend 'weather-data '">
-    <span data-bind="item.current.value" data-bind-title="item.current.time" class="ws-currentvalue"></span> <span data-bind="item.inputUnits" class="ws-currentunits"></span> <span data-bind="item.current.wind_from_direction | displayWindDirection" class="ws-currentunits"></span>
+<div class="weather-data" data-bind-class="weather-data">
+    <span data-bind="item.current.value" data-bind-title="item.current.time" class="ws-currentvalue"></span> <span data-bind="item.inputUnits" class="ws-currentunits"></span> 
+    <span data-bind="item.current.wind_from_direction | displayWindDirection" class="ws-currentunits"></span>
+    <span data-bind="item.current.direction_of_sea_water_velocity | displayWindDirection" class="ws-currentunits"></span>
+    <span data-bind="item.current.sea_surface_wave_from_direction | displayWindDirection" class="ws-currentunits"></span>
     <div class="wsv-maxmin">
       <span class="wsv-max">
         <span data-bind="item.max.value" data-bind-title="item.max.time"></span> <span data-bind="item.inputUnits" class="ws-units"></span> High
