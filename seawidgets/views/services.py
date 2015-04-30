@@ -8,7 +8,6 @@ from django.http import HttpResponse
 def proxy_to(request, path, target_url):
     if 'url' in request.GET and request.GET['url']:
         url = request.GET['url']
-        print urllib2.unquote(url).decode('utf8')
     else:
         url = '%s%s' % (target_url, path)
         if 'QUERY_STRING' in request.META and request.META['QUERY_STRING']:
