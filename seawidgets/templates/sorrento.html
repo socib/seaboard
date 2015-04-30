@@ -23,12 +23,28 @@
     <div class="span4">
         <h1 class="section">Datos Boya Sa Dragonera</h1>
         <div data-id="weather" data-view="StationInfo" data-location="{{ location.zone.code }}" data-title=""></div>
-    </div>    
-    <div class="span8">
-      <h1 class="section">Mapa Sensibilidad de la Costa (<a href="http://gis.socib.es/sacosta/composer">ir a visor</a>)</h1>
-      <div id="map-sacosta" style="width: 100%; height: 350px;">
-      </div>
     </div>
+
+      <div class="span8">
+        <h1 class="section">Seguimiento del Sorrento via Marine Traffic</h1>
+        <script type="text/javascript">
+          width='100%';   // the width of the embedded map in pixels or percentage
+          height='350';   // the height of the embedded map in pixels or percentage
+          border='1';   // the width of the border around the map (zero means no border)
+          shownames='true';  // to display ship names on the map (true or false)
+          latitude='39.681113'; // the latitude of the center of the map, in decimal degrees
+          longitude='1.865136';  // the longitude of the center of the map, in decimal degrees
+          zoom='10';   // the zoom level of the map (values between 2 and 17)
+          maptype='0';    // use 0 for Normal map, 1 for Satellite, 2 for Hybrid, 3 for Terrain
+          // trackvessel='225391000';  // MMSI of a vessel (note: vessel will displayed only if within range of the system) - overrides "zoom" option
+          fleet='';   // the registered email address of a user-defined fleet (user's default fleet is used)
+          remember='false'; // remember or not the last position of the map (true or false)
+          language='es';    // the preferred display language
+          showmenu=true;    // show or hide the map options menu
+        </script>
+        <script type="text/javascript" src="http://www.marinetraffic.com/js/embed.js"></script>    
+    </div>      
+
   </div>
 
   <div class="row-fluid">
@@ -64,28 +80,14 @@
       <img src="http://socib.es/files/images_fotos/modelling/modelo_vertido_sorrento.gif" class="img-responsive" />
       <p style="display: block; width: 85%; margin:auto;">
       Simulación de la trayectoria de un vertido realizado a las 12.00 horas de 29/04/2015. <br />
-      Los contornos corresponden a la probabilidad acumulada de todas las particulas (verde 50% y rojo 90%).<br /> 
+      Los contornos corresponden a la probabilidad acumulada de todas las particulas (verde 90% y rojo 50%).<br /> 
       Simulación valida para 24 horas.
       </p>
     </div> 
     <div class="span6">
-      <h1 class="section">Seguimiento del Sorrento via Marine Traffic</h1>
-      <script type="text/javascript">
-        width='100%';   // the width of the embedded map in pixels or percentage
-        height='450';   // the height of the embedded map in pixels or percentage
-        border='1';   // the width of the border around the map (zero means no border)
-        shownames='true';  // to display ship names on the map (true or false)
-        latitude='39.681113'; // the latitude of the center of the map, in decimal degrees
-        longitude='1.865136';  // the longitude of the center of the map, in decimal degrees
-        zoom='10';   // the zoom level of the map (values between 2 and 17)
-        maptype='0';    // use 0 for Normal map, 1 for Satellite, 2 for Hybrid, 3 for Terrain
-        // trackvessel='225391000';  // MMSI of a vessel (note: vessel will displayed only if within range of the system) - overrides "zoom" option
-        fleet='';   // the registered email address of a user-defined fleet (user's default fleet is used)
-        remember='false'; // remember or not the last position of the map (true or false)
-        language='es';    // the preferred display language
-        showmenu=true;    // show or hide the map options menu
-      </script>
-      <script type="text/javascript" src="http://www.marinetraffic.com/js/embed.js"></script>    
+      <h1 class="section">Mapa Sensibilidad de la Costa (<a href="http://gis.socib.es/sacosta/composer">ir a visor</a>)</h1>
+      <div id="map-sacosta" style="width: 100%; height: 500px;">
+      </div>
     </div>
   </div>
   <div class="row-fluid">
@@ -94,7 +96,7 @@
           <h1 class="section" id="vessel-position">Herramientas y enlaces</h1>
           <ul class="nav nav-tabs nav-stacked">
             <li class="nav-header">OBSERVACIÓN</li>
-            <li><a href="http://socib.es/?seccion=observingFacilities&facility=mooring&id=18">Sa Dragonera en web SOCIB</a></li>
+            <li><a href="http://socib.es/?seccion=observingFacilities&facility=mooring&id=18">Boya Sa Dragonera en web SOCIB</a></li>
             <li><a href="http://portus.puertos.es/">Web Puertos del Estado</a></li>
 
             <li class="nav-header">MODELOS</li>
@@ -105,6 +107,7 @@
           </ul>
       </section>
     </div>
+
     <div class="span6">
       <section class="status">
           <h1 class="section">Contribuciones</h1>
@@ -115,6 +118,14 @@
               />
             </a>
           </div>
+          <div class="well">
+            Con la colaboración de:
+            <a href="http://imedea.uib-csic.es/" style="display: block; margin: auto; margin-top: 15px; text-align: center;">
+              <img src="http://datos.gbif.es/collectory/data/institution/logo_imedea2_peq.jpg"
+              />
+            </a>
+          </div>
+
       </section>
     </div>     
   </div>
