@@ -1,4 +1,4 @@
-var SORRENTO_POSITION = [39.58157, 1.971803];
+var SORRENTO_POSITION = [39.555236, 2.122133];
 var Sorrento = function(wms_server, layers, container) {
     this.wms_server = wms_server;
     var currentTime = new Date();
