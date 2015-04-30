@@ -14,7 +14,7 @@
       <header>
         <div class="logo-socib"><img src="{% get_static_prefix %}images/logo_Socib.png" /></div>
         <div data-id="proud" data-view="Text" data-title="{{ location.proud_heading }}" data-text="{{ location.proud_body }}" ></div>
-        <div data-id="clock" data-view="Clock"></div>
+        <div data-id="clock" data-view="Clockutc"></div>
       </header>
     </div>
   </div>
@@ -181,7 +181,7 @@
 <script src="{% static "js/leaflet-0.6.2/Leaflet.Coordinates-0.1.3.min.js" %}"></script>
 <script src="{% static "js/jquery.backstretch.js" %}" ></script>
 <script src="{% static "widgets/text/text.js" %}" ></script>
-<script src="{% static "widgets/clock/clock.js" %}" ></script>
+<script src="{% static "widgets/clockutc/clockutc.js" %}" ></script>
 <script src="{% static "widgets/beamon/beamon.js" %}" ></script>
 <script src="{% static "js/modernizr.custom.js" %}"></script>
 <script src="{% static "js/jquery.bookblock.js" %}"></script>
