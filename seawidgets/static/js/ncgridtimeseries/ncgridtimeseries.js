@@ -570,7 +570,7 @@ NCWMSGridTimeseriesViewer.prototype.createChart = function(layer) {
     }
     var chart_container = chart_wrapper.find('.chart-' + layer.params.layers);
     if (!chart_container.length) {
-        chart_wrapper.append("<div class='chart chart-" + layer.params.layers + "' style='height:300px;'></div>");
+        chart_wrapper.append("<div class='chart chart-" + layer.params.layers + "' style='height:200px;'></div>");
         chart_container = chart_wrapper.find('.chart-' + layer.params.layers);
     }
 
@@ -581,6 +581,9 @@ NCWMSGridTimeseriesViewer.prototype.createChart = function(layer) {
 
         chart: {
             zoomType: 'x'
+        },
+        navigator : {
+                enabled : false
         },
         rangeSelector: {
             enabled: false,

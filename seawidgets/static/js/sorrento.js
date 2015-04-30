@@ -333,6 +333,6 @@ $(function() {
     currents();
     sapo();
     wind();
-    aviso();
-    sacosta();
+    // aviso();
+    // sacosta();
 });

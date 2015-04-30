@@ -77,7 +77,7 @@ a.leaflet-control-timecontrol{
 
 a.leaflet-control-timecontrol:hover{
   height: auto;
-  width: auto;
+  width: auto !important;
 }
 
 a.timecontrol-date{
@@ -101,12 +101,12 @@ a.timecontrol-date.timecontrol-loading:before{
 
 a.timecontrol-slider{
   height: auto;
-  width: 300px;
+  width: 300px  !important;
   padding: 4px 15px;   
 }
 
 a.timecontrol-slider:hover{
-  width: 300px;
+  width: 300px  !important;
 }
 
 a.timecontrol-slider .ui-slider{
