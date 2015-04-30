@@ -583,6 +583,7 @@ NCWMSGridTimeseriesViewer.prototype.createChart = function(layer) {
             zoomType: 'x'
         },
         rangeSelector: {
+            enabled: false,
             selected: this.default_range_selector,
             buttons: [{
                 type: 'day',
