@@ -57,7 +57,7 @@ CONVERSION = {
 }
 
 
-# @cache_page(60 * 60 * 1, cache="default")
+@cache_page(60 * 60 * 1, cache="default")
 def station_info(request, location_code, format='html', template='weather_station/station_info.html'):
     """Get current data form weather station and minimum and maximum values for the last 24 hours. It search for all variables listed in STATION_VARIABLES (now: 'air_temperature', 'wind_speed', 'air_pressure', 'relative_humidity', 'rain_accumulation').
     It returns a JSON array with every variable.
@@ -144,7 +144,7 @@ def station_info(request, location_code, format='html', template='weather_statio
     return render_to_response(template, kwvars, RequestContext(request))
 
 
-# @cache_page(60 * 5, cache="default")
+@cache_page(60 * 5, cache="default")
 def station_variable_info(request, location_code='pdp', variable='air_temperature'):
     """Get weather station data for just one variable."""
 
@@ -278,7 +278,7 @@ def get_variable_data(id_platform, id_instrument, id_variable, standard_name, di
             'current': current,
             'display_name': displayName,
             'standard_name': standard_name
-        }        
+        }
     else:
         results = {
             'error': 'No data available',
