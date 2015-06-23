@@ -76,7 +76,7 @@
         var variables = this.get('variables').split(",");
         var chart = $(this.node).highcharts();
         var d = new Date();
-        var x = d.parseFormat(data.time, 'dd-mm-yyyy HH:MM:ss').getTime();
+        var x = d.parseFormat(data.time, 'dd-mm-yyyy HH:MM:ss', true).getTime();
         for (var v = 0, l = variables.length; v < l; v++) {
           var standardName = variables[v];
           var serie = chart.series[v];
@@ -129,7 +129,7 @@
               if (standardName in conversions){
                 value = conversions[standardName].call(this, value);
               }
-              serie.data.push([d.parseFormat(data.time[i], 'dd-mm-yyyy HH:MM:ss').getTime(), value]);
+              serie.data.push([d.parseFormat(data.time[i], 'dd-mm-yyyy HH:MM:ss', true).getTime(), value]);
             }
             series.push(serie);
           }
