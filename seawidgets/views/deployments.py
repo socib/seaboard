@@ -1,4 +1,5 @@
 # coding: utf-8
+import json
 from django.http import HttpResponse
 from django.utils import simplejson
 from django.views.decorators.cache import cache_page
@@ -17,6 +18,24 @@ PLATFORM_TYPES = (
     'Sea Level',
     'Weather Station')
 
+def current_turtles(request):
+    # Hardcoded urls for each turtle
+    turtles = (
+        settings.DATADISCOVERY_URL + '/deployment-info?id_platform=227&id_deployment=391',
+        settings.DATADISCOVERY_URL + '/deployment-info?id_platform=226&id_deployment=390'
+    )
+
+    outjson = dict(type='FeatureCollection', features=[])
+
+    for url in turtles:
+        fp = urllib2.urlopen(url)
+        try:
+            geojson = json.load(fp)
+            if geojson.get('type', None) == 'FeatureCollection' and type(geojson.get('features', None) == list):
+                outjson['features'] += [geojson['features'][i] for i in (0, -1)]
+        except ValueError, e:
+            pass  # invalid json
+    return HttpResponse(json.dumps(outjson), mimetype='application/json')
 
 @cache_page(60 * 60 * 2, cache="default")
 def current_deployments_stats(request):
