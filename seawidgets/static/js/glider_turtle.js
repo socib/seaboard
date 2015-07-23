@@ -95,7 +95,7 @@ function real_time() {
             logscale:true,
             abovemaxcolor: "extend",
             belowmincolor: "extend",
-            numcolorbands: 50,
+            numcolorbands: 100,
         },
         visible: true,
         singleTile: false,
