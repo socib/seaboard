@@ -43,20 +43,10 @@ NCWMSGridTimeseriesViewer.prototype.addLayersToMap = function() {
             } else {
                 layer.tilelayer = L.tileLayer.wms(layer.url, wms_options);
             }
-/*
+
             layer.timeLayer = L.timeDimension.layer.wms(layer.tilelayer, {
                 proxy: this.proxy,
                 updateTimeDimension: (i == 0)
-            });
-*/
-
-            var updateTimeDimension = false;
-            if (layer.TimeDimensionOptions && layer.TimeDimensionOptions.updateTimeDimension){
-                updateTimeDimension = true;
-            }
-            layer.timeLayer = L.timeDimension.layer.wms(layer.tilelayer, {
-                proxy: this.proxy,
-                updateTimeDimension: updateTimeDimension
             });
 
             this.layerControl.addOverlay(layer.timeLayer, layer.name);

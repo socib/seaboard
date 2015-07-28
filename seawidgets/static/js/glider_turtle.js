@@ -35,33 +35,31 @@ var Real_Time_Viewer = function(layers, container) {
     };
     this.gridViewer = new NCWMSGridTimeseriesViewer(this.options);
 
-    this.gridViewer.layerControl.h
     var rt_map = this.gridViewer.getMap();
     //getTurtles(rt_map)
 
     var turtles = [
-        [227, 391, 'Callypso','turtle-1'],
-        [226, 390,'Kontiki','turtle-2']
+        [227, 391, 'Callypso','turtle-1','#29CD50'],
+        [226, 390,'Kontiki','turtle-2',"#F28826"]
     ];
 
-    var overLayers = [];
     for (var i = 0, l = turtles.length; i < l; i++) {
         var turtlesLayer = L.timeDimension.layer.drifterDeployment({
             id_platform: turtles[i][0],
             id_deployment: turtles[i][1],
             duration: "P1D",
-            addlastPoint: true
+            addlastPoint: true,
+            icon:turtles[i][3],
+            color:turtles[i][4]
         });
         turtlesLayer.addTo(rt_map);
-        overLayers.push({
+        var turtle={
             name: turtles[i][2],
             icon: iconByName(turtles[i][3]),
             layer: turtlesLayer
-        })
+        }
+        this.gridViewer.layerControl.addOverlay(turtle);
     }
-
-    var panelLayers = new L.Control.PanelLayers(null, overLayers, {collapsed: true});
-    rt_map.addControl(panelLayers);
 };
 
 function iconByName(name) {
@@ -97,10 +95,11 @@ function real_time() {
             belowmincolor: "extend",
             numcolorbands: 100,
         },
-        visible: true,
+        visible: false,
         singleTile: false,
         autoExtent: false,
-        timeseriesWhenNotVisible: true
+        timeseriesWhenNotVisible: true,
+        icon:'chla'
     },{
         name: "Significant wave height",
         url: wms_sapo,
@@ -115,7 +114,8 @@ function real_time() {
         visible: false,
         singleTile: false,
         autoExtent: false,
-        timeseriesWhenNotVisible: true
+        timeseriesWhenNotVisible: true,
+        icon: 'sea_surface_wave_significant_height'
     }, {
         name: "Average wave direction",
         url: wms_sapo,
@@ -138,7 +138,8 @@ function real_time() {
         legendHTML: function() {
             var innerHTML = '<img src="/static/images/black-arrow.png" /> mean direction';
             return innerHTML;
-        }
+        },
+        icon:'sea_surface_wave_from_direction'
     },{
         name: "Sea Surface Currents",
         url: wms_wmop,
@@ -158,7 +159,8 @@ function real_time() {
         autoExtent: false,
         TimeDimensionOptions: {
             updateTimeDimension: true
-        }
+        },
+        icon:'direction_of_sea_water_velocity'
     },{
         name: "Sea Surface Temperature",
         url: wms_wmop,
@@ -175,7 +177,8 @@ function real_time() {
         autoExtent: false,
         TimeDimensionOptions: {
             updateTimeDimension: true
-        }
+        },
+        icon:'sea_water_temperature'
     },{
         name: "Sea Surface Salinity",
         url: wms_wmop,
@@ -192,7 +195,8 @@ function real_time() {
         autoExtent: false,
         TimeDimensionOptions: {
             updateTimeDimension: true
-        }
+        },
+        icon:'sea_water_salinity'
     },{
         name: "Sea Surface Height",
         url: wms_wmop,
@@ -204,17 +208,17 @@ function real_time() {
             numcolorbands: 100,
             styles: 'boxfill/spectral'
         },
-        visible: true,
+        visible: false,
         singleTile: false,
         autoExtent: false,
         TimeDimensionOptions: {
             updateTimeDimension: true
-        }
+        },
+        icon: 'water_surface_height_above_reference_datum'
     }];
 
     var rtMap = new Real_Time_Viewer(rt_layers, 'map');
 }
-
 
 L.TimeDimension.Layer.DrifterDeployment = L.TimeDimension.Layer.GeoJson.extend({
 
@@ -223,26 +227,63 @@ L.TimeDimension.Layer.DrifterDeployment = L.TimeDimension.Layer.GeoJson.extend({
         L.TimeDimension.Layer.GeoJson.prototype.initialize.call(this, layer, options);
         this._id_platform = this.options.id_platform;
         this._id_deployment = this.options.id_deployment;
+        this._color = this.options.color || this._pickRandomColor();
+        this._fitBounds = this.options.fitBounds || false;
+        this._updateTimeDimensionMode = 'extremes';
+        this._updateTimeDimension = false;
+        this._updateCurrentTime = this.options.updateCurrentTime || false;
+        this._iconImg = this.options.icon;
     },
 
     onAdd: function(map) {
+
         L.TimeDimension.Layer.prototype.onAdd.call(this, map);
         var proxy = '/services/wms-proxy';
         var url = "http://apps.socib.es/DataDiscovery/deployment-info?" +
-            "id_platform=" + this._id_platform + "&id_deployment=" + this._id_deployment;
+            "id_platform=" + this._id_platform + "&id_deployment=" + this._id_deployment + "&sample=1";
+        map.spin(true);
         $.getJSON(proxy + '?url=' + encodeURIComponent(url), (function(map, data) {
             this._baseLayer = this._createLayer(data);
+
             this._onReadyBaseLayer();
+            map.spin(false);
         }.bind(this, map)));
+
+    },
+
+    fitMapToBounds: function() {
+        if (this._map && this._baseLayer) {
+            this._map.fitBounds(this._baseLayer.getBounds());
+        }
+    },
+    searchLastPoint: function() {
+        if (this._map && this._baseLayer) {
+            var lastTimeDimension = this._timeDimension.getCurrentTime()/1000;
+            var d = new Date(lastTimeDimension);
+            var lastTimeProperties = {'time stamp': 0};
+            var layers = this._baseLayer._layers
+            for (l in layers) {
+                if (layers[l].feature.properties['time stamp'] != undefined) {
+                    if ((layers[l].feature.properties['time stamp'] < lastTimeDimension) &&
+                        (layers[l].feature.properties['time stamp'] > lastTimeProperties['time stamp'] )) {
+                        lastTimeProperties = layers[l].feature.properties;
+                    }
+                }
+            }
+            return lastTimeProperties.html
+        }
     },
 
     _createLayer: function(featurecollection) {
-        // lastPosition
-        this._color = this._pickRandomColor();
-
+        convertToSlug = function(Text) {
+            return decodeURIComponent(Text)
+                .toLowerCase()
+                .replace(/[^\w ]+/g, '')
+                .replace(/ +/g, '-');
+        };
 
         this._icon = L.icon({
-            iconUrl: '/static/images/icons/turtle-1.png',
+            iconUrl: '/static/images/icons/'+ this._iconImg +'.png',
             iconSize: [30, 30],
             iconAnchor: [15, 30]
         });
@@ -258,7 +299,7 @@ L.TimeDimension.Layer.DrifterDeployment = L.TimeDimension.Layer.GeoJson.extend({
                     fillColor: this._color,
                     fillOpacity: 0.5,
                     stroke: false,
-                    radius: 3
+                    radius: 5
                 });
             }).bind(this),
             style: (function(feature) {
@@ -267,14 +308,29 @@ L.TimeDimension.Layer.DrifterDeployment = L.TimeDimension.Layer.GeoJson.extend({
                     "weight": 2,
                     "opacity": 1
                 };
+            }).bind(this),
+            onEachFeature: (function (feature, layer) {
+                if (feature.properties.hasOwnProperty('html')) {
+                    layer.bindPopup(feature.properties.html);
+                }else if(feature.properties.hasOwnProperty('last')){
+                    /*Since we cannot get scientific info from the last point, we make a last time search*/
+                    layer.bindPopup(this.searchLastPoint() + feature.properties.abstract);
+                }
             }).bind(this)
         });
+        layer.fire('data:loading');
         if (!featurecollection.features) {
             return layer;
         }
         layer.addData(featurecollection.features[0]);
+        this._addDeploymentTrajectory(featurecollection.features[0]);
         for (var i = 1, l = featurecollection.features.length; i < l; i++) {
             var point = featurecollection.features[i];
+            if (point.geometry.type == 'Point') {
+                if (point.geometry.coordinates.length < 2 || point.geometry.coordinates[0] === null || point.geometry.coordinates[1] === null) {
+                    continue;
+                }
+            }
             layer.addData(point);
         }
         // save last point
@@ -283,62 +339,55 @@ L.TimeDimension.Layer.DrifterDeployment = L.TimeDimension.Layer.GeoJson.extend({
     },
 
     _pickRandomColor: function() {
-        var colors = ["#00aaff", "#ffaa00", "#ff00aa", "#ff0000", "#00ffaa", "#00ff00", "#0000ff", "#aa00ff", "#aaff00"];
+        var colors = ["#ff00aa", "#ff0000", "#00ffaa", "#00ff00", "#0000ff", "#aa00ff", "#aaff00", "#00aaff", "#ffaa00"];
         var index = Math.floor(Math.random() * colors.length);
         return colors[index];
     },
 
-    _addDeploymentTrajectory: function(layer, trajectory_feature) {
+    _addDeploymentTrajectory: function(trajectory_feature) {
         // remove the old one
         if (this._deploymentTrajectory) {
-            layer.removeLayer(this._deploymentTrajectory);
+            this._map.removeLayer(this._deploymentTrajectory);
         }
         var getStyle = (function(feature) {
             return {
                 "color": this._color,
-                "weight": 2,
-                "opacity": 1
+                "weight": 1,
+                "opacity": 0.5
             };
         }).bind(this);
         var deploymentTrajectory = L.geoJson(trajectory_feature, {
             style: getStyle
         });
-        // deploymentTrajectory.on('click', deployment.popupFunction.bind(this, deployment, undefined));
-        deploymentTrajectory.addTo(layer);
+        // deploymentTrajectory.on('click', deploymentTrajectory.popupFunction.bind(this, deploymentTrajectory, undefined));
+        deploymentTrajectory.bindPopup(trajectory_feature.properties.abstract);
+        deploymentTrajectory.addTo(this._map);
         // save for later
         this._deploymentTrajectory = deploymentTrajectory;
     },
 
-    _addDeploymenPoint: function(layer, point, isLastPoint) {
-        var deploymentPoint = L.geoJson(point, {
-            pointToLayer: (function(feature, latLng) {
-                if (isLastPoint) {
-                    return new L.Marker(latLng, {
-                        icon: this._icon
-                    });
-                } else {
-                    return L.circleMarker(latLng, {
-                        fillColor: this._color,
-                        fillOpacity: 0.5,
-                        stroke: false,
-                        radius: 3
-                    });
-                }
-            }).bind(this)
-        });
-        // deploymentPoint.on('click', deployment.popupFunction.bind(this, deployment, point));
-        deploymentPoint.addTo(layer);
-        if (isLastPoint)
-            this._lastPoint = deploymentPoint;
+    eachLayer: function(method, context) {
+        if (this._deploymentTrajectory) {
+            method.call(context, this._deploymentTrajectory);
+        }
+        return L.TimeDimension.Layer.GeoJson.prototype.eachLayer.call(this, method, context);
+    },
+
+    _onReadyBaseLayer: function() {
+        this._loaded = true;
+        this._setAvailableTimes();
+        if (this._updateCurrentTime)
+            this._timeDimension.setCurrentTime(this._availableTimes[0]);
+        this._update();
+        if (this._fitBounds) {
+            this.fitMapToBounds();
+        }
     }
-
-
 });
 
 L.timeDimension.layer.drifterDeployment = function(options) {
     return new L.TimeDimension.Layer.DrifterDeployment(null, options);
 };
-
 $(function() {
     real_time();
 });

@@ -237,7 +237,8 @@ L.Control.PanelLayers = L.Control.Layers.extend({
 			this._expand();
 		}
 
-		this._baseLayersList = L.DomUtil.create('div', className + '-base', form);
+		//this._baseLayersList = L.DomUtil.create('div', className + '-base', form);
+		this._baseLayersList = L.DomUtil.create('div', className + '-overlays', form);
 		this._separator = L.DomUtil.create('div', className + '-separator', form);
 		this._overlaysList = L.DomUtil.create('div', className + '-overlays', form);
 
