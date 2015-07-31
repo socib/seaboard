@@ -36,7 +36,7 @@ var Real_Time_Viewer = function(layers, container) {
     this.gridViewer = new NCWMSGridTimeseriesViewer(this.options);
 
     var rt_map = this.gridViewer.getMap();
-    //getTurtles(rt_map)
+    getVessels(this.gridViewer)
 
     var turtles = [
         [227, 391, 'Callypso','turtle-1','#29CD50'],
@@ -66,14 +66,30 @@ function iconByName(name) {
 	return '<img class"legend-icon" src="../static/images/icons/'+ name +'.png" style="width: 20px;height: 20px;"/>';
 }
 
-function getTurtles(rt_map){
-    $.getJSON('/deployments/current_turtles.json', function(data) {
-      var geojson = L.geoJson(data.features, {
+function getVessels(gridViewer){
+    var rt_map = gridViewer.getMap();
+    var boatIcon = new L.Icon({
+			iconUrl: '../static/images/icons/marker-boat.png',
+			shadowUrl: null,
+			iconSize: new L.Point(19, 26),
+			iconAnchor: new L.Point(9, 13)
+    });
+     $.getJSON('/deployments/current_vessels.json', function(data) {
+      var geojson = L.geoJson(data, {
         onEachFeature: function (feature, layer) {
-          layer.bindPopup(feature.properties.html);
+          layer.bindPopup("Speed: " + feature.properties.speed);
+        },
+        pointToLayer: function (feature, latlng) {
+            return L.marker(latlng, {icon: boatIcon, iconAngle: feature.properties.course });
         }
       });
       geojson.addTo(rt_map);
+      var ship ={
+            name: 'Vessel',
+            icon: iconByName('marker-boat'),
+            layer: geojson
+        }
+      gridViewer.layerControl.addOverlay(ship);
     });
 }
 
@@ -270,8 +286,18 @@ L.TimeDimension.Layer.DrifterDeployment = L.TimeDimension.Layer.GeoJson.extend({
                     }
                 }
             }
-            return lastTimeProperties.html
+            return lastTimeProperties
         }
+    },
+    formatTurtlePopup: function(pointProps, lineProps) {
+
+        var html = "<b>" + pointProps['platform_name'] + "</b></BR>";
+        html += "Time: " + new Date(pointProps['time stamp']*1000).format('yyyy-mm-dd HH:MM') + " (UTC)</BR>";
+        html += "Position: " + pointProps['LON'].match(/^(\d*[.]\d*)/)[0] + "," + pointProps['LAT'].match(/^(\d*[.]\d*)/)[0] + "</BR>";
+        html += "Speed: " + pointProps['SPEED'] + "</BR>";
+        html += '<button type="button" class="btn btn-info" data-toggle="collapse" data-target="#turtle_abstract">More info</button>'
+        html += "<div id='turtle_abstract' class='collapse'>" + lineProps.abstract + "</div>";
+        return html;
     },
 
     _createLayer: function(featurecollection) {
@@ -314,7 +340,7 @@ L.TimeDimension.Layer.DrifterDeployment = L.TimeDimension.Layer.GeoJson.extend({
                     layer.bindPopup(feature.properties.html);
                 }else if(feature.properties.hasOwnProperty('last')){
                     /*Since we cannot get scientific info from the last point, we make a last time search*/
-                    layer.bindPopup(this.searchLastPoint() + feature.properties.abstract);
+                    layer.bindPopup(this.formatTurtlePopup(this.searchLastPoint(), feature.properties));
                 }
             }).bind(this)
         });

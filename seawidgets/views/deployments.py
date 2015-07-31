@@ -1,4 +1,5 @@
 # coding: utf-8
+import csv
 import json
 from django.http import HttpResponse
 from django.utils import simplejson
@@ -35,6 +36,43 @@ def current_turtles(request):
                 outjson['features'] += [geojson['features'][i] for i in (0, -1)]
         except ValueError, e:
             pass  # invalid json
+    return HttpResponse(json.dumps(outjson), mimetype='application/json')
+
+@cache_page(60 * 5, cache="default")
+def current_vessels(request):
+    outjson = {}
+
+    opener = urllib2.build_opener()
+    opener.addheaders = [('User-agent', 'Mozilla/5.0')]
+    fp = opener.open('http://www.marinetraffic.com/en/api/exportvessels/v:4/100f603ee069ffa7dbadf4d087c69d79f241bb5c/protocol:csv/timespan:5')
+    try:
+        cr = csv.reader(fp)
+
+        rownum = 0
+        for row in cr:
+            if rownum == 0:
+                header = row
+                iMMSI = header.index('MMSI')
+                iLon = header.index(' LON')
+                iLat = header.index(' LAT')
+                iSpeed = header.index(' SPEED')
+                iCourse = header.index(' COURSE')
+            else:
+                if row[iMMSI] == '225950380':
+                    outjson ={
+                        "type": "Point",
+                        "coordinates": [float(row[iLon]), float(row[iLat])],
+                        "properties": {
+                            "speed": row[iSpeed],
+                            "course": row[iCourse]
+                        }
+                    }
+                    # for fields in header:
+                    #     outjson[fields] = row[header.index(fields)]
+            rownum += 1
+    except ValueError, e:
+        pass  # invalid csv
+
     return HttpResponse(json.dumps(outjson), mimetype='application/json')
 
 @cache_page(60 * 60 * 2, cache="default")
