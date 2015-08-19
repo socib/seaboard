@@ -1036,7 +1036,7 @@ L.TimeDimension.Layer.GeoJson = L.TimeDimension.Layer.extend({
                 layer.addData(feature);
                 if (this._addlastPoint && feature.geometry.type == "LineString") {
                     if (feature.geometry.coordinates.length > 0) {
-                        var properties = feature.properties;                        
+                        var properties = feature.properties;
                         properties.last = true;
                         layer.addData({
                             type: 'Feature',
