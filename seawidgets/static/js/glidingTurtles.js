@@ -1,9 +1,8 @@
 var POSITION = [39.6145, 1.99363];
-var Real_Time_Viewer = function(layers, container) {
+var GTViewer = function(layers, container) {
     var currentTime = new Date();
     currentTime.setUTCMinutes(0, 0, 0);
     var endDate = new Date(currentTime.getTime());
-    //var endDate = new Date(2014, 7, 20, 0, 0, 0, 0);
     L.TimeDimension.Util.addTimeDuration(endDate, "P1D", true);
 
     this.options = {
@@ -21,19 +20,19 @@ var Real_Time_Viewer = function(layers, container) {
             timeDimensionControlOptions: {
                 autoPlay: false,
                 speedSlider: false,
-                timeSlider: false,
+                timeSlider: true,
                 displayDate: true,
                 playerOptions: {
                     buffer: 0,
                     transitionTime: 500,
-                    loop: true,
+                    loop: false,
                 }
             }
         },
         proxy: '/services/wms-proxy',
         default_range_selector: 0
     };
-    this.gridViewer = new NCWMSGridTimeseriesViewer(this.options);
+    this.gridViewer = new MapGT(this.options);
 
     var rt_map = this.gridViewer.getMap();
     getVessels(this.gridViewer)
@@ -224,7 +223,7 @@ function real_time() {
         icon: 'water_surface_height_above_reference_datum'
     }];
 
-    var rtMap = new Real_Time_Viewer(rt_layers, 'map');
+    var rtMap = new GTViewer(rt_layers, 'map');
 }
 
 L.TimeDimension.Layer.DrifterDeployment = L.TimeDimension.Layer.GeoJson.extend({
@@ -283,11 +282,11 @@ L.TimeDimension.Layer.DrifterDeployment = L.TimeDimension.Layer.GeoJson.extend({
     formatTurtlePopup: function(pointProps, lineProps) {
 
         var html = "<b>" + pointProps['platform_name'] + "</b></BR>";
-        html += "Time: " + new Date(pointProps['time stamp']*1000).format('yyyy-mm-dd HH:MM') + " (UTC)</BR>";
+        /*html += "Time: " + new Date(pointProps['time stamp']*1000).format('yyyy-mm-dd HH:MM') + " (UTC)</BR>";
         html += "Position: " + pointProps['LON'].match(/^(\d*[.]\d*)/)[0] + "," + pointProps['LAT'].match(/^(\d*[.]\d*)/)[0] + "</BR>";
         html += "Speed: " + pointProps['SPEED'] + "</BR>";
         html += '<button type="button" class="btn btn-info" data-toggle="collapse" data-target="#turtle_abstract">More info</button>'
-        html += "<div id='turtle_abstract' class='collapse'>" + lineProps.abstract + "</div>";
+        html += "<div id='turtle_abstract' class='collapse'>" + lineProps.abstract + "</div>";*/
         return html;
     },
 
