@@ -34,55 +34,42 @@ var GTViewer = function(layers, container) {
     };
     this.gridViewer = new MapGT(this.options);
 
-    var rt_map = this.gridViewer.getMap();
-    getVessels(this.gridViewer)
+    getPlatforms(this.gridViewer);
 
-    var turtles = [
-        [276, 520, 'Mel','turtle-1','#29CD50',"turtle"],
-        [107, 521, 'Glider','icon-glider',"#F28826","glider"]
-    ];
-
-    for (var i = 0, l = turtles.length; i < l; i++) {
-        var turtlesLayer = L.timeDimension.layer.drifterDeployment({
-            id_platform: turtles[i][0],
-            id_deployment: turtles[i][1],
-            duration: "P3D",
-            addlastPoint: true,
-            icon:turtles[i][3],
-            color:turtles[i][4]
-        });
-        turtlesLayer.addTo(rt_map);
-        var turtle={
-            name: turtles[i][2],
-            icon: iconByName(turtles[i][3]),
-            layer: turtlesLayer
-        }
-        this.gridViewer.layerControl.addOverlay(turtle);
-    }
 };
 
 function iconByName(name) {
 	return '<img class"legend-icon" src="../static/images/icons/'+ name +'.png" style="width: 20px;height: 20px;"/>';
 }
 
-function getVessels(gridViewer){
-     var rt_map = gridViewer.getMap();
+function getPlatforms(viewer){
+    var rt_map = viewer.getMap();
+    var platforms = [
+        [276, 520, 'Mel','turtle-1','#29CD50','turtle'],
+        [107, 521, 'Glider','icon-glider','#F28826','glider'],
+        [225964230, null,'SOCIB UNO','marker-boat','#FF0000','ship']
+        //[224634000, null,'SOCIB UNO','marker-boat','#FF0000','ship']
+    ];
 
-     var vesselLayer = L.timeDimension.layer.vesselDeployment({
+    for (var i = 0, l = platforms.length; i < l; i++) {
+        var layer = L.timeDimension.layer.Deployment({
+            id_platform: platforms[i][0],
+            id_deployment: platforms[i][1],
             duration: "P3D",
             addlastPoint: true,
-            icon:'marker-boat',
-            color:'#FF0000'
-     });
-     vesselLayer.addTo(rt_map);
-        var ship ={
-            name: 'Vessel',
-            icon: iconByName('marker-boat'),
-            layer: vesselLayer
+            icon: platforms[i][3],
+            color: platforms[i][4],
+            type_deployment: platforms[i][5]
+        });
+        layer.addTo(rt_map);
+        var platformsLegend={
+            name: platforms[i][2],
+            icon: iconByName(platforms[i][3]),
+            layer: layer
         }
-      gridViewer.layerControl.addOverlay(ship);
+        viewer.layerControl.addOverlay(platformsLegend);
+    }
 }
-
 
 function real_time() {
     var wms_sapo = 'http://thredds.socib.es/thredds/wms/operational_models/oceanographical/wave/model_run_aggregation/sapo_ib/sapo_ib_best.ncd';
@@ -226,11 +213,12 @@ function real_time() {
     var rtMap = new GTViewer(rt_layers, 'map');
 }
 
-L.TimeDimension.Layer.DrifterDeployment = L.TimeDimension.Layer.GeoJson.extend({
+L.TimeDimension.Layer.Deployment = L.TimeDimension.Layer.GeoJson.extend({
 
     initialize: function(layer, options) {
         layer = L.geoJson();
         L.TimeDimension.Layer.GeoJson.prototype.initialize.call(this, layer, options);
+        this._type_deployment = this.options.type_deployment;
         this._id_platform = this.options.id_platform;
         this._id_deployment = this.options.id_deployment;
         this._color = this.options.color || this._pickRandomColor();
@@ -244,14 +232,24 @@ L.TimeDimension.Layer.DrifterDeployment = L.TimeDimension.Layer.GeoJson.extend({
     onAdd: function(map) {
 
         L.TimeDimension.Layer.prototype.onAdd.call(this, map);
-        var proxy = '/services/wms-proxy';
-        var url = "http://apps.socib.es/DataDiscovery/deployment-info?" +
+        var requestURL;
+        if(this._type_deployment == "ship"){
+            requestURL = '/deployments/ship_tracking_' + this._id_platform + '.json'
+        }else{
+            var proxy = '/services/wms-proxy';
+            var url = "http://apps.socib.es/DataDiscovery/deployment-info?" +
             "id_platform=" + this._id_platform + "&id_deployment=" + this._id_deployment + "&sample=1";
-        map.spin(true);
-        $.getJSON(proxy + '?url=' + encodeURIComponent(url), (function(map, data) {
-            this._baseLayer = this._createLayer(data);
 
-            this._onReadyBaseLayer();
+            requestURL = proxy + '?url=' + encodeURIComponent(url)
+        }
+        map.spin(true);
+        $.getJSON(requestURL, (function(map, data) {
+            if(!data.hasOwnProperty("error")){
+                this._baseLayer = this._createLayer(data);
+                this._onReadyBaseLayer();
+            }else{
+                console.log("ERROR: " + data.error + " for ship with mmsi:" + this._id_platform);
+            }
             map.spin(false);
         }.bind(this, map)));
 
@@ -264,14 +262,16 @@ L.TimeDimension.Layer.DrifterDeployment = L.TimeDimension.Layer.GeoJson.extend({
     },
     searchLastPoint: function() {
         if (this._map && this._baseLayer) {
-            var lastTimeDimension = this._timeDimension.getCurrentTime()/1000;
-            var d = new Date(lastTimeDimension);
-            var lastTimeProperties = {'time stamp': 0};
+            var lastTimeDimension = (this._type_deployment == 'ship') ?
+                this._timeDimension.getCurrentTime() : this._timeDimension.getCurrentTime()/1000;
+            var timeField = (this._type_deployment == 'ship') ? 'time' : 'time stamp';
+            var lastTimeProperties = {};
+            lastTimeProperties[timeField] = 0;
             var layers = this._baseLayer._layers
             for (l in layers) {
-                if (layers[l].feature.properties['time stamp'] != undefined) {
-                    if ((layers[l].feature.properties['time stamp'] < lastTimeDimension) &&
-                        (layers[l].feature.properties['time stamp'] > lastTimeProperties['time stamp'] )) {
+                if (layers[l].feature.properties[timeField] != undefined) {
+                    if ((layers[l].feature.properties[timeField] < lastTimeDimension) &&
+                        (layers[l].feature.properties[timeField] > lastTimeProperties[timeField] )) {
                         lastTimeProperties = layers[l].feature.properties;
                     }
                 }
@@ -279,14 +279,33 @@ L.TimeDimension.Layer.DrifterDeployment = L.TimeDimension.Layer.GeoJson.extend({
             return lastTimeProperties
         }
     },
-    formatTurtlePopup: function(pointProps, lineProps) {
+    formatPopup: function(pointProps, lineProps) {
+        var html ="";
+        if(pointProps != undefined && lineProps != undefined){
 
-        var html = "<b>" + pointProps['platform_name'] + "</b></BR>";
-        /*html += "Time: " + new Date(pointProps['time stamp']*1000).format('yyyy-mm-dd HH:MM') + " (UTC)</BR>";
-        html += "Position: " + pointProps['LON'].match(/^(\d*[.]\d*)/)[0] + "," + pointProps['LAT'].match(/^(\d*[.]\d*)/)[0] + "</BR>";
-        html += "Speed: " + pointProps['SPEED'] + "</BR>";
-        html += '<button type="button" class="btn btn-info" data-toggle="collapse" data-target="#turtle_abstract">More info</button>'
-        html += "<div id='turtle_abstract' class='collapse'>" + lineProps.abstract + "</div>";*/
+            if (this._type_deployment == 'ship'){
+                var speed = (parseFloat(pointProps['speed'])/10).toFixed(2);
+                html = "<b>Ship: </b>"+lineProps['name']+"</BR>"
+                html += "<b>Speed: </b>" + speed + " kn / " + (speed * 1.852).toFixed(2) + " km/h</BR>";
+                html += "<b>TimeStamp: </b>" + pointProps['time'] + " UTC</BR>";
+                html += "<b>TimeStamp: </b>" + new Date(pointProps['time']).format('yyyy-mm-dd HH:MM') + " UTC</BR>";
+            }else if (this._type_deployment == 'turtle'){
+                html = "<b>" + pointProps['platform_name'] + "</b></BR>";
+                html += "Time: " + new Date(pointProps['time stamp']*1000).format('yyyy-mm-dd HH:MM') + " (UTC)</BR>";
+                html += "Position: " + pointProps['LON'].match(/^(\d*[.]\d*)/)[0] + "," + pointProps['LAT'].match(/^(\d*[.]\d*)/)[0] + "</BR>";
+                html += "Speed: " + pointProps['SPEED'] + "</BR>";
+                html += '<button type="button" class="btn btn-info" data-toggle="collapse" data-target="#abstract">More info</button>'
+                html += "<div id='abstract' class='collapse'>" + lineProps.abstract + "</div>";
+            }else if(this._type_deployment == 'glider'){
+                html = "<b>" + pointProps['platform_name'] + "</b></BR>";
+                html += "Time: " + new Date(pointProps['time stamp']*1000).format('yyyy-mm-dd HH:MM') + " (UTC)</BR>";
+                html += "TimeStamp: " + pointProps['time stamp'] + " (UTC)</BR>";
+                html += "Position: " + pointProps['LON'].match(/^(\d*[.]\d*)/)[0] + "," + pointProps['LAT'].match(/^(\d*[.]\d*)/)[0] + "</BR>";
+                html += "Speed: " + pointProps['PSPEED'] + "</BR>";
+                html += '<button type="button" class="btn btn-info" data-toggle="collapse" data-target="#abstract">More info</button>'
+                html += "<div id='abstract' class='collapse'>" + lineProps.abstract + "</div>";
+            }
+        }
         return html;
     },
 
@@ -303,6 +322,12 @@ L.TimeDimension.Layer.DrifterDeployment = L.TimeDimension.Layer.GeoJson.extend({
             iconSize: [30, 30],
             iconAnchor: [15, 30]
         });
+
+        if(this._type_deployment == "ship"){
+            this._icon.options.iconSize = [19, 26];
+            this._icon.options.iconAnchor = [9, 13];
+        }
+
         this._iconTarget = L.icon({
             iconUrl: '/static/images/icons/icon-target.png',
             iconSize: [22, 22],
@@ -336,19 +361,30 @@ L.TimeDimension.Layer.DrifterDeployment = L.TimeDimension.Layer.GeoJson.extend({
                 }
                 if (feature.properties.hasOwnProperty('last')) {
                     var propsPoint = this.searchLastPoint();
-                    var angle = propsPoint['BEARING'] != undefined ? parseInt(propsPoint['BEARING'].split(" ")[0]) : 0
+                    feature.originalProps = propsPoint;
+                    var angle= 0;
+                    if (this._type_deployment == "ship"){
+                        angle = parseInt(propsPoint['course'])
+                    }else if(this._type_deployment == "glider"){
+                        angle = parseInt(propsPoint['BEARING'].split(" ")[0])
+                    }
 
                     return new L.Marker(latLng, {
                         icon: this._icon,
                         iconAngle: angle
                     });
                 }
-                return L.circleMarker(latLng, {
-                    fillColor: this._color,
-                    fillOpacity: 0.5,
-                    stroke: false,
-                    radius: 5
-                });
+                 var circleMarker = L.circleMarker(latLng, {
+                        fillColor: this._color,
+                        fillOpacity: 0.5,
+                        stroke: false,
+                        radius: 5
+                 });
+                if(this._type_deployment == 'ship'){
+                    circleMarker.options.radius = 0;
+                    circleMarker.options.clicakable = false;
+                }
+                return circleMarker;
             }).bind(this),
             style: (function(feature) {
                 if (feature.properties && feature.properties.class){
@@ -379,8 +415,7 @@ L.TimeDimension.Layer.DrifterDeployment = L.TimeDimension.Layer.GeoJson.extend({
                 if (feature.properties.hasOwnProperty('html')) {
                     layer.bindPopup(feature.properties.html);
                 }else if(feature.properties.hasOwnProperty('last')){
-                    /*Since we cannot get scientific info from the last point, we make a last time search*/
-                    layer.bindPopup(this.formatTurtlePopup(this.searchLastPoint(), feature.properties));
+                    layer.bindPopup(this.formatPopup(feature.originalProps, feature.properties));
                 }
             }).bind(this)
         });
@@ -425,7 +460,6 @@ L.TimeDimension.Layer.DrifterDeployment = L.TimeDimension.Layer.GeoJson.extend({
         var deploymentTrajectory = L.geoJson(trajectory_feature, {
             style: getStyle
         });
-        // deploymentTrajectory.on('click', deploymentTrajectory.popupFunction.bind(this, deploymentTrajectory, undefined));
         deploymentTrajectory.bindPopup(trajectory_feature.properties.abstract);
         deploymentTrajectory.addTo(this._map);
         // save for later
@@ -451,186 +485,8 @@ L.TimeDimension.Layer.DrifterDeployment = L.TimeDimension.Layer.GeoJson.extend({
     }
 });
 
-L.timeDimension.layer.drifterDeployment = function(options) {
-    return new L.TimeDimension.Layer.DrifterDeployment(null, options);
-};
-
-L.TimeDimension.Layer.VesselDeployment = L.TimeDimension.Layer.GeoJson.extend({
-
-    initialize: function(layer, options) {
-        layer = L.geoJson();
-        L.TimeDimension.Layer.GeoJson.prototype.initialize.call(this, layer, options);
-        this._color = this.options.color || this._pickRandomColor();
-        this._fitBounds = this.options.fitBounds || false;
-        this._updateTimeDimensionMode = 'extremes';
-        this._updateTimeDimension = false;
-        this._updateCurrentTime = this.options.updateCurrentTime || false;
-        this._iconImg = this.options.icon;
-    },
-
-    onAdd: function(map) {
-
-        L.TimeDimension.Layer.prototype.onAdd.call(this, map);
-        map.spin(true);
-        $.getJSON('/deployments/ship_tracking_225964230.json', (function(map, data) {
-            if(!data.hasOwnProperty("error")){
-                this._baseLayer = this._createLayer(data);
-                this._onReadyBaseLayer();
-            }else{
-                console.log("ERROR: " + data.error)
-            }
-            map.spin(false);
-        }.bind(this, map)));
-
-    },
-
-    fitMapToBounds: function() {
-        if (this._map && this._baseLayer) {
-            this._map.fitBounds(this._baseLayer.getBounds());
-        }
-    },
-    searchLastPoint: function() {
-        if (this._map && this._baseLayer) {
-            var lastTimeDimension = this._timeDimension.getCurrentTime();
-            var d = new Date(lastTimeDimension);
-            var lastTimeProperties = {'time': 0};
-
-            var layers = this._baseLayer.getLayers()
-            for (l in layers) {
-                if (layers[l].feature.properties['time'] != undefined) {
-                    if ((layers[l].feature.properties['time'] < lastTimeDimension) &&
-                        (layers[l].feature.properties['time'] > lastTimeProperties['time'] )) {
-                        lastTimeProperties = layers[l].feature.properties;
-                    }
-                }
-            }
-            return lastTimeProperties
-        }
-    },
-    formatPopup: function(pointProps, lineProps) {
-        var speed = (parseFloat(pointProps['speed'])/10).toFixed(2);
-        var html = "<b>Ship: </b>"+lineProps['name']+"</BR>"
-            html += "<b>Speed: </b>" + speed + " kn / " + (speed * 1.852).toFixed(2) + " km/h</BR>";
-            html += "<b>TimeStamp: </b>" + new Date(pointProps['time']).format('yyyy-mm-dd HH:MM') + " UTC</BR>";
-
-
-        return html;
-    },
-
-    _createLayer: function(featurecollection) {
-        convertToSlug = function(Text) {
-            return decodeURIComponent(Text)
-                .toLowerCase()
-                .replace(/[^\w ]+/g, '')
-                .replace(/ +/g, '-');
-        };
-
-        this._icon = new L.Icon({
-			iconUrl: '/static/images/icons/'+ this._iconImg +'.png',
-			iconSize: [19, 26],
-			iconAnchor: [9, 13]
-        });
-
-        var layer = L.geoJson(null, {
-            pointToLayer: (function(feature, latLng) {
-                if (feature.properties.hasOwnProperty('last')) {
-                    var props = this.searchLastPoint();
-                    feature.propertiesPoint = props
-                    return new L.Marker(latLng, {
-                        icon: this._icon,
-                        iconAngle: props['course']
-                    });
-                }
-                return L.circleMarker(latLng, {
-                    fillColor: this._color,
-                    fillOpacity: 0,
-                    stroke: false,
-                    radius: 3
-                });
-            }).bind(this),
-            style: (function(feature) {
-                return {
-                    "color": this._color,
-                    "weight": 2,
-                    "opacity": 1
-                };
-            }).bind(this),
-            onEachFeature: (function (feature, layer) {
-                if (feature.properties.hasOwnProperty('html')) {
-                    layer.bindPopup(feature.properties.html);
-                }else if(feature.properties.hasOwnProperty('last')){
-                    /*Since we cannot get scientific info from the last point, we make a last time search*/
-                    layer.bindPopup(this.formatPopup(this.searchLastPoint(), feature.properties));
-                }
-            }).bind(this)
-        });
-        layer.fire('data:loading');
-        if (!featurecollection.features) {
-            return layer;
-        }
-        layer.addData(featurecollection.features[0]);
-        this._addDeploymentTrajectory(featurecollection.features[0]);
-        for (var i = 1, l = featurecollection.features.length; i < l; i++) {
-            var point = featurecollection.features[i];
-            if (point.geometry.type == 'Point') {
-                if (point.geometry.coordinates.length < 2 || point.geometry.coordinates[0] === null || point.geometry.coordinates[1] === null) {
-                    continue;
-                }
-            }
-            layer.addData(point);
-        }
-        return layer;
-    },
-
-    _pickRandomColor: function() {
-        var colors = ["#ff00aa", "#ff0000", "#00ffaa", "#00ff00", "#0000ff", "#aa00ff", "#aaff00", "#00aaff", "#ffaa00"];
-        var index = Math.floor(Math.random() * colors.length);
-        return colors[index];
-    },
-
-    _addDeploymentTrajectory: function(trajectory_feature) {
-        // remove the old one
-        if (this._deploymentTrajectory) {
-            this._map.removeLayer(this._deploymentTrajectory);
-        }
-        var getStyle = (function(feature) {
-            return {
-                "color": this._color,
-                "weight": 2,
-                "opacity": 0.4
-            };
-        }).bind(this);
-        var deploymentTrajectory = L.geoJson(trajectory_feature, {
-            style: getStyle
-        });
-        // deploymentTrajectory.on('click', deploymentTrajectory.popupFunction.bind(this, deploymentTrajectory, undefined));
-        deploymentTrajectory.bindPopup(trajectory_feature.properties.abstract);
-        deploymentTrajectory.addTo(this._map);
-        // save for later
-        this._deploymentTrajectory = deploymentTrajectory;
-    },
-
-    eachLayer: function(method, context) {
-        if (this._deploymentTrajectory) {
-            method.call(context, this._deploymentTrajectory);
-        }
-        return L.TimeDimension.Layer.GeoJson.prototype.eachLayer.call(this, method, context);
-    },
-
-    _onReadyBaseLayer: function() {
-        this._loaded = true;
-        this._setAvailableTimes();
-        if (this._updateCurrentTime)
-            this._timeDimension.setCurrentTime(this._availableTimes[0]);
-        this._update();
-        if (this._fitBounds) {
-            this.fitMapToBounds();
-        }
-    }
-});
-
-L.timeDimension.layer.vesselDeployment = function(options) {
-    return new L.TimeDimension.Layer.VesselDeployment(null, options);
+L.timeDimension.layer.Deployment = function(options) {
+    return new L.TimeDimension.Layer.Deployment(null, options);
 };
 
 $(function() {
