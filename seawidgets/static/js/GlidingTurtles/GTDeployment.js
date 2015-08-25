@@ -1,224 +1,10 @@
-var POSITION = [39.6145, 1.99363];
-var GTViewer = function(layers, container) {
-    var currentTime = new Date();
-    currentTime.setUTCMinutes(0, 0, 0);
-    var endDate = new Date(currentTime.getTime());
-    L.TimeDimension.Util.addTimeDuration(endDate, "P1D", true);
-
-    this.options = {
-        container: container,
-        layers: layers,
-        mapOptions: {
-            center: POSITION,
-            zoom: 8,
-            scrollWheelZoom: false,
-            timeDimensionOptions: {
-                timeInterval: "P3D/" + endDate.toISOString(),
-                period: "PT1H",
-                currentTime: currentTime.getTime()
-            },
-            timeDimensionControlOptions: {
-                autoPlay: false,
-                speedSlider: false,
-                timeSlider: true,
-                displayDate: true,
-                playerOptions: {
-                    buffer: 0,
-                    transitionTime: 500,
-                    loop: false,
-                }
-            }
-        },
-        proxy: '/services/wms-proxy',
-        default_range_selector: 0
-    };
-    this.gridViewer = new MapGT(this.options);
-
-    getPlatforms(this.gridViewer);
-
-};
-
-function iconByName(name) {
-	return '<img class"legend-icon" src="../static/images/icons/'+ name +'.png" style="width: 20px;height: 20px;"/>';
-}
-
-function getPlatforms(viewer){
-    var rt_map = viewer.getMap();
-    var platforms = [
-        [276, 520, 'Mel','turtle-1','#29CD50','turtle'],
-        [107, 521, 'Glider','icon-glider','#F28826','glider'],
-        [225964230, null,'SOCIB UNO','marker-boat','#FF0000','ship']
-        //[224634000, null,'SOCIB UNO','marker-boat','#FF0000','ship']
-    ];
-
-    for (var i = 0, l = platforms.length; i < l; i++) {
-        var layer = L.timeDimension.layer.Deployment({
-            id_platform: platforms[i][0],
-            id_deployment: platforms[i][1],
-            duration: "P3D",
-            addlastPoint: true,
-            icon: platforms[i][3],
-            color: platforms[i][4],
-            type_deployment: platforms[i][5]
-        });
-        layer.addTo(rt_map);
-        var platformsLegend={
-            name: platforms[i][2],
-            icon: iconByName(platforms[i][3]),
-            layer: layer
-        }
-        viewer.layerControl.addOverlay(platformsLegend);
-    }
-}
-
-function real_time() {
-    var wms_sapo = 'http://thredds.socib.es/thredds/wms/operational_models/oceanographical/wave/model_run_aggregation/sapo_ib/sapo_ib_best.ncd';
-    var wms_wmop = 'http://thredds.socib.es/thredds/wms/operational_models/oceanographical/hydrodynamics/model_run_aggregation/wmop/wmop_best.ncd';
-    var wms_myo_chl = 'http://myocean.artov.isac.cnr.it/thredds/wms/dataset-oc-med-chl-modis_a-l4-interp_4km_daily-rt-v02';
-
-    var rt_layers = [{
-        name: "Chlorophyll Concentration",
-        url: wms_myo_chl,
-        params: {
-            layers: "CHL",
-            styles: 'boxfill/rainbow',
-            colorscalerange: '0.01,10',
-            logscale:true,
-            abovemaxcolor: "extend",
-            belowmincolor: "extend",
-            numcolorbands: 100,
-        },
-        visible: false,
-        singleTile: false,
-        autoExtent: false,
-        timeseriesWhenNotVisible: true,
-        icon:'chla'
-    },{
-        name: "Significant wave height",
-        url: wms_sapo,
-        params: {
-            layers: "significant_wave_height",
-            styles: 'shadefill/scb_bugnylorrd',
-            colorscalerange: '0,2',
-            abovemaxcolor: "extend",
-            belowmincolor: "extend",
-            numcolorbands: 100,
-        },
-        visible: false,
-        singleTile: false,
-        autoExtent: false,
-        timeseriesWhenNotVisible: true,
-        icon: 'sea_surface_wave_significant_height'
-    }, {
-        name: "Average wave direction",
-        url: wms_sapo,
-        params: {
-            layers: 'average_wave_direction',
-            format: 'image/png',
-            transparent: true,
-            colorscalerange: '1,1',
-            abovemaxcolor: "extend",
-            belowmincolor: "extend",
-            markerscale: 15,
-            markerspacing: 12,
-            markerclipping: true,
-            styles: 'prettyvec/greyscale'
-        },
-        visible: false,
-        singleTile: true,
-        autoExtent: false,
-        timeseries: false,
-        legendHTML: function() {
-            var innerHTML = '<img src="/static/images/black-arrow.png" /> mean direction';
-            return innerHTML;
-        },
-        icon:'sea_surface_wave_from_direction'
-    },{
-        name: "Sea Surface Currents",
-        url: wms_wmop,
-        params: {
-            layers: "sea_surface_velocity",
-            colorscalerange: "0,1",
-            markerscale: 15,
-            markerspacing: 12,
-            markerclipping: true,
-            abovemaxcolor: "extend",
-            belowmincolor: "extend",
-            styles: 'prettyvec/rainbow',
-            zIndex: 90
-        },
-        visible: false,
-        singleTile: true,
-        autoExtent: false,
-        TimeDimensionOptions: {
-            updateTimeDimension: true
-        },
-        icon:'direction_of_sea_water_velocity'
-    },{
-        name: "Sea Surface Temperature",
-        url: wms_wmop,
-        params: {
-            layers: "temp",
-            colorscalerange: "auto",
-            abovemaxcolor: "extend",
-            belowmincolor: "extend",
-            numcolorbands: 100,
-            styles: 'boxfill/spectral'
-        },
-        visible: false,
-        singleTile: true,
-        autoExtent: false,
-        TimeDimensionOptions: {
-            updateTimeDimension: true
-        },
-        icon:'sea_water_temperature'
-    },{
-        name: "Sea Surface Salinity",
-        url: wms_wmop,
-        params: {
-            layers: "salt",
-            colorscalerange: "36,38.5",
-            abovemaxcolor: "extend",
-            belowmincolor: "extend",
-            numcolorbands: 100,
-            styles: 'boxfill/spectral'
-        },
-        visible: false,
-        singleTile: false,
-        autoExtent: false,
-        TimeDimensionOptions: {
-            updateTimeDimension: true
-        },
-        icon:'sea_water_salinity'
-    },{
-        name: "Sea Surface Height",
-        url: wms_wmop,
-        params: {
-            layers: "zeta",
-            colorscalerange: "-1,0",
-            abovemaxcolor: "extend",
-            belowmincolor: "extend",
-            numcolorbands: 100,
-            styles: 'boxfill/spectral'
-        },
-        visible: false,
-        singleTile: false,
-        autoExtent: false,
-        TimeDimensionOptions: {
-            updateTimeDimension: true
-        },
-        icon: 'water_surface_height_above_reference_datum'
-    }];
-
-    var rtMap = new GTViewer(rt_layers, 'map');
-}
-
-L.TimeDimension.Layer.Deployment = L.TimeDimension.Layer.GeoJson.extend({
+L.TimeDimension.Layer.GTDeployment = L.TimeDimension.Layer.GeoJson.extend({
 
     initialize: function(layer, options) {
         layer = L.geoJson();
         L.TimeDimension.Layer.GeoJson.prototype.initialize.call(this, layer, options);
         this._type_deployment = this.options.type_deployment;
+        this._name_deployment = this.options.name_deployment;
         this._id_platform = this.options.id_platform;
         this._id_deployment = this.options.id_deployment;
         this._color = this.options.color || this._pickRandomColor();
@@ -279,29 +65,30 @@ L.TimeDimension.Layer.Deployment = L.TimeDimension.Layer.GeoJson.extend({
             return lastTimeProperties
         }
     },
-    formatPopup: function(pointProps, lineProps) {
+    formatPopup: function(pointProps, lineProps, geom) {
         var html ="";
         if(pointProps != undefined && lineProps != undefined){
 
             if (this._type_deployment == 'ship'){
                 var speed = (parseFloat(pointProps['speed'])/10).toFixed(2);
-                html = "<b>Ship: </b>"+lineProps['name']+"</BR>"
+                html = "<b>Ship: </b>"+lineProps['name_deployment']+"</BR>"
                 html += "<b>Speed: </b>" + speed + " kn / " + (speed * 1.852).toFixed(2) + " km/h</BR>";
-                html += "<b>TimeStamp: </b>" + pointProps['time'] + " UTC</BR>";
-                html += "<b>TimeStamp: </b>" + new Date(pointProps['time']).format('yyyy-mm-dd HH:MM') + " UTC</BR>";
+                html += "<b>TimeStamp: </b>" + formatDate(new Date(pointProps['time'])) + " UTC</BR>";
+                html += "<b>Position: </b>" + "Lon: " + geom.coordinates[0].toFixed(2) + " / Lat: " + geom.coordinates[1].toFixed(2);
             }else if (this._type_deployment == 'turtle'){
-                html = "<b>" + pointProps['platform_name'] + "</b></BR>";
-                html += "Time: " + new Date(pointProps['time stamp']*1000).format('yyyy-mm-dd HH:MM') + " (UTC)</BR>";
-                html += "Position: " + pointProps['LON'].match(/^(\d*[.]\d*)/)[0] + "," + pointProps['LAT'].match(/^(\d*[.]\d*)/)[0] + "</BR>";
-                html += "Speed: " + pointProps['SPEED'] + "</BR>";
+                html = "<h4><b>" + pointProps['platform_name'] + "</b></h4>";
+                html += "<b>Time: </b>" + formatDate(new Date(pointProps['time stamp']*1000))+ " UTC</BR>";
+                html += "<b>Position: </b>" + "Lon: " + geom.coordinates[0].toFixed(2) + " / Lat: " + geom.coordinates[1].toFixed(2) + "</BR>";
+                html += "<b>Speed: </b>" + pointProps['SPEED'] + "</BR>";
+                html += "<b>Angle: </b>" + pointProps['CUR_DIR'] + "</BR>";
                 html += '<button type="button" class="btn btn-info" data-toggle="collapse" data-target="#abstract">More info</button>'
                 html += "<div id='abstract' class='collapse'>" + lineProps.abstract + "</div>";
             }else if(this._type_deployment == 'glider'){
-                html = "<b>" + pointProps['platform_name'] + "</b></BR>";
-                html += "Time: " + new Date(pointProps['time stamp']*1000).format('yyyy-mm-dd HH:MM') + " (UTC)</BR>";
-                html += "TimeStamp: " + pointProps['time stamp'] + " (UTC)</BR>";
-                html += "Position: " + pointProps['LON'].match(/^(\d*[.]\d*)/)[0] + "," + pointProps['LAT'].match(/^(\d*[.]\d*)/)[0] + "</BR>";
-                html += "Speed: " + pointProps['PSPEED'] + "</BR>";
+                html = "<h4><b>" + pointProps['platform_name'] + "</b></h4>";
+                html += "<b>Time: </b>" + formatDate(new Date(pointProps['time stamp']*1000))+ " UTC</BR>";
+                html += "<b>Position: </b>" + "Lon: " + geom.coordinates[0].toFixed(2) + " / Lat: " + geom.coordinates[1].toFixed(2) + "</BR>";
+                html += "<b>Speed: </b>" + pointProps['SPEED'] + "</BR>";
+                html += "<b>Angle: </b>" + pointProps['BEARING'] + "</BR>";
                 html += '<button type="button" class="btn btn-info" data-toggle="collapse" data-target="#abstract">More info</button>'
                 html += "<div id='abstract' class='collapse'>" + lineProps.abstract + "</div>";
             }
@@ -365,8 +152,11 @@ L.TimeDimension.Layer.Deployment = L.TimeDimension.Layer.GeoJson.extend({
                     var angle= 0;
                     if (this._type_deployment == "ship"){
                         angle = parseInt(propsPoint['course'])
+                        feature.properties.name_deployment = this._name_deployment;
                     }else if(this._type_deployment == "glider"){
                         angle = parseInt(propsPoint['BEARING'].split(" ")[0])
+                    }else if(this._type_deployment == "turtle"){
+                        angle = parseInt(propsPoint['CUR_DIR'].split(" ")[0]);
                     }
 
                     return new L.Marker(latLng, {
@@ -415,7 +205,7 @@ L.TimeDimension.Layer.Deployment = L.TimeDimension.Layer.GeoJson.extend({
                 if (feature.properties.hasOwnProperty('html')) {
                     layer.bindPopup(feature.properties.html);
                 }else if(feature.properties.hasOwnProperty('last')){
-                    layer.bindPopup(this.formatPopup(feature.originalProps, feature.properties));
+                    layer.bindPopup(this.formatPopup(feature.originalProps, feature.properties, feature.geometry));
                 }
             }).bind(this)
         });
@@ -485,10 +275,13 @@ L.TimeDimension.Layer.Deployment = L.TimeDimension.Layer.GeoJson.extend({
     }
 });
 
-L.timeDimension.layer.Deployment = function(options) {
-    return new L.TimeDimension.Layer.Deployment(null, options);
+L.timeDimension.layer.GTDeployment = function(options) {
+    return new L.TimeDimension.Layer.GTDeployment(null, options);
 };
 
-$(function() {
-    real_time();
-});
+var formatDate = function(d){
+    return d.getUTCFullYear() + '-' + (addZ(d.getUTCMonth() + 1)) + '-' + (addZ(d.getDate())) + ' ' +
+          addZ(d.getUTCHours()) + ':' + addZ(d.getUTCMinutes());
+}
+
+var addZ = function(n){return n<10? '0'+n:''+n;}

@@ -1,9 +1,9 @@
 # coding: utf-8
+import calendar
 import csv
 from xml.dom import minidom
 import json
 import datetime
-import time
 from django.http import HttpResponse
 from django.utils import simplejson
 from django.views.decorators.cache import cache_page
@@ -55,7 +55,7 @@ def ship_tracking(request,mmsi):
                 timestamps = []
                 coordinates = []
                 for p in positions:
-                    stime = time.mktime(datetime.datetime.strptime(str(p.attributes['TIMESTAMP'].value).split(".")[0],
+                    stime = calendar.timegm(datetime.datetime.strptime(str(p.attributes['TIMESTAMP'].value).split(".")[0],
                                                                       "%Y-%m-%dT%H:%M:%S").timetuple())*1000
                     timestamps.append(stime)
                     coord = [float(p.attributes['LON'].value), float(p.attributes['LAT'].value)]
@@ -69,7 +69,6 @@ def ship_tracking(request,mmsi):
                         "properties": {
                             "speed": p.attributes['SPEED'].value,
                             "course": p.attributes['COURSE'].value,
-                            # "timestamp": p.attributes['TIMESTAMP'].value,
                             "time": stime
                         }
                     })
@@ -81,8 +80,7 @@ def ship_tracking(request,mmsi):
                         "coordinates": coordinates
                     },
                     "properties": {
-                        "linestringTimestamps": timestamps,
-                        "name": "Socib Uno (Hurricane)"
+                        "linestringTimestamps": timestamps
                     }
                 })
 
