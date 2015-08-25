@@ -1,5 +1,5 @@
 /* 
- * Leaflet TimeDimension v0.1.3 - 2015-06-15 
+ * Leaflet TimeDimension v0.1.3 - 2015-08-25 
  * 
  * Copyright 2015 Biel Frontera (ICTS SOCIB) 
  * datacenter@socib.es 
@@ -396,6 +396,9 @@ L.TimeDimension.Util = {
             }
             this.addTimeDuration(currentTime, duration);
         }
+        if (currentTime > endTime){
+            result.push(endTime.getTime());
+        }
         return result;
     },
 
@@ -674,6 +677,15 @@ L.TimeDimension.Layer.WMS = L.TimeDimension.Layer.extend({
         } else {
             this._showLayer(layer, time);
         }
+    },
+
+    setParams: function (params, noRedraw) {
+        L.extend(this._baseLayer.options, params);
+        this._baseLayer.setParams(params, noRedraw);
+        if (this._currentLayer) {
+            this._currentLayer.setParams(params, noRedraw);
+        }
+        return this;
     },
 
     _showLayer: function(layer, time) {
@@ -1036,7 +1048,7 @@ L.TimeDimension.Layer.GeoJson = L.TimeDimension.Layer.extend({
                 layer.addData(feature);
                 if (this._addlastPoint && feature.geometry.type == "LineString") {
                     if (feature.geometry.coordinates.length > 0) {
-                        var properties = feature.properties;
+                        var properties = feature.properties;                        
                         properties.last = true;
                         layer.addData({
                             type: 'Feature',
@@ -1141,7 +1153,7 @@ L.TimeDimension.Layer.GeoJson = L.TimeDimension.Layer.extend({
             index_min = 0;
         }
         if (index_max === null) {
-            index_max = l - 1;
+            index_max = l;
         }
         var new_coordinates = [];
         if (feature.geometry.coordinates[0].length) {
