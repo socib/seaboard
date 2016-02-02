@@ -44,29 +44,33 @@ def latest_mobile_tiny(request, location, cameras):
 
 
 def latest(request, location, cameras, folder_suffix='', images_folder='latest_images'):
-    """Get JSON of latest image of a list of cameras. It returns a JSON array. Example::
+    """
+    Get JSON of latest image of a list of cameras. It returns a JSON array. Example.
 
         [
             {
                 "image_tn": "http://www.socib.es/users/mobims/imageArchive/clm/sirena/clm_tn/latest_images/c01_snap.jpeg",
                 "camera": "clm_c01",
                 "image": "http://www.socib.es/users/mobims/imageArchive/clm/sirena/clm/latest_images/c01_snap.png",
-                "time": "29/07/2013 14:10",
-                "title": "Cala Millor - c01: 29/07/2013 14:10"
+                "time": "29/07/2013 14:00",
+                "title": "Cala Millor - c01: 29/07/2013 14:00",
+                "timestamp": 1375105609000
             },
             {
                 "image_tn": "http://www.socib.es/users/mobims/imageArchive/clm/sirena/clm_tn/latest_images/c02_snap.jpeg",
                 "camera": "clm_c02",
                 "image": "http://www.socib.es/users/mobims/imageArchive/clm/sirena/clm/latest_images/c02_snap.png",
-                "time": "29/07/2013 14:10",
-                "title": "Cala Millor - c02: 29/07/2013 14:10"
+                "time": "29/07/2013 14:00",
+                "title": "Cala Millor - c02: 29/07/2013 14:00",
+                "timestamp": 1375105609000
             },
             {
                 "image_tn": "http://www.socib.es/users/mobims/imageArchive/clm/sirena/clm_tn/latest_images/c03_snap.jpeg",
                 "camera": "clm_c03",
                 "image": "http://www.socib.es/users/mobims/imageArchive/clm/sirena/clm/latest_images/c03_snap.png",
-                "time": "29/07/2013 14:10",
-                "title": "Cala Millor - c03: 29/07/2013 14:10"
+                "time": "29/07/2013 14:00",
+                "title": "Cala Millor - c03: 29/07/2013 14:00",
+                "timestamp": 1375105609000
             }
         ]
 
@@ -100,7 +104,12 @@ def latest(request, location, cameras, folder_suffix='', images_folder='latest_i
             imagespath = '/home/mobims/imageData/' + location + '/sirena/' + location + station_str + folder_suffix + '/' + images_folder + '/'
 
             if isdir(imagespath):
-                images.extend([{'image': f, 'station': station_str, 'path': imagespath, 'time': image_time_from_filename(join(imagespath, f))} for f in listdir(imagespath) if f.endswith(('_snap.png', '_snap.jpeg', '_snap.jpg')) and isfile(join(imagespath, f)) and in_cameras(f, cameras) and _utils.isimage(join(imagespath, f))])
+                images.extend([{
+                    'image': f,
+                    'station': station_str,
+                    'path': imagespath,
+                    'datetime': image_datetime_from_file(join(imagespath, f))}
+                    for f in listdir(imagespath) if f.endswith(('_snap.png', '_snap.jpeg', '_snap.jpg')) and isfile(join(imagespath, f)) and in_cameras(f, cameras) and _utils.isimage(join(imagespath, f))])
             else:
                 if station != 0:
                     end_stations = True
@@ -109,8 +118,9 @@ def latest(request, location, cameras, folder_suffix='', images_folder='latest_i
         for image in sorted(images):
             result = {}
             result['image'] = 'http://www.socib.es/users/mobims/imageArchive/' + location + '/sirena/' + location + image['station'] + folder_suffix + '/' + images_folder + '/' + image['image']
-            result['title'] = image_title_from_filename(zone, image['image'], image['path'])
-            result['time'] = image['time']
+            result['title'] = image_title_from_filename(zone, image['image'], image['path'], image['datetime'])
+            result['timestamp'] = (image['datetime'] - datetime.datetime(1970, 1, 1)).total_seconds() * 1000
+            result['time'] = image['datetime'].strftime('%d/%m/%Y %H:%M')
             result['image_tn'] = 'http://www.socib.es/users/mobims/imageArchive/' + location + '/sirena/' + location + image['station'] + '_tn/' + images_folder + '/' + image['image'].replace('.png', '.jpeg')
             result['camera'] = location + "_" + image['image'][0:image['image'].find('_')]
             results.append(result)
@@ -233,14 +243,23 @@ def image_time_from_filename(filename):
     return time.strftime('%d/%m/%Y %H:%M', time_object)
 
 
-def image_title_from_filename(zone, image, imagepath):
+def image_datetime_from_file(filename):
+    dt = datetime.datetime.now()
+    try:
+        time_object = time.localtime(getmtime(filename))
+        dt = datetime.datetime.fromtimestamp(time.mktime(time_object))
+    except:
+        pass
+    return dt.replace(minute=0, second=0, microsecond=0)
+
+
+def image_title_from_filename(zone, image, imagepath, image_dt):
     title = '%s - %s' % (zone.name, image)
     try:
-        time_object = time.localtime(getmtime(join(imagepath, image)))
         camera = image[0:image.find('_')]
         title = '%s - Cam %s: %s' % (zone.name,
             camera.replace('c', ''),
-            time.strftime('%d/%m/%Y %H:%M', time_object))
+            image_dt.strftime('%d/%m/%Y %H:%M'))
     except:
         pass
 
