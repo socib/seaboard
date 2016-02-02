@@ -1,4 +1,9 @@
 # coding: utf-8
+import calendar
+import csv
+from xml.dom import minidom
+import json
+import datetime
 from django.http import HttpResponse
 from django.utils import simplejson
 from django.views.decorators.cache import cache_page
@@ -17,6 +22,126 @@ PLATFORM_TYPES = (
     'Sea Level',
     'Weather Station')
 
+def current_turtles(request):
+    # Hardcoded urls for each turtle
+    turtles = (
+        settings.DATADISCOVERY_URL + '/deployment-info?id_platform=227&id_deployment=391',
+        settings.DATADISCOVERY_URL + '/deployment-info?id_platform=226&id_deployment=390'
+    )
+
+    outjson = dict(type='FeatureCollection', features=[])
+
+    for url in turtles:
+        fp = urllib2.urlopen(url)
+        try:
+            geojson = json.load(fp)
+            if geojson.get('type', None) == 'FeatureCollection' and type(geojson.get('features', None) == list):
+                outjson['features'] += [geojson['features'][i] for i in (0, -1)]
+        except ValueError, e:
+            pass  # invalid json
+    return HttpResponse(json.dumps(outjson), mimetype='application/json')
+
+@cache_page(60 * 5, cache="default")
+def ship_tracking(request,mmsi):
+    if mmsi != "":
+        features = []
+
+        url = 'http://mob0.marinetraffic.com/ais/gettrackxml.aspx?mmsi=' + mmsi
+        try:
+            sf = urllib2.urlopen(url)
+            dom = minidom.parse(sf)
+            positions = dom.getElementsByTagName('POS')
+            if len(dom.getElementsByTagName('POS')) > 0:
+                timestamps = []
+                coordinates = []
+                for p in positions:
+                    stime = calendar.timegm(datetime.datetime.strptime(str(p.attributes['TIMESTAMP'].value).split(".")[0],
+                                                                      "%Y-%m-%dT%H:%M:%S").timetuple())*1000
+                    timestamps.append(stime)
+                    coord = [float(p.attributes['LON'].value), float(p.attributes['LAT'].value)]
+                    coordinates.append(coord)
+                    features.append({
+                        "type": "Feature",
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": coord
+                        },
+                        "properties": {
+                            "speed": p.attributes['SPEED'].value,
+                            "course": p.attributes['COURSE'].value,
+                            "time": stime
+                        }
+                    })
+
+                features.insert(0, {
+                    "type": "Feature",
+                    "geometry": {
+                        "type": "LineString",
+                        "coordinates": coordinates
+                    },
+                    "properties": {
+                        "linestringTimestamps": timestamps
+                    }
+                })
+
+                outjson = {
+                    "type": "FeatureCollection",
+                    "features": features
+                }
+
+            else:
+                outjson = {
+                    "error": "Empty response"
+                }
+
+        except urllib2.URLError, err:
+            outjson = {
+                "error": str(err)
+            }
+            pass
+        finally:
+            try:
+                sf.close()
+            except NameError:
+                pass
+    else:
+        outjson = {
+                "error": "Provide a valid mmsi"
+        }
+    # outjson = {}
+    # opener = urllib2.build_opener()l
+    # opener.addheaders = [('User-agent', 'Mozilla/5.0')]
+
+    # fp = opener.open('http://www.marinetraffic.com/en/api/exportvessels/v:4/100f603ee069ffa7dbadf4d087c69d79f241bb5c/protocol:csv/timespan:5')
+    # try:
+    #     cr = csv.reader(fp)
+    #
+    #     rownum = 0
+    #     for row in cr:
+    #         if rownum == 0:
+    #             header = row
+    #             iMMSI = header.index('MMSI')
+    #             iLon = header.index(' LON')
+    #             iLat = header.index(' LAT')
+    #             iSpeed = header.index(' SPEED')
+    #             iCourse = header.index(' COURSE')
+    #         else:
+    #             if row[iMMSI] == '225950380':
+    #                 outjson ={
+    #                     "type": "Point",
+    #                     "coordinates": [float(row[iLon]), float(row[iLat])],
+    #                     "properties": {
+    #                         "speed": row[iSpeed],
+    #                         "course": row[iCourse]
+    #                     }
+    #                 }
+    #                 # for fields in header:
+    #                 #     outjson[fields] = row[header.index(fields)]
+    #         rownum += 1
+    # except ValueError, e:
+    #     pass  # invalid csv
+
+    return HttpResponse(json.dumps(outjson), mimetype='application/json')
 
 @cache_page(60 * 60 * 2, cache="default")
 def current_deployments_stats(request):
