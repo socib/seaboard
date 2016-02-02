@@ -108,7 +108,7 @@ def latest(request, location, cameras, folder_suffix='', images_folder='latest_i
                     'image': f,
                     'station': station_str,
                     'path': imagespath,
-                    'datetime': image_datetime_from_file(join(imagespath, f))}
+                    'mtime': image_mtime_from_file(join(imagespath, f))}
                     for f in listdir(imagespath) if f.endswith(('_snap.png', '_snap.jpeg', '_snap.jpg')) and isfile(join(imagespath, f)) and in_cameras(f, cameras) and _utils.isimage(join(imagespath, f))])
             else:
                 if station != 0:
@@ -117,10 +117,11 @@ def latest(request, location, cameras, folder_suffix='', images_folder='latest_i
 
         for image in sorted(images):
             result = {}
+            dt = datetime.datetime.fromtimestamp(image['mtime'])
             result['image'] = 'http://www.socib.es/users/mobims/imageArchive/' + location + '/sirena/' + location + image['station'] + folder_suffix + '/' + images_folder + '/' + image['image']
-            result['title'] = image_title_from_filename(zone, image['image'], image['path'], image['datetime'])
-            result['timestamp'] = (image['datetime'] - datetime.datetime(1970, 1, 1)).total_seconds() * 1000
-            result['time'] = image['datetime'].strftime('%d/%m/%Y %H:%M')
+            result['title'] = image_title_from_filename(zone, image['image'], image['path'], dt)
+            result['timestamp'] = image['mtime'] * 1000
+            result['time'] = dt.strftime('%d/%m/%Y %H:%M')
             result['image_tn'] = 'http://www.socib.es/users/mobims/imageArchive/' + location + '/sirena/' + location + image['station'] + '_tn/' + images_folder + '/' + image['image'].replace('.png', '.jpeg')
             result['camera'] = location + "_" + image['image'][0:image['image'].find('_')]
             results.append(result)
@@ -243,14 +244,14 @@ def image_time_from_filename(filename):
     return time.strftime('%d/%m/%Y %H:%M', time_object)
 
 
-def image_datetime_from_file(filename):
-    dt = datetime.datetime.now()
+def image_mtime_from_file(filename):
+    mtime = 0
     try:
-        time_object = time.localtime(getmtime(filename))
-        dt = datetime.datetime.fromtimestamp(time.mktime(time_object))
+        mtime = getmtime(filename)
+        mtime = mtime - (mtime % 3600)
     except:
         pass
-    return dt.replace(minute=0, second=0, microsecond=0)
+    return mtime
 
 
 def image_title_from_filename(zone, image, imagepath, image_dt):
