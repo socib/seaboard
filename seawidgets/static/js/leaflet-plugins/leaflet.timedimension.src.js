@@ -84,7 +84,7 @@ L.TimeDimension = (L.Layer || L.Class).extend({
         }
         this._loadingTimeIndex = newIndex;
         var newTime = this._availableTimes[newIndex];
-        console.log('INIT -- Current time: ' + new Date(newTime).toISOString());
+        
         if (this._checkSyncedLayersReady(this._availableTimes[this._loadingTimeIndex])) {
             this._newTimeIndexLoaded();
         } else {
@@ -94,7 +94,7 @@ L.TimeDimension = (L.Layer || L.Class).extend({
             // add timeout of 3 seconds if layers doesn't response
             setTimeout((function (index) {
                 if (index == this._loadingTimeIndex) {
-                    console.log('Change time for timeout');
+                    
                     this._newTimeIndexLoaded();
                 }
             }).bind(this, newIndex), this._loadingTimeout);
@@ -107,7 +107,7 @@ L.TimeDimension = (L.Layer || L.Class).extend({
             return;
         }
         var time = this._availableTimes[this._loadingTimeIndex];
-        console.log('END -- Current time: ' + new Date(time).toISOString());
+        
         this._currentTimeIndex = this._loadingTimeIndex;
         this.fire('timeload', {
             time: time
@@ -338,7 +338,7 @@ L.TimeDimension = (L.Layer || L.Class).extend({
             availableTimes: this._availableTimes,
             currentTime: currentTime
         });
-        console.log('available times changed');
+        
     },
     getLowerLimit: function () {
         return this._availableTimes[this.getLowerLimitIndex()];
@@ -760,11 +760,11 @@ L.TimeDimension.Layer.WMS = L.TimeDimension.Layer.extend({
     },
 
     _onNewTimeLoading: function(ev) {
-        // console.log('Layer._onNewTimeLoading: ' + this._baseLayer.wmsParams.layers + ' with time: ' + new Date(ev.time).toISOString());
+        // 
         var layer = this._getLayerForTime(ev.time);
         if (!this._map.hasLayer(layer)) {
             this._map.addLayer(layer);
-            // console.log('Layer._onNewTimeLoading: layer added to map');
+            // 
         }
     },
 
@@ -877,7 +877,7 @@ L.TimeDimension.Layer.WMS = L.TimeDimension.Layer.extend({
         }
         this._currentLayer = layer;
         this._currentTime = time;
-        console.log('Show layer ' + layer.wmsParams.layers + ' with time: ' + new Date(time).toISOString());
+        
 
         this._evictCachedTimes(this._timeCacheForward, this._timeCacheBackward);
     },
@@ -908,7 +908,7 @@ L.TimeDimension.Layer.WMS = L.TimeDimension.Layer.extend({
             if (this._timeDimension && time == this._timeDimension.getCurrentTime() && !this._timeDimension.isLoading()) {
                 this._showLayer(layer, time);
             }
-            // console.log('Loaded layer ' + layer.wmsParams.layers + ' with time: ' + new Date(time).toISOString());
+            // 
             this.fire('timeload', {
                 time: time
             });
@@ -1082,8 +1082,8 @@ L.TimeDimension.Layer.WMS = L.TimeDimension.Layer.extend({
             index--;
         }
         if (time != this._availableTimes[index]) {
-            console.log('Search layer time: ' + new Date(time).toISOString());
-            console.log('Return layer time: ' + new Date(this._availableTimes[index]).toISOString());
+            
+            
         }
         return this._availableTimes[index];
     },
@@ -1441,7 +1441,7 @@ L.TimeDimension.Player = (L.Layer || L.Class).extend({
             // If the player was waiting, check if all times are loaded
             if (this._waitingForBuffer) {
                 if (numberNextTimesReady < buffer) {
-                    console.log('Waiting until buffer is loaded. ' + numberNextTimesReady + ' of ' + buffer + ' loaded');
+                    
                     this.fire('waiting', {
                         buffer: buffer,
                         available: numberNextTimesReady
@@ -1449,14 +1449,14 @@ L.TimeDimension.Player = (L.Layer || L.Class).extend({
                     return;
                 } else {
                     // all times loaded
-                    console.log('Buffer is fully loaded!');
+                    
                     this.fire('running');
                     this._waitingForBuffer = false;
                 }
             } else {
                 // check if player has to stop to wait and force to full all the buffer
                 if (numberNextTimesReady < this._minBufferReady) {
-                    console.log('Force wait for load buffer. ' + numberNextTimesReady + ' of ' + buffer + ' loaded');
+                    
                     this._waitingForBuffer = true;
                     this._timeDimension.prepareNextTimes(this._steps, buffer, this._loop);
                     this.fire('waiting', {
@@ -1538,7 +1538,7 @@ L.TimeDimension.Player = (L.Layer || L.Class).extend({
         this._transitionTime = transitionTime;
         if (typeof this._buffer === 'function') {
             this._bufferSize = this._buffer.call(this, this._transitionTime, this._minBufferReady, this._loop);
-            console.log('Buffer size changed to ' + this._bufferSize);
+            
         } else {
             this._bufferSize = this._buffer;
         }
@@ -1620,13 +1620,13 @@ L.UI.Knob = L.Draggable.extend({
 
     _toX: function(value) {
         var x = (value - this.options.rangeMin) / this._getProjectionCoef();
-        //console.log('toX', value, x);
+        //
         return x;
     },
 
     _toValue: function(x) {
         var v = x * this._getProjectionCoef() + this.options.rangeMin;
-        //console.log('toValue', x, v);
+        //
         return v;
     },
 
@@ -1652,7 +1652,7 @@ L.UI.Knob = L.Draggable.extend({
     },
 
     setValue: function(v) {
-        //console.log('slider value', v);
+        //
         this.setPosition(this._toX(v));
     },
 

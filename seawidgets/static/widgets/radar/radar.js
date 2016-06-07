@@ -31,10 +31,7 @@
     }
 
     Radar.prototype.ready = function() {
-      OpenLayersRadar.Map.init(30,$(this.node).find('.radar-map').get(0));
-      //this.Map.map.loadWMSLayerDateTime();
-
-      //this.refreshData();
+      this._createMap();
       return setInterval(this.refreshData, 60000 * 60 * 2); // every 2 hours
     };
 
@@ -47,6 +44,183 @@
       null;
     };
 
+    Radar.prototype._createMap = function() {
+      var container = $(this.node).find('.radar-map').get(0);
+
+      var endDate = new Date();
+      if (endDate.getUTCMinutes() > 30) {
+        endDate.setUTCHours(endDate.getUTCHours() - 1);
+      } else {
+        endDate.setUTCHours(endDate.getUTCHours() - 2);
+      }
+      endDate.setUTCMinutes(0, 0, 0);
+
+      this.map = L.map(container, {
+        zoom: 9,
+        timeDimension: true,
+        timeDimensionOptions: {
+          timeInterval: "P1W/" + endDate.toISOString(),
+          period: "PT1H",
+          currentTime: endDate
+        },
+        timeDimensionControl: true,
+        timeDimensionControlOptions: {
+          autoPlay: true,
+          speedSlider: false,
+          timeSlider: false,
+          playerOptions: {
+            transitionTime: 500,
+            loop: true,
+          }
+        },
+        center: [38.705, 1.15],
+      });
+
+      L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+      }).addTo(this.map);
+
+      var wms_server = 'http://thredds.socib.es/thredds/wms/observational/hf_radar/hf_radar_ibiza-scb_codarssproc001_aggregation/dep0001_hf-radar-ibiza_scb-codarssproc001_L1_agg.nc';
+      var velocityLayer = L.nonTiledLayer.wms(wms_server, {
+        layers: 'sea_water_velocity',
+        version: '1.3.0',
+        format: 'image/png',
+        transparent: true,
+        styles: 'prettyvec/rainbow',
+        markerscale: 15,
+        markerspacing: 10,
+        abovemaxcolor: "extend",
+        belowmincolor: "extend",
+        colorscalerange: "0,0.4",
+        attribution: 'SOCIB HF RADAR | sea_water_velocity'
+      });
+
+      var velocityTimeLayer = L.timeDimension.layer.wms(velocityLayer, {
+        updateTimeDimension: false,
+        proxy: '/services/wms-proxy'
+      });
+      velocityTimeLayer.addTo(this.map);
+
+      var velocityLegend = L.control({
+        position: 'topright'
+      });
+      velocityLegend.onAdd = function(map) {
+        var src = wms_server + "?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetLegendGraphic&LAYER=sea_water_velocity&PALETTE=rainbow&colorscalerange=0,0.4";
+        var div = L.DomUtil.create('div', 'info legend');
+        div.innerHTML +=
+          '<img src="' + src + '" alt="legend">';
+        return div;
+      };
+      velocityLegend.addTo(this.map);
+
+      this.map.on('popupopen', (function(e) {
+        var popup = e.popup;
+        popup.setContent(this.get_popup_content(popup.station));
+      }).bind(this));
+
+      var stations = [{
+        name: 'Puig des Galfí',
+        lat: 38.9519,
+        lon: 1.21915,
+        code: 'GALF',
+        model: 'CODAR SeaSonde',
+        location: 'Western coast of Ibiza (Puig des Galfí)',
+        frequency: '13.5 MHz',
+        bandwidth: '90 KHz',
+        antenna_pattern: 'Measured',
+        photo: 'facilities/radar/images/radar-galf.jpg'
+      }, {
+        name: 'Formentera',
+        lat: 38.6662333,
+        lon: 1.3887500,
+        code: 'FORM',
+        model: 'CODAR SeaSonde',
+        location: 'Western coast of Formentera',
+        frequency: '13.5 MHz',
+        bandwidth: '90 KHz',
+        antenna_pattern: 'Measured',
+        photo: 'facilities/radar/images/radar-form.jpg'
+      }];
+
+      $.each(stations, (function(i, station) {
+        if (!station.marker)
+          station.marker = this.place_station_marker(station);
+      }).bind(this));
+    };
+
+    Radar.prototype.place_station_marker = function(station) {
+      var iconOptions = {
+        iconUrl: 'static/images/radar_map.png',
+        iconSize: [30, 30],
+        popupAnchor: [-3, -5],
+        iconAnchor: [10, 10],
+        labelAnchor: [6, 0]
+      };
+      var markerOptions = {
+        icon: new L.icon(iconOptions),
+        title: station.name
+      };
+
+      var labelDirection = 'right';
+      var label = station.name;
+      var marker = L.marker([station.lat, station.lon], markerOptions).bindLabel(label, {
+        noHide: true,
+        direction: labelDirection
+      }).addTo(this.map).showLabel();
+
+      marker.bindPopup('');
+      marker._popup.station = station;
+
+      return marker;
+    };
+
+    Radar.prototype.get_popup_content = function(station) {
+      var html = '<div class="radar-station">';      
+      html += '<ul><li><span class="station-attribute">Name:</span> ' + station.code + "</li>";
+      html += '<li><span class="station-attribute">Model:</span> ' + station.model + "</li>";
+      html += '<li><span class="station-attribute">Location:</span> ' + station.location + "</li>";
+      html += '<li><span class="station-attribute">LON:</span> ' + this.decimalDegrees2DMS(station.lon, 'Longitude') + "</li>";
+      html += '<li><span class="station-attribute">LAT:</span> ' + this.decimalDegrees2DMS(station.lat, 'Latitude') + "</li>";
+      html += '<li><span class="station-attribute">Center Frequency:</span> ' + station.frequency + "</li>";
+      html += '<li><span class="station-attribute">Bandwidth:</span> ' + station.bandwidth + "</li>";
+      html += '<li><span class="station-attribute">Antenna pattern:</span> ' + station.antenna_pattern + "</li></ul>";
+      html += '</div>';
+      return html;
+    };
+
+    /*
+        Converts a Decimal Degree Value into
+        Degrees Minute Seconds Notation.
+
+        Pass value as double
+        type = {Latitude or Longitude} as string
+
+        returns a string as D:M:S:Direction
+    */
+    Radar.prototype.decimalDegrees2DMS = function(value, type) {
+      degrees = Math.floor(value);
+      minutes = Math.abs((value - degrees) * 60).toFixed(2);
+      // subseconds = Math.abs((submin-minutes) * 60);
+      direction = "";
+      if (type == "Longitude") {
+        if (value < 0)
+          direction = "W";
+        else if (value > 0)
+          direction = "E";
+        else
+          direction = "";
+      } else if (type == "Latitude") {
+        if (value < 0)
+          direction = "S";
+        else if (value > 0)
+          direction = "N";
+        else
+          direction = "";
+      }
+      degrees = Math.abs(degrees);
+      notation = degrees + "° " + minutes + "' " + direction;
+      return notation;
+    };
     return Radar;
 
   })(Dashing.Widget);
