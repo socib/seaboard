@@ -244,6 +244,11 @@
                           var img_situation = $('<img />');
                           img_situation.attr('src','/static/widgets/beamon/images/' + self.cameras[index] + '.png' );
                           situation.html(img_situation);
+                        } else{
+                          var situation = self.$container.find(".situation");
+                          if (situation){
+                            situation.remove();
+                          }
                         }
 
                         $(this).fadeIn(self.options.speed || self.options.fade, function () {
