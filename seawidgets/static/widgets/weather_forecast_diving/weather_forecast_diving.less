@@ -1,0 +1,286 @@
+@-webkit-keyframes rotation {
+    from{
+        -webkit-transform: rotate(0deg);
+    }
+    to{
+        -webkit-transform: rotate(360deg);
+    }
+}
+
+@-webkit-keyframes halfrotation {
+    from{
+        -webkit-transform: rotate(270deg);
+    }
+    to{
+        -webkit-transform: rotate(360deg);
+    }
+}
+
+.widget-weather-forecast_diving{
+  position: relative;
+
+  .wf-weeksummary{  /*   No precipitation throughout the week, with temperatures rising to 35°C */
+    text-align: center;
+    font-size: 14px;
+    line-height: 22px;  /*22*/
+    margin: 10px 5px;
+    min-height: 44px;
+    color: @secondary-title-color;
+  }
+
+  .wf-prediction {
+    margin-bottom: 4px;  /*4px*/
+
+    .wf-summary{
+      font-size: 12px;
+      color: @widget-background-color;
+      background-color: @secondary-background-color;
+      white-space: nowrap;
+    }
+  
+    .wf-day{
+      font-size: 15.68px;  /*17.68 */
+      text-align: center;
+      margin-top: 10px;
+     /* width: 10%; */    /*80%  100%*/
+    }
+    .wf-table-variables {
+      font-size: 11.3px;
+      width: 100%;
+      table-layout: fixed;  
+      border: 1px solid @secondary-background-color;
+
+      .wf-variable-name {
+          border-left: 1px solid @secondary-background-color;
+          font-size: 11.3px;  /* 11.3px; */
+          background-position: 70% 40%;   /*50% 10%;*/
+          background-repeat: no-repeat;
+          padding-top: 50px;  /*20px*/
+          padding-bottom: 4px;
+          line-height: 10px;  /*10px  */
+
+
+          &.wf-temperature {
+            background-image: url('/static/widgets/weather_forecast_diving/images/air_temperature.png');
+           /* background-position: 20px 9px;
+            padding-top: 7px;
+            padding-left: 25px;*/
+          }
+          &.wf-wind {
+            background-image: url('/static/widgets/weather_forecast_diving/images/wind_speed.png');
+            //text-align: center;
+          }
+          &.wf-humidity {
+            background-image: url('/static/widgets/weather_forecast_diving/images/relative_humidity.png');  //relative_humidity
+            
+          }
+          &.wf-pressure {
+            background-image: url('/static/widgets/weather_forecast_diving/images/air_pressure.png');
+            
+          }
+          &.wf-cloudCover {
+            background-image: url('/static/widgets/weather_forecast_diving/images/cloudCover.png');
+            
+          }
+          &.wf-sunriseTime {
+            background-image: url('/static/widgets/weather_forecast_diving/images/sunriseTime.png');
+           
+          }
+          &.wf-sunsetTime {
+            background-image: url('/static/widgets/weather_forecast_diving/images/sunsetTime.png');
+           
+          }
+      }
+      .wf-variable{
+       border-left: 1px solid @secondary-background-color;
+        margin: 5px;
+       /* width: 50px;*/
+       /* height: 100%;*/  /*100%*/
+        font-size: 14.6px;
+        line-height: 20px;  /* 14px */
+        vertical-align: top;
+        padding-bottom: 6px;  /* 6px*/
+          .wf-units{
+            color: @secondary-title-color;
+            font-size: 9.7px;
+            line-height: 19px;  /* line-height: 13px; */
+          }
+          &.wf-humidity {
+            font-size: 15.4px; /*19.4*/
+            vertical-align: middle;
+          }
+        /*  &.wf-humidity {
+            font-size: 12.5px;   
+            vertical-align: middle;
+          }*/
+          &.wf-pressure {
+            font-size: 13.5px;
+          }
+          &.wf-cloudCover {
+            font-size: 13.5px;
+          }
+          &.wf-sunriseTime {
+            font-size: 13.5px;
+          }
+          &.wf-sunsetTime {
+            font-size: 13.5px;
+          }
+          .wf-max-temp{
+            color: #ff2b06;
+          }
+          .wf-min-temp{
+            color: #003a63;
+          }
+      }
+    }
+  }
+
+  .wf-prediction:first-child {
+
+    .wf-summary{
+      background-color: @title-color;
+    }
+    .wf-day{
+      color: @title-color;
+    }
+    .wf-table-variables {
+      border: 1px solid @title-color;
+
+      .wf-variable-name {
+          border-left: 1px solid @title-color;
+      }
+
+      .wf-variable {
+          border-left: 1px solid @title-color;
+      }
+    }
+
+  }
+
+  .wf-prediction:last-child {
+    margin-bottom: 0px;
+  }
+
+
+  ul.wf-variables {
+    list-style: none;
+    clear:left;
+    list-style:none;
+    margin:0px 0px 0px 25px;  /* 10px */
+    padding:20px;
+    position:relative;
+    text-align:center;
+  }
+
+  li.wf-variable {
+    border: 1px solid @secondary-title-color;
+    display: block;
+    float: left;
+    list-style:none;
+    margin:0;
+    padding:0;
+    position:relative;
+
+    &.wf-humidity {
+      min-width: 80px;
+    }
+    .wf-min-temp{
+      color:#2cc0d0;
+    }
+    .wf-max-temp{
+      color:#CC3300;
+    }
+  }
+
+  [class^="wf-icon-"],
+  [class*=" wf-icon-"]{
+      font-family: "iconvault";
+      font-style: normal;
+      font-weight: normal;
+      font-variant: normal;
+      text-transform: none;
+      line-height: 50px;
+      -webkit-font-smoothing: antialiased;
+      display: block;
+      text-decoration: inherit;
+      font-size: 50px;
+      margin: auto;
+      margin-top: 5px;
+      width: 0px;
+      height: 40px;
+      padding-right: 50px;
+
+
+  }
+  .wf-icon-clear-day:before {
+      content: "\f113";
+      color:rgb(255, 165, 0);
+      display: block;
+      position: absolute;
+      -webkit-animation: rotation 12s infinite linear;
+  }
+  .wf-icon-clear-night:before{
+      content: "\f10d";
+      color:#2cc0d0;
+      display: block;
+  };
+
+  .wf-icon-partly-cloudy-night:before,.wf-icon-partly-cloudy-day:before, .wf-icon-cloudy:before {
+      content: "\f106";
+      color: rgb(204, 204, 204);
+      position: absolute;
+  }
+
+  .wf-icon-partly-cloudy-night:after {
+      content: "\f100";
+      color: #2cc0d0;
+      position: absolute;
+  }
+  .wf-icon-partly-cloudy-day:after {
+      content: "\f101";
+      color: rgb(255, 165, 0);
+      position: absolute;
+      display: block;
+      -webkit-animation: halfrotation 5s infinite linear;
+  }
+  .wf-icon-rain:before, .wf-icon-wind:before, .wf-icon-sleet:before, .wf-icon-snow:before {
+    content: '\f105';
+    position:absolute;
+    color:rgb(204, 204, 204);
+  }
+  .wf-icon-rain:after {
+      content: "\f104";
+      color: #82b2e4;
+  }
+  .wf-icon-snow:after{
+      content: "\f10b";
+      color: #acd3f3;
+  }
+  .wf-icon-sleet:after {
+      content: "\f10c";
+      color: #acd3f3;
+  }
+  .wf-icon-wind:after {
+      content: "\f115";
+      color: rgb(255, 95, 32);
+  }
+  .wf-icon-fog:before {
+      content: "\f108";
+      color: rgb(204, 204, 204);
+  }
+  .wf-credit{
+    padding-right: 10px;
+    font-size: 8px;
+    line-height: 10px;
+    float: right;
+    margin-top: 0px;
+  }
+
+  @media (max-width: 767x) {  /* 767 */
+    .wf-prediction {
+      height: 100%;
+    }
+  }
+
+}
+
