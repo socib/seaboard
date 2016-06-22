@@ -57,22 +57,19 @@ NCWMSGridTimeseriesViewer.prototype.addLayersToMap = function() {
                 if (layer.legend === undefined || layer.legend ) {   // if (layer.legend === undefined || layer.legend) {   //(layer.legend ) 
                     var variableLegend = L.control({
                         position: 'bottomleft'   //bottomright'
+
                     });
                     variableLegend.onAdd = this.addLegend.bind(this, layer);
                     //variableLegend.onAdd = this._addLegendOutside.bind(this, layer);
-
                     variableLegend.onRemove = this.removeLegend.bind(this, layer);  //ver
                    // variableLegend.onRemoveOutside = this._removeLegendOutside.bind(this, layer);
-                    layer.timeLayer.legend = variableLegend;
-                   
+                    layer.timeLayer.legend = variableLegend;            
                 } 
              }
 
-
             if (layer.visible) {
                 layer.timeLayer.addTo(this.map);
-            }
-            
+            } 
         }
     }
 };
@@ -487,26 +484,24 @@ NCWMSGridTimeseriesViewer.prototype.createMap = function(map) {
             });
 
             var icon_buoy = L.icon({
-                iconUrl: '../static/mooring/images/buoy.png'  // http://localhost:8000/static/mooring/images/buoy.png
+                iconUrl: '../static/mooring/images/buoy.png'  
                //conSize: [38, 95], // size of the icon
                 });
-            //var station = L.marker([39.54419, 2.378461], {icon: icon_buoy}).bindPopup('Demo'); 
+           
             var station = L.marker([39.54419, 2.378461], {icon: icon_buoy}); 
             station.addTo(this.map);
-           // var bathymetryGroupLayer = L.layerGroup([bathymetryLayer, coastlinesLayer, namesLayer, underseaLayer]);
-            //bathymetryGroupLayer.addTo(this.map);
+           
             var baseGroupLayer = L.layerGroup([bathymetryLayer,osmLayer]);     //bathymetryLayer, wmsideib  osmLayer
             baseGroupLayer.addTo(this.map);
             this.baseMaps = {
-                //"OSM": osmLayer,
-                "Emodnet bathymetry": bathymetryLayer, // bathymetryGroupLayer,
-               //"IDEIB": wmsideib
+              
+                "Emodnet bathymetry": bathymetryLayer, 
+               
                 "OSM": osmLayer
                 
             };
         } else {
-            //var baseGroupLayer = L.layerGroup([bathymetryLayer, coastlinesLayer, namesLayer, underseaLayer]);    
-            // baseGroupLayer.addTo(map);
+            
             for (var baselayer in this.baseMaps) {
                 this.baseMaps[baselayer].addTo(this.map);
                 break;
@@ -531,28 +526,7 @@ NCWMSGridTimeseriesViewer.prototype.createMap = function(map) {
 
     this.map.addControl(sidebar);
  
-  /*var leftSidebar = L.control.sidebar('sidebar-left', {
-        position: 'left'
-    });
-
-
-    this.map.addControl(leftSidebar);
-
-
-   
-    setTimeout(function () {
-        leftSidebar.toggle();
-    }, 500);
-
-    setInterval(function () {
-        leftSidebar.toggle();
-    }, 5000);
-  */
-
-   
-
-
-    
+  
 
     this.map.on('layeradd', function(eventLayer) {
         if (eventLayer.layer.legend) { 
@@ -677,11 +651,9 @@ NCWMSGridTimeseriesViewer.prototype.removeLegend = function(layer, map) {
 
 NCWMSGridTimeseriesViewer.prototype._removeLegendOutside = function(layer) {
     var div_wrapper = $('#legend-wrapper-outside');
-    div_wrapper.remove();  //this._getLegendInnerHTML(layer)
+    div_wrapper.remove();  
     return;
 };
-
-
 
 
 
@@ -974,7 +946,7 @@ var diving = function( layers, container) {
         container: container,
         layers: layers,
         mapOptions: {
-            center:  [39.47, 2.45],  //Centrar la vista en 39.46, 2.46  nivel 13  //ELTORO_POSITION
+            center:  [39.47, 2.45],  
             zoom: 13,  //9
             scrollWheelZoom: false,
             timeDimensionOptions: {
@@ -1041,8 +1013,7 @@ function wmop() {
         legendHTML: function() {
           var innerHTML = '<img src="/static/images/black-arrow.png" /> mean direction';
           return innerHTML;
-        },
-       // icon:'sea_surface_wave_from_direction'
+        }
     },
         {
         name: "Wave height",
@@ -1060,9 +1031,6 @@ function wmop() {
         singleTile: false,
         autoExtent: false,
         timeseriesWhenNotVisible: true
-        
-        //icon: 'sea_surface_wave_significant_height'
-        //http://thredds.socib.es/thredds/wms/operational_models/oceanographical/wave/model_run_aggregation/sapo_ib/sapo_ib_best.ncd?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetLegendGraphic&TRANSPARENT=true&LAYER=significant_wave_height&PALETTE=scb_bugnylorrd&COLORSCALERANGE=0,2&numcolorbands=100
     },{
         name: "Sea Surface Temperature",
         url: wms_wmop,
@@ -1080,10 +1048,7 @@ function wmop() {
         autoExtent: false,
         TimeDimensionOptions: {
             updateTimeDimension: true
-        },
-       // icon:'sea_water_temperature'
-       // http://thredds.socib.es/thredds/wms/operational_models/oceanographical/hydrodynamics/model_run_aggregation/wmop/wmop_best.ncd?SERVICE=WMS
-       ////http://thredds.socib.es/thredds/wms/operational_models/oceanographical/hydrodynamics/model_run_aggregation/wmop/wmop_best.ncd?REQUEST=GetLegendGraphic&LAYER=temp&PALETTE=mpl_gnbu
+        }
     },{
         name: "Sensibilidad ambiental de la costa",  //Sensibilidad ambiental de la costa-2012
         url: wms_sensibilidad,
@@ -1092,7 +1057,6 @@ function wmop() {
             format: 'image/png',
             transparent: true,
             styles: 'sa_illes_balears_2011'
-           //http://gis.socib.es/geoserver/ows?TRANSPARENT=true&SERVICE=WMS&VERSION=1.1.1&REQUEST=GetLegendGraphic&EXCEPTIONS=application%2Fvnd.ogc.se_xml&LAYER=sa%3Abal_sa_costa_2012&SCALE=2183916.2728723255&FORMAT=image%2Fgif
         },
          visible: true ,
         // legendOutside: true,
@@ -1101,12 +1065,11 @@ function wmop() {
           var innerHTML = "<iframe src='"+ "http://gis.socib.es/geoserver/ows?service=WMS&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=bal_sa_costa_2012" +"' width='260' height='80' frameborder='0' class='resizable' ></iframe>" 
           return innerHTML;
          }
-       // icon:'sea_surface_wave_from_direction'
     },{
         name: "Uso humano de la costa", 
         url: wms_sensibilidad,
         params: {
-            layers: "sa:bal_uso_humano",  //sa:
+            layers: "sa:bal_uso_humano",  
             format: 'image/png',
             styles: 'uso_humano_new'
         },
@@ -1114,211 +1077,114 @@ function wmop() {
       // legendOutside: true,
         singleTile: false,
         autoExtent: false,
-       // http://gis.socib.es/geoserver/ows?TRANSPARENT=true&SERVICE=WMS&VERSION=1.1.1&REQUEST=GetLegendGraphic&EXCEPTIONS=application%2Fvnd.ogc.se_xml&LAYER=sa%3Abal_uso_humano&SCALE=2183916.2728723255&FORMAT=image%2Fgif
-       legendHTML: function() {
-         // '<li>'+'<i class="circle" style="background:'+ getColour(platform_name[i]) +'"></i>'+'<span>'+o.title+'</span>'+'</li>';                                                                                                                  <i class="circle" style="background:'+ getColour(platform_name[i]) +'"></i>'+'<span>'+o.title+'</span>'+'</li>';
+        legendHTML: function() {                                                                                                                 
            var innerHTML = "<iframe src='"+"http://gis.socib.es/geoserver/ows?TRANSPARENT=true&SERVICE=WMS&VERSION=1.1.1&REQUEST=GetLegendGraphic&EXCEPTIONS=application%2Fvnd.ogc.se_xml&LAYER=sa%3Abal_uso_humano&SCALE=2183916.2728723255&FORMAT=image%2Fgif"+ "' width='260' height='80' frameborder='0' class='resizable' ></iframe>";  //Zones de fondeig
           // var innerHTML = '<div class="resizable" style="width:200px; height:200px;"'>'+'<'iframe src="http://gis.socib.es/geoserver/ows?TRANSPARENT=true&SERVICE=WMS&VERSION=1.1.1&REQUEST=GetLegendGraphic&EXCEPTIONS=application%2Fvnd.ogc.se_xml&LAYER=sa%3Abal_uso_humano&SCALE=2183916.2728723255&FORMAT=image%2Fgif"+ frameborder="0"></iframe>'+'</div>';  //Zones de fondeig
             return innerHTML;
         }
-       /* TimeDimensionOptions: {
-            updateTimeDimension: true
-        },
-        icon:'sea_water_temperature'*/
     },{
         name: "Zonas de Fondeo", 
         url: wms_sensibilidad,
         params: {
-            layers: "bal_zones_fondeig",  //sa:
+            layers: "bal_zones_fondeig",  
             format: 'image/png',
-           /*colorscalerange: "auto",
-            abovemaxcolor: "extend",
-            belowmincolor: "extend",
-            numcolorbands: 100,*/
             styles: 'sailing'
         },
         visible: true,
       //  legendOutside: true,
-        //http://gis.socib.es/geoserver/sa/wms?request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=bal_zones_fondeig&SCALE=2183916.2728723255&FORMAT=image%2Fgif
         legendHTML: function() {
            var innerHTML = '<img src="/static/images/zones_fondeig.png" /> Anchoring areas';  //Zones de fondeig
             return innerHTML;
         }
-       /* icon:'sea_water_temperature'*/
-    }
-    ];
-
-    //var sapoMap = new Sorrento(wms_sapo, sapo_wmop_layers , 'map-wind');  // Se define un solo wms, aunque hay la definicion de dos capas.
+    }];
+   
       var sapoMap2 = new diving(sapo_wmop_layers2 , 'map-wmop'); 
-    //var sapoMap = new GTViewer(sapo_wmop_layers, 'map-wind');
-
-
-
-
-  /*  this.map.on('overlayremove', function (eventLayer) {
-        if (eventLayer.name != "Wave height") {
-            this.removelayer(eventLayer.layer.legend);
-            eventLayer.layer.legend.onRemove();
-        }
-    });
-
-  */
-
+ 
 }
 
 
+var load_moorings = function(){  // + Moorings.units, function(jsonData)
 
+    $.getJSON( 'http://localhost:8000/services/dd/list-moorings?', function(data) {
 
-/*var ourCustomControl = L.Control.extend({
- 
-  options: {
-    position: 'topleft' 
-    //control position - allowed: 'topleft', 'topright', 'bottomleft', 'bottomright'
-  },
- 
-  onAdd: function (map) {
-    return container;
-  },
- 
-});
+    var id_platform = 26;   
+    platform = {} ;
+    var items = [];
+    list_moorings = data;
 
+    for (var i = 0, l = list_moorings.length; i < l; i++) {
+        if (list_moorings[i].id == id_platform) {
+        platform.index = i;
+        platform.id = list_moorings[i].id;
+        platform.lat = (parseFloat(list_moorings[i].boundingBox[1]) + parseFloat(list_moorings[i].boundingBox[0])) / 2;
+        platform.lon = (parseFloat(list_moorings[i].boundingBox[3]) + parseFloat(list_moorings[i].boundingBox[2])) / 2;
+        platform.name = list_moorings[i].name
+            .replace("Station", "")
+            .replace("Buoy", "")
+            .replace("Mobims", "")
+            .trim();
 
-map.addControl(new customControl());*/
+        platform.platformType = list_moorings[i].platformType;
+        platform.state = list_moorings[i].state;
+        platform.icon = list_moorings[i].icon;
+        platform.lastTimeSampleReceived = list_moorings[i].lastTimeSampleReceived;
 
+        if (platform.variables)
+            delete platform.variables;
 
-
-
-
-
-
-//el.innerHTML ="";
-
- var load_data = function() {
-       // $.getJSON(Moorings.PATH + 'requests/get_mooring_overview.php?units=' + Moorings.units, function(jsonData) {
-       //http://localhost:8000/services/dd/mooring-last-data?id_platform=26&mode=overview
-      // http://localhost:8000/services/dd/mooring-last-data?id_platform=26&mode=overview 
-
-       // url = settings.DATADISCOVERY_URL + '/mooring-last-data?id_platform=' + str(id_platform) + '&mode=catalog'
-     var   id_platform = 26;
-    list = {} ;
-
-        // $.getJSON( 'http://localhost:8000/services/dd/mooring-last-data?id_platform=26&mode=overview' , function(jsonData) {
-        $.getJSON( 'http://localhost:8000/services/dd/mooring-last-data?id_platform=' + '26' + '&mode=catalog', function(jsonData) {
-           
-          console.log(jsonData);
-
-          list = jsonData;
-         //variables = [];
-          var items = [];
-          var value;
-          /*for (var j = 0, lj = list.jsonInstrumentList.length; j < lj; j++) {
-                var variables = list.jsonInstrumentList[j].jsonVariableList;
-
-                for (var k = 0, lk = variables.length; k < lk; k++) {
-
-                    if (!variables[variables[k].standardName])
-                        variables[variables[k].standardName] = [];
-
-                    value = variables[k].lastSampleValue;
-                    value = value.replace(/(.*) ([\w])(-1)/, "$1/$2");
-                    value = value.replace(/(.*) C$/, "$1 °C");
-                    variables[variables[k].standardName].push({
-                        'value': value,
-                        'name': variables[k].displayName,
-                        'id': variables[k].id,
-                        'instrument': {
-                            'id': list.jsonInstrumentList[j].id,
-                            'name': list.jsonInstrumentList[j].displayName,
-
-                         },
-                    });
-                    
+        platform.variables = {};
+        var value;
+        for (var j = 0, lj = list_moorings[i].jsonInstrumentList.length; j < lj; j++) {
+            var variables = list_moorings[i].jsonInstrumentList[j].jsonVariableList;
+            for (var k = 0, lk = variables.length; k < lk; k++) {
+                // Remove gust direction
+                if (variables[k].displayName.indexOf(' gust ') > 0) {
+                    continue;
                 }
-            }*/
-          
-      for (var j = 0, lj = list.jsonInstrumentList.length; j < lj; j++) {
-        // var value;
-        variables1 = list.jsonInstrumentList[j].jsonVariableList;
 
-        //console.log(variables1);
+                if (!platform.variables[variables[k].standardName])
+                    platform.variables[variables[k].standardName] = [];
 
-        for (var k = 0, lk = variables1.length; k < lk; k++) {
-
-          value = variables1[k].lastSampleValue;
-          value = value.replace(/(.*) ([\w])(-1)/, "$1/$2");
-          value = value.replace(/(.*) C$/, "$1 °C");
-
-          /*     variables1[variables1[k].standardName].push({
-          'value': value,
-          'name': variables1[k].displayName,
-          'id': variables1[k].id,
-          'instrument': {
-            'id': list.jsonInstrumentList[j].id,
-            'name': list.jsonInstrumentList[j].displayName
-          //  el.innerHTML= '<li>'+'<i '+ list.jsonInstrumentList[j].id +'"></i>'+'</li>';
-          // var  out = list.jsonInstrumentList[j].id;
-          },
-          });*/
-
-          if (variables1[k].id == '11075' ){
-
-          // items.push("<li id='" + variables1[k].id + "'>" + variables1[k].displayName + ' '+':'+ ' '+ variables1[k].lastValue +' '+variables1[k].inputUnits +"</li>");
-          // items.push(variables1[k].displayName + '<br>'+' '+':'+ ' '+ variables1[k].lastValue +' '+'°'+variables1[k].inputUnits +'<br>');
-          // items.push(variables1[k].displayName + '<br>'+ ' '+ variables1[k].lastValue +' '+'°'+variables1[k].inputUnits +'<br>');
-           items.push(variables1[k].displayName +':'+' '+ variables1[k].lastValue +' '+'°'+variables1[k].inputUnits +'<br>');
-          //items.push("<li id='" + list.jsonInstrumentList[j].jsonVariableList[j].id + "'>" + variables1[k].displayName + ' '+':'+ ' '+ variables1[k].lastValue + ' '+variables1[k].inputUnits +"</li>");
-          console.log(items);
-          }
-
-          // el.innerHTML= '<li>'+'<i '+ variables1[k].id +'"></i>'+'</li>';  
-          document.getElementById("id_station").innerHTML = items;
-
+                value = variables[k].lastSampleValue;
+                value = value.replace(/(.*) ([\w])(-1)/, "$1/$2");
+                value = value.replace(/(.*) C$/, "$1 °C");
+                platform.variables[variables[k].standardName].push({
+                    'value': value,
+                    'name': variables[k].displayName,
+                    'id': variables[k].id,
+                    'instrument': {
+                        'id': list_moorings[i].jsonInstrumentList[j].id,
+                        'name': list_moorings[i].jsonInstrumentList[j].displayName
+                    }
+                });
+                if (variables[k].id == '11075' ){
+                   items.push(variables[k].displayName +':'+' '+ variables[k].lastValue +' '+'°'+variables[k].inputUnits);
+                  //items.push("<li id='" + list.jsonInstrumentList[j].jsonVariableList[j].id + "'>" + variables1[k].displayName + ' '+':'+ ' '+ variables1[k].lastValue + ' '+variables1[k].inputUnits +"</li>");
+                }
+               // el.innerHTML= '<li>'+'<i '+ variables1[k].id +'"></i>'+'</li>';  
+                document.getElementById("id_station").innerHTML = items;
+            }
         }
-      }
-    })  
-  } 
 
-//&id_platform=26&id_variable=10476  Air presssure
-//id_platform=26&id_variable=11075  Air temperature
-//&id_platform=26&id_variable=10477   Sea level
+      }
+    }
+  })
+}
+
+
 
 
 $(function() {
     wmop();
-    load_data();
+    load_moorings();
+
 });
 
 
-
-
-
-
-
+var leyenda1 = "<iframe src='"+ "http://gis.socib.es/geoserver/ows?service=WMS&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=bal_sa_costa_2012" +"' width='750' height='400' frameborder='0' ></iframe>" ;
  
-  var leyenda1 = '<img src= "http://gis.socib.es/geoserver/ows?service=WMS&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=bal_sa_costa_2012"  />';  //width="700" height="auto"
-  document.getElementById('id_legend1').innerHTML = leyenda1; 
+ // var leyenda1 = '<img src= "http://gis.socib.es/geoserver/ows?service=WMS&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=bal_sa_costa_2012" width="800" height="auto" />';  //width="700" height="auto"
+document.getElementById('id_legend1').innerHTML = leyenda1; 
 
 
 
-/*
-var leyenda = '<img src= "http://gis.socib.es/geoserver/ows?service=WMS&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=bal_sa_costa_2012" />';
-document.getElementById('legend-wrapper-outside2').innerHTML = leyenda;  
-
-document.getElementById('legend-wrapper-outside2').style.display="none";
-
-function toggleVisibility(){
-
-if(document.getElementById('legend-wrapper-outside2').style.display=="block")
-  document.getElementById('legend-wrapper-outside2').style.display="none";
-else
-  document.getElementById('legend-wrapper-outside2').style.display="block";
-}
-*/
-
-
-
-
-
-
-
- 

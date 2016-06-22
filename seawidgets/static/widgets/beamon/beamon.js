@@ -50,10 +50,6 @@
       
       if (this.get('type') !== undefined && this.get('type') == 'timelapse') {
         url = '/beamon/' + this.get('location') + '/' + this.get('cameras') + '/today';
-     
-      //if (this.get('type') !== undefined && this.get('type') == 'timelapse') {
-      //  url =  this.get('url') + '/today/'.image;  
-      //} else if (this.get('type') !== undefined && this.get('type') == 'waveforecast') {  //Cambia unicament aquesta part
       } else  if (this.get('type') !== undefined && this.get('type') == 'waveforecast') {      
         url = '/sapo/' + this.get('location') + '/latest';
       } else  if (this.get('type') !== undefined && this.get('type') == 'photogallery') {      
@@ -61,7 +57,7 @@
       }else {
         url = '/beamon/' + this.get('location') + '/' + this.get('cameras') + '/latest_mobile';
       }
-      $.getJSON(url, function(data) {   //http://www.socib.es/users/iserra/images-diving'  http://www.socib.es/users/iserra/images-diving
+      $.getJSON(url, function(data) {   
         images = [];
         texts = [];
         cameras = [];

@@ -1,0 +1,11 @@
+.legend-wrapper-outside{ 
+  left: 50px;
+}
+.leaflet-bar-timecontrol{
+  left: 50px;
+}
+
+ .legend-text{
+    text-align: justify;
+    font-size: 16px;
+} 
