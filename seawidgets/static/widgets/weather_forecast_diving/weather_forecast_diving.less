@@ -19,17 +19,17 @@
 .widget-weather-forecast_diving{
   position: relative;
 
-  .wf-weeksummary{  /*   No precipitation throughout the week, with temperatures rising to 35°C */
+  .wf-weeksummary{  
     text-align: center;
     font-size: 14px;
-    line-height: 22px;  /*22*/
+    line-height: 22px; 
     margin: 10px 5px;
     min-height: 44px;
     color: @secondary-title-color;
   }
 
   .wf-prediction {
-    margin-bottom: 4px;  /*4px*/
+    margin-bottom: 4px;  
 
     .wf-summary{
       font-size: 12px;
@@ -39,10 +39,10 @@
     }
   
     .wf-day{
-      font-size: 15.68px;  /*17.68 */
+      font-size: 15.68px;  
       text-align: center;
       margin-top: 10px;
-     /* width: 10%; */    /*80%  100%*/
+      width: 100%;    
     }
     .wf-table-variables {
       font-size: 11.3px;
@@ -52,12 +52,12 @@
 
       .wf-variable-name {
           border-left: 1px solid @secondary-background-color;
-          font-size: 11.3px;  /* 11.3px; */
-          background-position: 70% 40%;   /*50% 10%;*/
+          font-size: 11.3px;  
+          background-position: 50% 10%;    
           background-repeat: no-repeat;
-          padding-top: 50px;  /*20px*/
+          padding-top: 35px;  /*20px,50px*/
           padding-bottom: 4px;
-          line-height: 10px;  /*10px  */
+          line-height: 10px; 
 
 
           &.wf-temperature {
@@ -68,7 +68,7 @@
           }
           &.wf-wind {
             background-image: url('/static/widgets/weather_forecast_diving/images/wind_speed.png');
-            //text-align: center;
+            
           }
           &.wf-humidity {
             background-image: url('/static/widgets/weather_forecast_diving/images/relative_humidity.png');  //relative_humidity
@@ -93,26 +93,21 @@
       }
       .wf-variable{
        border-left: 1px solid @secondary-background-color;
-        margin: 5px;
-       /* width: 50px;*/
-       /* height: 100%;*/  /*100%*/
+        margin: 5px;   /*  0px; */
+        height: 100%; 
         font-size: 14.6px;
-        line-height: 20px;  /* 14px */
+        line-height: 20px;  
         vertical-align: top;
-        padding-bottom: 6px;  /* 6px*/
+        padding-bottom: 6px;  
           .wf-units{
             color: @secondary-title-color;
             font-size: 9.7px;
-            line-height: 19px;  /* line-height: 13px; */
+            line-height: 19px;  
           }
           &.wf-humidity {
-            font-size: 15.4px; /*19.4*/
+            font-size: 15.4px; 
             vertical-align: middle;
           }
-        /*  &.wf-humidity {
-            font-size: 12.5px;   
-            vertical-align: middle;
-          }*/
           &.wf-pressure {
             font-size: 13.5px;
           }
@@ -166,7 +161,7 @@
     list-style: none;
     clear:left;
     list-style:none;
-    margin:0px 0px 0px 25px;  /* 10px */
+    margin:0px 0px 0px 20px; 
     padding:20px;
     position:relative;
     text-align:center;
@@ -276,7 +271,7 @@
     margin-top: 0px;
   }
 
-  @media (max-width: 767x) {  /* 767 */
+  @media (max-width: 767x) {  
     .wf-prediction {
       height: 100%;
     }
