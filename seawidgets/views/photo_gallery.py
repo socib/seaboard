@@ -14,33 +14,39 @@ def list_images(request, location):
     """
     test_data = [
         {
-            "image": "http://www.socib.es/users/iserra/images-diving/jellyfish.jpg",
+            "image": "/static/images-diving/jellyfish.jpg",
             "title": " Jellyfish (Pelagia noctiluca) "
         },
         {
-            "image": "http://www.socib.es/users/iserra/images-diving/Barracudes.jpg",
+            "image": "/static/images-diving/barracudes.jpg",
             "title": "Barracuda (Sphyraena)"
         },
         {
-            "image": "http://www.socib.es/users/iserra/images-diving/Nudibrach.jpg",
+            "image": "/static/images-diving/nudibrach.jpg",
             "title": "Nudibrach (Flabellina ischitana)"
         },
         {
-            "image": "http://www.socib.es/users/iserra/images-diving/Rainbow_wrasse.jpg",
+            "image": "/static/images-diving/rainbow_wrasse.jpg",
             "title": "Rainbow wrasse (Coris julis)"
         },
         {
-            "image": "http://www.socib.es/users/iserra/images-diving/sea_eltoro.jpg",
+            "image": "/static/images-diving/sea_eltoro.jpg",
             "title": " "
         },
         {
-            "image": "http://www.socib.es/users/iserra/images-diving/Smoothtrunkfish.jpg",
+            "image": "/static/images-diving/smoothtrunkfish.jpg",
             "title": "Smooth trunkfish (Lactophys triqueter) "
         }, {
-            "image": "http://www.socib.es/users/iserra/images-diving/Forkbeard.jpg",
+
+            "image": "/static/images-diving/forkbeard.jpg",
             "title": "Forkbeard (Phycis phycis)"
+        },
+        {
+            "image": "/static/images-diving/seahorse.jpg",
+            "title": "Seahorse (Hippocampus guttulatus)"
         }
     ]
+
 
     json = simplejson.dumps(test_data)
     return HttpResponse(json, mimetype='application/json')

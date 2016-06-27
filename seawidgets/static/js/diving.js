@@ -476,20 +476,27 @@ NCWMSGridTimeseriesViewer.prototype.createMap = function(map) {
                 attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
             });  
             
-            var wmsideib = L.tileLayer.wms("http://ideib.caib.es/pub_ideib/public/Relleu/MapServer/WMSServer",{
-                layers: '5',   //56,55,54,52,51,50,48,47,46,45,43,42,41,39,38,37,36
-                format: 'image/png',
-                transparent: true,
-                opacity: 0.8  
-            });
 
-            var icon_buoy = L.icon({
-                iconUrl: '../static/mooring/images/buoy.png'  
+            var icon_station= L.icon({
+                iconUrl: '../static/images/sea_level.png',
+                iconSize: [30, 30],
+                popupAnchor: [-3, -5],
+                iconAnchor: [10, 10],
+                labelAnchor: [6, 0] 
                //conSize: [38, 95], // size of the icon
                 });
            
-            var station = L.marker([39.54419, 2.378461], {icon: icon_buoy}); 
-            station.addTo(this.map);
+            var labelDirection = 'right';
+            var label = 'Andratx';
+            var station = L.marker([39.54419, 2.378461], {icon: icon_station}).bindLabel(label, {
+                noHide: true,
+                direction: labelDirection
+                }); 
+
+            station.addTo(this.map).showLabel();
+
+            station.bindPopup('');
+            station._popup.station = station;
            
             var baseGroupLayer = L.layerGroup([bathymetryLayer,osmLayer]);     //bathymetryLayer, wmsideib  osmLayer
             baseGroupLayer.addTo(this.map);
@@ -1105,7 +1112,7 @@ function wmop() {
 
 var load_moorings = function(){  // + Moorings.units, function(jsonData)
 
-    $.getJSON( 'http://localhost:8000/services/dd/list-moorings?', function(data) {
+    $.getJSON( '/services/dd/list-moorings?', function(data) {
 
     var id_platform = 26;   
     platform = {} ;
@@ -1174,17 +1181,19 @@ var load_moorings = function(){  // + Moorings.units, function(jsonData)
 
 
 
+
 $(function() {
     wmop();
     load_moorings();
+   
 
 });
 
 
-var leyenda1 = "<iframe src='"+ "http://gis.socib.es/geoserver/ows?service=WMS&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=bal_sa_costa_2012" +"' width='750' height='400' frameborder='0' ></iframe>" ;
+var leyenda_wms = "<iframe src='"+ "http://gis.socib.es/geoserver/ows?service=WMS&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=bal_sa_costa_2012" +"' width='800'  frameborder='0' scrolling='auto' ></iframe>" ;
  
  // var leyenda1 = '<img src= "http://gis.socib.es/geoserver/ows?service=WMS&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=bal_sa_costa_2012" width="800" height="auto" />';  //width="700" height="auto"
-document.getElementById('id_legend1').innerHTML = leyenda1; 
+document.getElementById('id_legend').innerHTML = leyenda_wms; 
 
 
 
