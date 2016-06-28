@@ -1180,20 +1180,14 @@ var load_moorings = function(){  // + Moorings.units, function(jsonData)
 
 
 
-
-
 $(function() {
     wmop();
     load_moorings();
-   
-
 });
 
 
-var leyenda_wms = "<iframe src='"+ "http://gis.socib.es/geoserver/ows?service=WMS&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=bal_sa_costa_2012" +"' width='800'  frameborder='0' scrolling='auto' ></iframe>" ;
- 
- // var leyenda1 = '<img src= "http://gis.socib.es/geoserver/ows?service=WMS&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=bal_sa_costa_2012" width="800" height="auto" />';  //width="700" height="auto"
-document.getElementById('id_legend').innerHTML = leyenda_wms; 
+var leyenda_wms = "<img src='"+ "http://gis.socib.es/geoserver/ows?service=WMS&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=bal_sa_costa_2012" +"' width='750' ></img>" ;
 
+document.getElementById('id_legend').innerHTML = leyenda_wms; 
 
 

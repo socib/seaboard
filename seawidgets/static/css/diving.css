@@ -4,8 +4,19 @@
 .leaflet-bar-timecontrol{
   left: 50px;
 }
-
- .legend-text{
-    text-align: justify;
-    font-size: 16px;
+.legend-text{
+  text-align: justify;
+  font-size: 16px;
 } 
+.leaflet-control-zoom {
+  left: 50px;
+}
+.sidebar-content {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.95);
+  overflow: auto;
+  /*overflow-x: hidden;
+  overflow-y: auto;*/ 
+}
