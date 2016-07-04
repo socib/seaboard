@@ -11,9 +11,40 @@
   <div class="row">
     <div class="span12">
       <header>
+         <div style="position:right; top: 0px;">  <!--right:300px;-->
+            <div class="header_language">
+            <a href="" ><img src="/static/images/flags/es.gif" width=16 height=10 alt="" /></a>
+            <a href="" ><img src="/static/images/flags/eng.gif" width=16 height=10 alt="" /></a></div>                
+          </div>
     	  <div class="logo-socib"><img src="/static/images/logo_Socib.png" /></div>
-    	  <div data-id="proud" data-view="Text" data-title="SOCIB seaBoard for diving activities" data-text="SOCIB is a Coastal Ocean Observing and Forecasting System located in the Balearic Islands" ></div>
-    	  <div style="clear: both;"></div>
+         
+    <!--    <form style="max-width: 200px;" class="navbar-form navbar-right"
+              action="/i18n/setlang/" method="post">
+            <div class="form-group">
+                <input type='hidden' name='csrfmiddlewaretoken' value='oAPEm7OGgF9qYQkfm2Dn1HD4QuLculsu' />
+                <input name="next" type="hidden" value="/"/>
+                <select class="selectpicker show-tick form-control" name="language"
+                        onchange="this.form.submit()" data-style="btn-inverse">
+                    
+                    
+                        <option value="es">
+                            Español
+                        </option>
+                    
+                        <option value="ca"
+                                selected="selected">
+                            Català
+                        </option>
+                    
+                        <option value="en">
+                            English
+                        </option>
+                    
+                </select>
+            </div>
+        </form>-->
+    	  <div data-id="proud" data-view="Text" data-title="Maritime state for underwater activities" ></div>   
+    	  <div style="clear: both;"></div>      
       </header>
     </div>
   </div>
@@ -27,10 +58,9 @@
             <div class="sidebar-tabs">
               <ul role="tablist">
                 <li><a href="#legend" role="tab" data-toggle="tooltip" title="Legend"><i class="fa fa-bars"></i></a></li>
-                <li><a href="#participate" role="tab" data-toggle="tooltip" title="Participate"><i class="fa fa-user"></i></a></li>
               </ul>
             </div>
-    			  <div class="sidebar-content">
+    			 <div class="sidebar-content">
               <div class="sidebar-pane" id="legend">
                 <h3 class="sidebar-header">
                 Legend
@@ -38,9 +68,6 @@
                 </h3>
                 <p class='legend-text'>Enviromental Sensitivity of the Coastline</p><br>
                 <div id="id_legend"> </div>
-              </div>
-              <div class="sidebar-pane" id="participate">
-                <h3 class="sidebar-header">Participate<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h3>
               </div>
     			  </div>
     		  </div>
@@ -51,14 +78,17 @@
       <section class="prediction">
           <div data-id="forecast" data-view="WeatherForecastDiving" data-location="{{ location.code }}" data-days="3" data-title="Weather forecast"></div>
           <div data-id="beamon" data-view="Beamon" data-location="{{ location.zone.code }}" data-type="photogallery" data-title="Diving photography"></div>  
-           <div >
-                The photographs have been provided by <a href="https://www.instagram.com/">M. Gomila</a> 
-           </div>
+          
       </section>
     </div> 
   </div>
 <div class="row">
   <div class="span7"> 
+      <section class="info">         
+      <div data-id="sea_water_temperature" data-view="VesselChart" data-title="Sea Water Temperature"></div>       
+      </section>
+    </div>    
+  <div class="span5"> 
     <section class="status">
       <h4 class="section" id="vessel-position">Tools and resources</h4></br>
         <ul class="nav nav-tabs nav-stacked">  
@@ -76,8 +106,15 @@
           <li><a href="http://gis.socib.es/sacosta/composer">SACOSTA (Environmental Sensitivity of the Coastline)</a></li> 
         </ul>
     </section> 
-
   </div>
+
+ <!-- <section class="info">  
+  <div class="container">  
+    <div class="row">-->
+                    
+   <!-- </div>
+  </div>
+</section>-->
 </div>
 <footer>
   <div class="container">
@@ -115,6 +152,7 @@
 <script src="{% static "widgets/weather_forecast_diving/weather_forecast_diving.js" %}" ></script>
 <script src="{% static "widgets/weather_forecast/weather_forecast.js" %}" ></script>
 <script src="{% static "widgets/weather_station_variable/weather_station_variable.js" %}" ></script>
+<script src="{% static "widgets/vessel_chart/vessel_chart.js" %}" ></script>
 <script src="{% static "widgets/rss/rss.js" %}" ></script>
 <script src="{% static "js/Highstock-2.0.4/highstock.js" %}"></script>
 
@@ -129,7 +167,10 @@
 <script type="text/javascript" src="{% static "js/ncgridtimeseries/leaflet.timedimension.circlelabelmarker.js" %}"></script>
 <script type="text/javascript" src="{% static "js/leaflet-0.6.2/leaflet.label.js" %}"></script>
 <script type="text/javascript" src="{% static "js/leaflet-plugins/leaflet-sidebar.js" %}"></script>
+<script type="text/javascript" src="{% static "js/leaflet-plugins/proj4-compressed.js" %}"></script>
+<script type="text/javascript" src="{% static "js/leaflet-plugins/proj4leaflet.js" %}"></script>
 <script src="{% static "js/diving.js" %}" ></script>
+<!--<script src="{% static "js/seawidgets-vessel.application.js" %}" ></script>-->
 
 
 <script src="{% static "js/seawidgets.application.js" %}" ></script>

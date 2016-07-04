@@ -15,7 +15,7 @@ def list_images(request, location):
     test_data = [
         {
             "image": "/static/images-diving/jellyfish.jpg",
-            "title": " Jellyfish (Pelagia noctiluca) "
+            "title": " Jellyfish (Pelagia noctiluca) "          
         },
         {
             "image": "/static/images-diving/barracudes.jpg",
@@ -31,12 +31,13 @@ def list_images(request, location):
         },
         {
             "image": "/static/images-diving/sea_eltoro.jpg",
-            "title": " "
+            "title": "Enviroment sea"
         },
         {
-            "image": "/static/images-diving/smoothtrunkfish.jpg",
-            "title": "Smooth trunkfish (Lactophys triqueter) "
-        }, {
+            "image": "/static/images-diving/mysid_shrimps.jpg",
+            "title": "Mysid shrimps"
+        },
+        {
 
             "image": "/static/images-diving/forkbeard.jpg",
             "title": "Forkbeard (Phycis phycis)"
