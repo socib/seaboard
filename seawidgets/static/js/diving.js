@@ -23,7 +23,7 @@
     }
     this.addLayersToMap();
 
-}; 
+};
 
 NCWMSGridTimeseriesViewer.prototype.addLayersToMap = function() {
     if (this.pendingLayers > 0)
