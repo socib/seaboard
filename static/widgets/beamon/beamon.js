@@ -49,8 +49,8 @@
 
       if (this.get('type') !== undefined && this.get('type') == 'timelapse') {
         url = '/beamon/' + this.get('location') + '/' + this.get('cameras') + '/today';
-      } else if (this.get('type') !== undefined && this.get('type') == 'waveforecast') {
-        url = '/sapo/' + this.get('location') + '/latest';
+      } else if (this.get('type') !== undefined && this.get('type') == 'waveforecast') {    //Cambia unicament aquesta part
+        url = '/sapo/' + this.get('location') + '/latest';                                  //Cambia unicament aquesta part
       }else {
         url = '/beamon/' + this.get('location') + '/' + this.get('cameras') + '/latest_mobile';
       }
@@ -86,7 +86,7 @@
     Beamon.prototype.showNoImage = function() {
       var no_image = '/static/widgets/beamon/images/no_image.png';
       if (this.get('type') != undefined && this.get('type') == 'waveforecast') {
-        no_image = '/static/widgets/beamon/images/no_image_sapo.png';
+        no_image = '/static/widgets/beamon/images/no_image_sapo.png';    //Cuando no tenemos ninugna imagen
       }
 
       $(this.node).find('.beamon-image').backstretch(no_image, ['Waves forecast'] ,{
