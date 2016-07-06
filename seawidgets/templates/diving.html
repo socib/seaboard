@@ -17,6 +17,32 @@
             <a href="" ><img src="/static/images/flags/eng.gif" width=16 height=10 alt="" /></a></div>                
           </div>
     	  <div class="logo-socib"><img src="/static/images/logo_Socib.png" /></div>
+         
+    <!--    <form style="max-width: 200px;" class="navbar-form navbar-right"
+              action="/i18n/setlang/" method="post">
+            <div class="form-group">
+                <input type='hidden' name='csrfmiddlewaretoken' value='oAPEm7OGgF9qYQkfm2Dn1HD4QuLculsu' />
+                <input name="next" type="hidden" value="/"/>
+                <select class="selectpicker show-tick form-control" name="language"
+                        onchange="this.form.submit()" data-style="btn-inverse">
+                    
+                    
+                        <option value="es">
+                            Español
+                        </option>
+                    
+                        <option value="ca"
+                                selected="selected">
+                            Català
+                        </option>
+                    
+                        <option value="en">
+                            English
+                        </option>
+                    
+                </select>
+            </div>
+        </form>-->
     	  <div data-id="proud" data-view="Text" data-title="Maritime state for underwater activities" ></div>   
     	  <div style="clear: both;"></div>      
       </header>
@@ -59,7 +85,7 @@
 <div class="row">
   <div class="span7"> 
       <section class="info">         
-        <div id="chart_climatology" style="width: 600px; height: 400px;"></div>  
+      <div data-id="sea_water_temperature" data-view="VesselChart" data-title="Sea Water Temperature"></div>       
       </section>
     </div>    
   <div class="span5"> 
@@ -144,16 +170,15 @@
 <script type="text/javascript" src="{% static "js/leaflet-plugins/proj4-compressed.js" %}"></script>
 <script type="text/javascript" src="{% static "js/leaflet-plugins/proj4leaflet.js" %}"></script>
 <script src="{% static "js/diving.js" %}" ></script>
-
+<!--<script src="{% static "js/seawidgets-vessel.application.js" %}" ></script>-->
 
 
 <script src="{% static "js/seawidgets.application.js" %}" ></script>
 
 
 {% endblock page_js %}
-<script type="text/javascript">
 
-</script>
+
 {% block page_css %}
   <link rel="stylesheet" href="{% static "js/leaflet-0.7.3/leaflet.css" %}" />
   <link rel="stylesheet" href="{% static "js/leaflet-plugins/Control.FullScreen.css" %}" />
