@@ -15,44 +15,36 @@ def list_images(request, location):
     test_data = [
         {
             "image": "/static/images-diving/jellyfish.jpg",
-            "title": " Jellyfish (Pelagia noctiluca) ",
-            "autor": "Miquel Gomila (@miknuk)"
+            "title": " Jellyfish (Pelagia noctiluca) "          
         },
         {
             "image": "/static/images-diving/barracudes.jpg",
-            "title": "Barracuda (Sphyraena)",
-            "autor": "Miquel Gomila (@miknuk)"
+            "title": "Barracuda (Sphyraena)"
         },
         {
             "image": "/static/images-diving/nudibrach.jpg",
-            "title": "Nudibrach (Flabellina ischitana)",
-            "autor": "Miquel Gomila (@miknuk)"
+            "title": "Nudibrach (Flabellina ischitana)"
         },
         {
             "image": "/static/images-diving/rainbow_wrasse.jpg",
-            "title": "Rainbow wrasse (Coris julis)",
-            "autor": "Miquel Gomila (@miknuk)"
+            "title": "Rainbow wrasse (Coris julis)"
         },
         {
             "image": "/static/images-diving/sea_eltoro.jpg",
-            "title": "enviroment sea",
-            "autor": "Miquel Gomila (@miknuk)"
+            "title": "Enviroment sea"
         },
         {
             "image": "/static/images-diving/mysid_shrimps.jpg",
-            "title": "Mysid shrimps",
-            "autor": "Miquel Gomila (@miknuk)"
+            "title": "Mysid shrimps"
         },
         {
 
             "image": "/static/images-diving/forkbeard.jpg",
-            "title": "Forkbeard (Phycis phycis)",
-            "autor": "Miquel Gomila (@miknuk)"
+            "title": "Forkbeard (Phycis phycis)"
         },
         {
             "image": "/static/images-diving/seahorse.jpg",
-            "title": "Seahorse (Hippocampus guttulatus)",
-            "autor": "Miquel Gomila (@miknuk)"
+            "title": "Seahorse (Hippocampus guttulatus)"
         }
     ]
 
