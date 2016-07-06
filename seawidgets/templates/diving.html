@@ -85,7 +85,7 @@
 <div class="row">
   <div class="span7"> 
       <section class="info">         
-      <div data-id="sea_water_temperature" data-view="VesselChart" data-title="Sea Water Temperature"></div>       
+        <div id="chart" style="width: 800px; height: 400px; margin: 0 auto"></div>    <!--<div id="container" style="width: 800px; height: 400px; margin: 0 auto"></div>-->   
       </section>
     </div>    
   <div class="span5"> 
@@ -177,8 +177,9 @@
 
 
 {% endblock page_js %}
+<script type="text/javascript">
 
-
+</script>
 {% block page_css %}
   <link rel="stylesheet" href="{% static "js/leaflet-0.7.3/leaflet.css" %}" />
   <link rel="stylesheet" href="{% static "js/leaflet-plugins/Control.FullScreen.css" %}" />
