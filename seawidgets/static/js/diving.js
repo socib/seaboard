@@ -494,6 +494,17 @@ NCWMSGridTimeseriesViewer.prototype.createMap = function(map) {
                 attribution: 'Base -IDEIB MDE'      
             });
 
+
+            var wms_batimetric50 = L.tileLayer.wms("http://ideib.caib.es/pub_ideib/public/MDE/MapServer/WMSServer?",{
+                layers: '38',  //Batimétric 50.000
+                format: 'image/png',
+                crs: crs25831,    //crs: crs25831,
+                transparent: true,
+                continuousWorld: true,
+                version: '1.3.0',
+                attribution: 'IDEIB CAIB Batimètric'      
+            });
+
             var wmsideib20M = L.tileLayer.wms("http://ideib.caib.es/pub_ideib/public/MTIB/MapServer/WMSServer?",{
                 layers: '36',  //E020M  Batimètric  
                 format: 'image/png',
@@ -541,6 +552,16 @@ NCWMSGridTimeseriesViewer.prototype.createMap = function(map) {
                 continuousWorld: true,
                 version: '1.3.0',
                 attribution: 'Base - IEO-Naturaleza del fondo Marino'      
+            });
+
+             var wms_reservasmarinas = L.tileLayer.wms("http://ideib.caib.es/pub_ideib/public/TEMATIC-LIMITS/MapServer/WMSServer",{
+                layers: '15',  //Naturaleza del fondo Marino
+                format: 'image/png',
+                crs: crs25831,    //crs: crs25831,
+                transparent: false,
+                continuousWorld: true,
+                version: '1.3.0',
+                attribution: 'IDEIB - reservas marinas'      
             });
 
             var Spain_IGNBase = L.tileLayer.wms('http://www.ign.es/wms-inspire/ign-base', {
@@ -627,7 +648,7 @@ NCWMSGridTimeseriesViewer.prototype.createMap = function(map) {
         }).addTo(this.map);
     }
    // var overlayMaps = {"Emodnet bathymetry":bathymetryLayer,"IEO -Isobatas": wmsieo,"IEO-Naturaleza del fondo Marino": wmsieo_naturalezamarino ,"IDEIB-E020M  Batimètric":wmsideib20M};
-    var overlayMaps = {"Emodnet bathymetry":bathymetryLayer,"IEO -Isobatas": wmsieo,"IDEIB-E020M  Batimètric":wmsideib20M};
+    var overlayMaps = {"Emodnet bathymetry":bathymetryLayer,"IEO -Isobatas": wmsieo,"IDEIB-E020M  Batimètric":wmsideib20M,"IDEIB-Reservas marinas":wms_reservasmarinas, "IDEIB_CAIB Batimètric":wms_batimetric50};
    // var overlayMaps = {};
     this.layerControl = L.control.layers(this.baseMaps,overlayMaps);
 
@@ -1224,68 +1245,280 @@ var load_moorings = function(){  // + Moorings.units, function(jsonData)
         var items = [];
         list_moorings = data;
 
-        for (var i = 0, l = list_moorings.length; i < l; i++) {
-            if (list_moorings[i].id == id_platform) {
-                platform.index = i;
-                platform.id = list_moorings[i].id;
-                platform.lat = (parseFloat(list_moorings[i].boundingBox[1]) + parseFloat(list_moorings[i].boundingBox[0])) / 2;
-                platform.lon = (parseFloat(list_moorings[i].boundingBox[3]) + parseFloat(list_moorings[i].boundingBox[2])) / 2;
-                platform.name = list_moorings[i].name
-                .replace("Station", "")
-                .replace("Buoy", "")
-                .replace("Mobims", "")
-                .trim();
+            for (var i = 0, l = list_moorings.length; i < l; i++) {
+                if (list_moorings[i].id == id_platform) {
+                    platform.index = i;
+                    platform.id = list_moorings[i].id;
+                    platform.lat = (parseFloat(list_moorings[i].boundingBox[1]) + parseFloat(list_moorings[i].boundingBox[0])) / 2;
+                    platform.lon = (parseFloat(list_moorings[i].boundingBox[3]) + parseFloat(list_moorings[i].boundingBox[2])) / 2;
+                    platform.name = list_moorings[i].name
+                    .replace("Station", "")
+                    .replace("Buoy", "")
+                    .replace("Mobims", "")
+                    .trim();
 
-                platform.platformType = list_moorings[i].platformType;
-                platform.state = list_moorings[i].state;
-                platform.icon = list_moorings[i].icon;
-                platform.lastTimeSampleReceived = list_moorings[i].lastTimeSampleReceived;
+                    platform.platformType = list_moorings[i].platformType;
+                    platform.state = list_moorings[i].state;
+                    platform.icon = list_moorings[i].icon;
+                    platform.lastTimeSampleReceived = list_moorings[i].lastTimeSampleReceived;
 
-                if (platform.variables)
-                    delete platform.variables;
+                    if (platform.variables)
+                        delete platform.variables;
 
-                platform.variables = {};
-                var value;
-                for (var j = 0, lj = list_moorings[i].jsonInstrumentList.length; j < lj; j++) {
-                    var variables = list_moorings[i].jsonInstrumentList[j].jsonVariableList;
-                    for (var k = 0, lk = variables.length; k < lk; k++) {
-                // Remove gust direction
-                if (variables[k].displayName.indexOf(' gust ') > 0) {
-                    continue;
+                    platform.variables = {};
+                    var value;
+                    for (var j = 0, lj = list_moorings[i].jsonInstrumentList.length; j < lj; j++) {
+                        var variables = list_moorings[i].jsonInstrumentList[j].jsonVariableList;
+                        for (var k = 0, lk = variables.length; k < lk; k++) {
+                        // Remove gust direction
+                        if (variables[k].displayName.indexOf(' gust ') > 0) {
+                            continue;
+                        }
+
+                        if (!platform.variables[variables[k].standardName])
+                            platform.variables[variables[k].standardName] = [];
+
+                        value = variables[k].lastSampleValue;
+                        value = value.replace(/(.*) ([\w])(-1)/, "$1/$2");
+                        value = value.replace(/(.*) C$/, "$1 °C");
+                        platform.variables[variables[k].standardName].push({
+                            'value': value,
+                            'name': variables[k].displayName,
+                            'id': variables[k].id,
+                            'instrument': {
+                                'id': list_moorings[i].jsonInstrumentList[j].id,
+                                'name': list_moorings[i].jsonInstrumentList[j].displayName
+                            }
+                        });
+                        if (variables[k].id == '11075' ){
+                         items.push(variables[k].displayName +':'+' '+ variables[k].lastValue +' '+'°'+variables[k].inputUnits);
+                          //items.push("<li id='" + list.jsonInstrumentList[j].jsonVariableList[j].id + "'>" + variables1[k].displayName + ' '+':'+ ' '+ variables1[k].lastValue + ' '+variables1[k].inputUnits +"</li>");
+                      }
+                       // el.innerHTML= '<li>'+'<i '+ variables1[k].id +'"></i>'+'</li>';  
+                       document.getElementById("id_station").innerHTML = items;
+                   }
                 }
 
-                if (!platform.variables[variables[k].standardName])
-                    platform.variables[variables[k].standardName] = [];
+            }
+        }
+    })
+}
 
-                value = variables[k].lastSampleValue;
-                value = value.replace(/(.*) ([\w])(-1)/, "$1/$2");
-                value = value.replace(/(.*) C$/, "$1 °C");
-                platform.variables[variables[k].standardName].push({
-                    'value': value,
-                    'name': variables[k].displayName,
-                    'id': variables[k].id,
-                    'instrument': {
-                        'id': list_moorings[i].jsonInstrumentList[j].id,
-                        'name': list_moorings[i].jsonInstrumentList[j].displayName
+
+function processData(){
+
+    $.get('/static/js/profile_test.csv', function(data){ 
+        
+        list = data
+        //console.log(list);
+
+    data =[];
+
+        var lines = list.split('\n');
+
+        for (var i=1; i<lines.length; i++) {
+            var items = lines[i].split(',');
+            
+            data.push(items[0],items[1]);
+              /*  var tarr = [];
+                for (var j=0; j<list.length; j++) {
+                    tarr.push(list[j]+":"+data[items]);
+                }
+                lines.push(tarr);*/
+           
+        }
+        console.log(data);
+        return data;
+    });
+
+}
+
+function crearChart(){
+
+//processData(variable);
+//var data;
+
+// sStage1 = tempStage1.Replace("-9999", " ");
+
+      /*  data.push(variable);
+        return data;
+        console.log(data);*/
+    
+
+       //variable = tdp;
+        $('#chart_climatology').highcharts({
+            //custom_variable: variable,
+
+            chart: {
+                renderTo: 'chart_climatology',
+                type: 'spline',
+                inverted: true,
+                zoomType: 'x'
+
+            },
+
+            rangeSelector: {
+                selected: 1
+            },
+
+            title: {
+                text: 'Temperature profile'
+            },
+
+            xAxis: {
+                reversed: true,
+                title: {
+                    enabled: true,
+                    text: 'Depth (m)'
+                }/*,
+                labels: {
+                    formatter: function() {
+                        return this.value + ' m';
                     }
-                });
-                if (variables[k].id == '11075' ){
-                 items.push(variables[k].displayName +':'+' '+ variables[k].lastValue +' '+'°'+variables[k].inputUnits);
-                  //items.push("<li id='" + list.jsonInstrumentList[j].jsonVariableList[j].id + "'>" + variables1[k].displayName + ' '+':'+ ' '+ variables1[k].lastValue + ' '+variables1[k].inputUnits +"</li>");
-              }
-               // el.innerHTML= '<li>'+'<i '+ variables1[k].id +'"></i>'+'</li>';  
-               document.getElementById("id_station").innerHTML = items;
-           }
-       }
+                },
+                maxPadding: 0.05,
+                showLastLabel: true,
+                gridLineWidth: 2*/
 
-   }
+            },
+            yAxis: {
+                title: {
+                   // text: variable.standardName.replace(/_/g, ' ') + ' (' + variable.inputUnits + ')'
+                    text:'Temperature'
+                },
+              /*  labels: {
+                    formatter: function() {
+                        return this.value;
+                    }
+                },*/
+                lineWidth: 2
+            },
+            
+            legend: {
+                enabled: false
+            },
+            tooltip: {
+                //headerFormat: '<b><span style="color: {series.color};">{series.name}</span></b><br/>',
+               // pointFormat: '{point.x} m: {point.y} ' + variable.inputUnits
+            },
+            plotOptions: {
+                spline: {
+                    marker: {
+                        enabled: true,
+                        radius: 1.5,
+                        symbol: 'circle'
+
+                    },
+                    lineWidth: 2,
+                    connectNulls: false
+                }
+            },
+            series: [{
+                name: 'All visits',
+                lineWidth: 4,
+                marker: {
+                    radius: 4
+                }
+            }, {
+                name: 'New visitors'
+            }]
+        });
+
+    
 }
-})
+
+
+
+
+function _addNewSerie(chart, time) {
+    // verify this serie does not exist in the chartv
+    var found = false;
+    var length = chart.series.length;
+    for (var i = 0; i < length; i++) {
+        var serie = chart.series[i];
+        if (serie.options.custom_time == time) {
+            found = true;
+            break;
+        }
+    }
+
+    if (!found) {
+        var currentProfileIndex = time.toString();
+        var variable_name = chart.options.custom_variable.name;
+        var new_serie = {
+            type: 'spline',
+            name: variable_name + '<br/>at ' + _epochToDate(time * 1000).format('default', true),
+            color: profiles[currentProfileIndex].color,
+            data: (function() {
+                if (max_points == 0) {
+                    return _.zip(profiles[currentProfileIndex].data.DEPTH,
+                        profiles[currentProfileIndex].data[variable_name]);
+                } else {
+                    var length = profiles[currentProfileIndex].data.DEPTH.length - 1;
+                    var step = Math.floor(length / max_points);
+                    return _.zip(_.filter(profiles[currentProfileIndex].data.DEPTH, function(num, index) {
+                        return (index % step == 0 || index == length);
+                    }),
+                        _.filter(profiles[currentProfileIndex].data[variable_name], function(num, index) {
+                        return (index % step == 0 || index == length);
+                    }));
+                }
+            })(),
+            custom_time: time
+        };
+        chart.addSeries(new_serie, false, false);
+    }
 }
+
+
+
+
+
+function _getNewSerie(chart, time) {
+        // verify this serie does not exist in the chart
+        var found = false;
+        var length = chart.series.length;
+        for (var i = 0; i < length; i++) {
+            var serie = chart.series[i];
+            if (serie.options.custom_time == time) {
+                found = true;
+                return null;
+            }
+        }
+
+        //var currentProfileIndex = time.toString();
+        var variable_name = chart.options.custom_variable.name;
+        var new_serie = {
+            type: 'spline',
+            name: variable_name + '<br/>at ' + _epochToDate(time * 1000).format('default', true),
+            color: profiles[currentProfileIndex].color,
+            data: (function() {
+                if (max_points == 0) {
+                    return _.zip(profiles[currentProfileIndex].data.DEPTH,
+                        profiles[currentProfileIndex].data[variable_name]);
+                } else {
+                    var length = profiles[currentProfileIndex].data.DEPTH.length - 1;
+                    var step = Math.floor(length / max_points);
+                    return _.zip(_.filter(profiles[currentProfileIndex].data.DEPTH, function(num, index) {
+                        return (index % step == 0 || index == length);
+                    }),
+                        _.filter(profiles[currentProfileIndex].data[variable_name], function(num, index) {
+                        return (index % step == 0 || index == length);
+                    }));
+                }
+            })(),
+            custom_time: time
+        };
+        return new_serie;
+    }
+
 
 $(function() {
     wmop();
     load_moorings();
+   // processData();
+    crearChart();
+
 });
 
 
