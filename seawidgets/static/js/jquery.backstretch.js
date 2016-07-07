@@ -4,7 +4,7 @@
  *
  * Copyright (c) 2012 Scott Robbin
  * Licensed under the MIT license.
- */
+ */ 
 
 ;(function ($, window, undefined) {
   'use strict';
@@ -237,7 +237,7 @@
                         // "speed" option has been deprecated, but we want backwards compatibilty
 
                         // show overlay text
-                        self.$container.parent().find(".overlay").text(self.texts[index]);
+                        self.$container.parent().find(".overlay").html(self.texts[index]);
                         // show situatioin image
                         if (self.cameras.length > 0){
                           var situation = self.$container.find(".situation");
