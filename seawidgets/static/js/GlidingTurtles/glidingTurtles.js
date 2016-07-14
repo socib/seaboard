@@ -1,7 +1,7 @@
 var POSITION = [39.6145, 1.99363];
 var GTViewer = function(layers, container) {
     var currentTime = new Date();
-    currentTime.setUTCHours(currentTime.getUTCHours() + 1 , 0, 0, 0);
+    currentTime.setUTCHours(currentTime.getUTCHours() , 0, 0, 0);
     var endDate = new Date(currentTime.getTime());
     L.TimeDimension.Util.addTimeDuration(endDate, "P1D", true);
 
@@ -45,10 +45,11 @@ function iconByName(name) {
 function getPlatforms(viewer){
     var rt_map = viewer.getMap();
     var platforms = [
-        [276, 520, 'Mel','turtle_green','#608823','turtle'],
-        [107, 521, 'Glider','icon-glider','#F28826','glider'],
+        [278, 522, 'Pixel','turtle_green','#608823','turtle'],
+        [280, 524, 'Eddy','turtle_orange','#C06117','turtle'],
+        [103, 644, 'Glider','icon-glider','#E2DA26','glider']
         //[225964230, null,'SOCIB UNO','marker-boat','#FF0000','ship']
-        [224637000, null,'Marti i Soler','marker-boat','#FF0000','ship']
+        //[224637000, null,'Marti i Soler','marker-boat','#FF0000','ship']
     ];
 
     for (var i = 0, l = platforms.length; i < l; i++) {
@@ -75,26 +76,9 @@ function getPlatforms(viewer){
 function real_time() {
     var wms_sapo = 'http://thredds.socib.es/thredds/wms/operational_models/oceanographical/wave/model_run_aggregation/sapo_ib/sapo_ib_best.ncd';
     var wms_wmop = 'http://thredds.socib.es/thredds/wms/operational_models/oceanographical/hydrodynamics/model_run_aggregation/wmop/wmop_best.ncd';
-    var wms_myo_chl = 'http://myocean.artov.isac.cnr.it/thredds/wms/dataset-oc-med-chl-modis_a-l4-interp_4km_daily-rt-v02';
+    var wms_myo_chl = 'http://thredds.socib.es/thredds/wms/observational/satellite/ocean_color/myocean/chla/L3/ocean_color_myocean_chla_L3_NRT_agg/ocean_color_myocean_chla_L3_NRT_agg_best.ncd';
 
     var rt_layers = [{
-        name: "Chlorophyll Concentration",
-        url: wms_myo_chl,
-        params: {
-            layers: "CHL",
-            styles: 'boxfill/rainbow',
-            colorscalerange: '0.01,10',
-            logscale:true,
-            abovemaxcolor: "extend",
-            belowmincolor: "extend",
-            numcolorbands: 100,
-        },
-        visible: false,
-        singleTile: false,
-        autoExtent: false,
-        timeseriesWhenNotVisible: true,
-        icon:'chla'
-    },{
         name: "Significant wave height",
         url: wms_sapo,
         params: {
@@ -209,7 +193,24 @@ function real_time() {
             updateTimeDimension: true
         },
         icon: 'water_surface_height_above_reference_datum'
-    }];
+    },{
+        name: "Chlorophyll Concentration",
+        url: wms_myo_chl,
+        params: {
+            layers: "CHL",
+            styles: 'boxfill/rainbow',
+            colorscalerange: '0.02,0.1',
+            logscale:true,
+            abovemaxcolor: "extend",
+            belowmincolor: "extend",
+            numcolorbands: 100,
+        },
+        visible: false,
+        singleTile: false,
+        autoExtent: false,
+        timeseriesWhenNotVisible: true,
+        icon:'chla'
+    },];
 
     var rtMap = new GTViewer(rt_layers, 'map');
 }

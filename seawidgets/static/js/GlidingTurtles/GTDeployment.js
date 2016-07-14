@@ -217,10 +217,12 @@ L.TimeDimension.Layer.GTDeployment = L.TimeDimension.Layer.GeoJson.extend({
         this._addDeploymentTrajectory(featurecollection.features[0]);
         for (var i = 1, l = featurecollection.features.length; i < l; i++) {
             var point = featurecollection.features[i];
-            if (point.geometry.type == 'Point') {
+            if (point.geometry.type == 'point') {
                 if (point.geometry.coordinates.length < 2 || point.geometry.coordinates[0] === null || point.geometry.coordinates[1] === null) {
                     continue;
                 }
+                // trick because point should be Point to be parsed, but it cannot be changed because mobile apps need it this way
+                point.geometry.type = 'Point'
             }
             layer.addData(point);
         }
