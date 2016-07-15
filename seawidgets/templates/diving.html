@@ -11,7 +11,7 @@
   <div class="row">
     <div class="span12">
       <header>
-         <div style="position:right; top: 0px;">  <!--right:300px;-->
+         <div style="position:right; top: 0px;">  
             <div class="header_language">
             <a href="" ><img src="/static/images/flags/es.gif" width=16 height=10 alt="" /></a>
             <a href="" ><img src="/static/images/flags/eng.gif" width=16 height=10 alt="" /></a></div>                
@@ -25,26 +25,9 @@
   <div class="row">
     <div class="span7"> 
       <section class="status">
-    	  <h1 class="section" style="font-size: 28px;">Wave and water temperature forecast </h1>  <!--Sea surface temperature WMOP-->
+    	  <h1 class="section" style="font-size: 28px;">Wave and water temperature forecast </h1>  
     	  <h3 >El Toro area </h3> 
     		<div id="map-wmop" style="width: 100%; height: 500px;">
-    		  <div id="sidebar" class="sidebar collapsed">
-            <div class="sidebar-tabs">
-              <ul role="tablist">
-                <li><a href="#legend" role="tab" data-toggle="tooltip" title="Legend"><i class="fa fa-bars"></i></a></li>
-              </ul>
-            </div>
-    			 <div class="sidebar-content">
-              <div class="sidebar-pane" id="legend">
-                <h3 class="sidebar-header">
-                Legend
-                <span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
-                </h3>
-                <p class='legend-text'>Enviromental Sensitivity of the Coastline</p><br>
-                <div id="id_legend"> </div>
-              </div>
-    			  </div>
-    		  </div>
     	  </div>
      </section>
   	</div>
@@ -57,38 +40,13 @@
     </div> 
   </div>
 <div class="row">
-  <div class="span7"> 
+ <!-- <div class="span7"> 
       <section class="info">         
-      <div id="chart_climatology" style="width: 600px; height: 400px;"></div>       
+      <div id="chart_climatology" style="width: 400px; height: 600px;"></div>       
       </section>
-    </div>    
-  <div class="span5"> 
-    <section class="status">
-      <h4 class="section" id="vessel-position">Tools and resources</h4></br>
-        <ul class="nav nav-tabs nav-stacked">  
-          <li class="nav-header">Observation</li>
-          <li><a href="http://socib.es/?seccion=observingFacilities&facility=mooring&id=26">Station Andratx at web SOCIB (at 12km) </a></li>
-          <li><a href="http://www.socib.es/?seccion=observingFacilities&facility=mooring&id=26&tab=table&id_platform=26&id_variable=11075">  
-                <div id="id_station"></div>
-              </a>
-          </li>
-          <li><a href="http://socib.es/?seccion=observingFacilities&facility=satimages&img=alt1bal">Altimetry / Geostrophic currents from satelite</a></li>
-          <li class="nav-header">Prediction</li>
-          <li><a href="http://socib.es/?seccion=modelling&facility=lw4nc">Currents</a></li> 
-          <li><a href="http://socib.es/?seccion=modelling&facility=sapo">Wave forecast </a></li> 
-          <li class="nav-header">Environmental Sensitivity of the Coastline</li>
-          <li><a href="http://gis.socib.es/sacosta/composer">SACOSTA (Environmental Sensitivity of the Coastline)</a></li> 
-        </ul>
-    </section> 
-  </div>
-
- <!-- <section class="info">  
-  <div class="container">  
-    <div class="row">-->
-                    
-   <!-- </div>
-  </div>
-</section>-->
+    </div> -->   
+ <!-- <div class="span5"> 
+  </div>-->
 </div>
 <footer>
   <div class="container">
@@ -126,7 +84,6 @@
 <script src="{% static "widgets/weather_forecast_diving/weather_forecast_diving.js" %}" ></script>
 <script src="{% static "widgets/weather_forecast/weather_forecast.js" %}" ></script>
 <script src="{% static "widgets/weather_station_variable/weather_station_variable.js" %}" ></script>
-<script src="{% static "widgets/vessel_chart/vessel_chart.js" %}" ></script>
 <script src="{% static "widgets/rss/rss.js" %}" ></script>
 <script src="{% static "js/Highstock-2.0.4/highstock.js" %}"></script>
 
@@ -144,6 +101,8 @@
 <script type="text/javascript" src="{% static "js/leaflet-plugins/proj4-compressed.js" %}"></script>
 <script type="text/javascript" src="{% static "js/leaflet-plugins/proj4leaflet.js" %}"></script>
 <script src="{% static "js/diving.js" %}" ></script>
+<script type="text/javascript" src="{% static "js/googleapis.js" %}"></script>
+<script type="text/javascript" src="{% static "js/leaflet-plugins/leaflet-plugins-master/layer/tile/Google.js" %}"></script>
 <!--<script src="{% static "js/seawidgets-vessel.application.js" %}" ></script>-->
 
 

@@ -1,4 +1,4 @@
- NCWMSGridTimeseriesViewer = function(options) {
+NCWMSGridTimeseriesViewer = function(options) {
     this.container = options.container || 'map';
     this.layers = options.layers;
     this.baseMaps = options.baseMaps;
@@ -50,28 +50,28 @@ NCWMSGridTimeseriesViewer.prototype.addLayersToMap = function() {
             });
 
             this.layerControl.addOverlay(layer.timeLayer, layer.name);
-            if (layer.legend === undefined){
-               // variableLegend.onRemove = this.removeLegend.bind(this, layer);  //antes desactivado
-           }
-           if (layer.name == 'Wave height'){
-                if (layer.legend === undefined || layer.legend ) {   // if (layer.legend === undefined || layer.legend) {   //(layer.legend ) 
+            if (layer.legend === undefined) {
+                // variableLegend.onRemove = this.removeLegend.bind(this, layer);  //antes desactivado
+            }
+            if (layer.name == 'Wave height') {
+                if (layer.legend === undefined || layer.legend) { // if (layer.legend === undefined || layer.legend) {   //(layer.legend ) 
                     var variableLegend = L.control({
-                        position: 'bottomleft'   //bottomright'
+                        position: 'bottomleft' //bottomright'
 
                     });
                     variableLegend.onAdd = this.addLegend.bind(this, layer);
                     //variableLegend.onAdd = this._addLegendOutside.bind(this, layer);
-                    variableLegend.onRemove = this.removeLegend.bind(this, layer);  //ver
-                   // variableLegend.onRemoveOutside = this._removeLegendOutside.bind(this, layer);
-                   layer.timeLayer.legend = variableLegend;            
-               } 
-           }
+                    variableLegend.onRemove = this.removeLegend.bind(this, layer); //ver
+                    // variableLegend.onRemoveOutside = this._removeLegendOutside.bind(this, layer);
+                    layer.timeLayer.legend = variableLegend;
+                }
+            }
 
-           if (layer.visible) {
-            layer.timeLayer.addTo(this.map);
-        } 
+            if (layer.visible) {
+                layer.timeLayer.addTo(this.map);
+            }
+        }
     }
-}
 };
 
 NCWMSGridTimeseriesViewer.prototype.addDefaultMarkers = function() {
@@ -227,7 +227,6 @@ NCWMSGridTimeseriesViewer.prototype.loadData_ = function(layer, point, callback)
         }
     }).bind(this, layer));
 };
-
 
 
 
@@ -428,16 +427,16 @@ NCWMSGridTimeseriesViewer.prototype.createMap = function(map) {
         var mapOptions = {
             fullscreenControl: true,
             timeDimension: true,
-          //  timeDimensionControl: true,      ///
-            center:  [39.46, 2.50], //39.4, 2.9    [39.46305556, 2.470833333]
+            //  timeDimensionControl: true,      ///
+            center: [39.46, 2.50], //39.4, 2.9    [39.46305556, 2.470833333]
             zoom: 12
         };
         this.map = L.map(this.container, $.extend({}, mapOptions, this.mapOptions));
 
         L.Control.TimeDimensionCustom = L.Control.TimeDimension.extend({
-            _getDisplayDateFormat: function(date){
+            _getDisplayDateFormat: function(date) {
                 return date.format("yyyy-mm-dd HH:MM 'UTC'", true);
-            }    
+            }
         });
         var timeDimensionControl = new L.Control.TimeDimensionCustom(this.mapOptions.timeDimensionControlOptions);
         this.map.addControl(timeDimensionControl);
@@ -447,15 +446,14 @@ NCWMSGridTimeseriesViewer.prototype.createMap = function(map) {
 
             // Add baselayers to map
 
-            var crs25831 = new L.Proj.CRS('EPSG:25831', 
-                '+proj=utm +zone=31 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs',
-                {
-                resolutions: [1100, 550, 275, 100, 50, 25, 10, 5, 2, 1, 0.5, 0.25]
+            var crs25831 = new L.Proj.CRS('EPSG:25831',
+                '+proj=utm +zone=31 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs', {
+                    resolutions: [1100, 550, 275, 100, 50, 25, 10, 5, 2, 1, 0.5, 0.25]
                 }
             );
 
             var bathymetryLayer = L.tileLayer.wms("http://ows.emodnet-bathymetry.eu/wms", {
-                layers: 'emodnet:contours',  //emodnet:contours Depth contours  emodnet:mean_atlas_land
+                layers: 'emodnet:contours', //emodnet:contours Depth contours  emodnet:mean_atlas_land
                 format: 'image/png',
                 transparent: true,
                 attribution: "<a href='http://www.emodnet-bathymetry.eu/'>EMODnet Bathymetry</a>",
@@ -472,7 +470,7 @@ NCWMSGridTimeseriesViewer.prototype.createMap = function(map) {
                 format: 'image/png',
                 transparent: true,
                 opacity: 0.3
-            });            
+            });
             var coastlinesLayer = L.tileLayer.wms("http://ows.emodnet-bathymetry.eu/wms", {
                 layers: 'coastlines',
                 format: 'image/png',
@@ -482,93 +480,93 @@ NCWMSGridTimeseriesViewer.prototype.createMap = function(map) {
 
             var osmLayer = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-            });  
-            
-            var wmsideib = L.tileLayer.wms("http://ideib.caib.es/pub_ideib/public/MTIB/MapServer/WMSServer?",{
-                layers: '0',  //layers: '0',MDE Hipsográfic
+            });
+
+            var wmsideib = L.tileLayer.wms("http://ideib.caib.es/pub_ideib/public/MTIB/MapServer/WMSServer?", {
+                layers: '0', //layers: '0',MDE Hipsográfic
                 format: 'image/png',
-                crs: crs25831,    //crs: crs25831,
+                crs: crs25831, //crs: crs25831,
                 transparent: true,
                 continuousWorld: true,
                 version: '1.3.0',
-                attribution: 'Base -IDEIB MDE'      
+                attribution: 'Base -IDEIB MDE'
             });
 
 
-            var wms_batimetric50 = L.tileLayer.wms("http://ideib.caib.es/pub_ideib/public/MDE/MapServer/WMSServer?",{
-                layers: '38',  //Batimétric 50.000
+            var wms_batimetric50 = L.tileLayer.wms("http://ideib.caib.es/pub_ideib/public/MDE/MapServer/WMSServer?", {
+                layers: '38', //Batimétric 50.000
                 format: 'image/png',
-                crs: crs25831,    //crs: crs25831,
+                crs: crs25831, //crs: crs25831,
                 transparent: true,
                 continuousWorld: true,
                 version: '1.3.0',
-                attribution: 'IDEIB CAIB Batimètric'      
+                attribution: 'IDEIB CAIB Batimètric'
             });
 
-            var wmsideib20M = L.tileLayer.wms("http://ideib.caib.es/pub_ideib/public/MTIB/MapServer/WMSServer?",{
-                layers: '36',  //E020M  Batimètric  
+            var wmsideib20M = L.tileLayer.wms("http://ideib.caib.es/pub_ideib/public/MTIB/MapServer/WMSServer?", {
+                layers: '36', //E020M  Batimètric  
                 format: 'image/png',
-                crs: crs25831,    //crs: crs25831,
+                crs: crs25831, //crs: crs25831,
                 transparent: true,
                 continuousWorld: true,
                 version: '1.3.0',
-                attribution: 'Base -E020M  Batimètric'      
+                attribution: 'Base -E020M  Batimètric'
             });
 
-            var wmsideib300M = L.tileLayer.wms("http://ideib.caib.es/pub_ideib/public/MTIB/MapServer/WMSServer?",{
-                layers: '37',  // E300M Batimètric
+            var wmsideib300M = L.tileLayer.wms("http://ideib.caib.es/pub_ideib/public/MTIB/MapServer/WMSServer?", {
+                layers: '37', // E300M Batimètric
                 format: 'image/png',
-                crs: crs25831,    //crs: crs25831,
+                crs: crs25831, //crs: crs25831,
                 transparent: true,
                 continuousWorld: true,
                 version: '1.3.0',
-                attribution: 'Base -IDEIB E300M Batimètric'      
+                attribution: 'Base -IDEIB E300M Batimètric'
             });
 
-            var ideib_general = L.tileLayer.wms("http://ideib.caib.es/pub_ideib/public/MTIB/MapServer/WMSServer?",{
-                layers: '56,55,54,52,51,50,47,46,45,43,42,41,39,38,37,36',  
+            var ideib_general = L.tileLayer.wms("http://ideib.caib.es/pub_ideib/public/MTIB/MapServer/WMSServer?", {
+                layers: '56,55,54,52,51,50,47,46,45,43,42,41,39,38,37,36',
                 format: 'image/png',
-                crs: crs25831,    //crs: crs25831,
+                crs: crs25831, //crs: crs25831,
                 transparent: true,
                 continuousWorld: true,
                 version: '1.3.0',
-                attribution: 'Base -IDEIB General'      
+                attribution: 'Base -IDEIB General'
             });
 
-            var wmsieo = L.tileLayer.wms("http://barreto.md.ieo.es/arcgis/services/wms/wmsBase/MapServer/WMSServer?",{
-                layers: '10',  //Isobatas
+            var wmsieo = L.tileLayer.wms("http://barreto.md.ieo.es/arcgis/services/wms/wmsBase/MapServer/WMSServer?", {
+                layers: '10', //Isobatas
                 format: 'image/png',
-                crs: crs25831,    //crs: crs25831,
+                crs: crs25831, //crs: crs25831,
                 transparent: true,
                 continuousWorld: true,
                 version: '1.3.0',
-                attribution: 'Base - IEO'      
+                attribution: 'Base - IEO'
             });
-            var wmsieo_naturalezamarino = L.tileLayer.wms("http://barreto.md.ieo.es/arcgis/services/wms/wmsBase/MapServer/WMSServer?",{
-                layers: '0',  //Naturaleza del fondo Marino
+            var wmsieo_naturalezamarino = L.tileLayer.wms("http://barreto.md.ieo.es/arcgis/services/wms/wmsBase/MapServer/WMSServer?", {
+                layers: '0', //Naturaleza del fondo Marino
                 format: 'image/png',
-                crs: crs25831,    //crs: crs25831,
+                crs: crs25831, //crs: crs25831,
                 transparent: false,
                 continuousWorld: true,
                 version: '1.3.0',
-                attribution: 'Base - IEO-Naturaleza del fondo Marino'      
+                attribution: 'Base - IEO-Naturaleza del fondo Marino'
             });
 
-             var wms_reservasmarinas = L.tileLayer.wms("http://ideib.caib.es/pub_ideib/public/TEMATIC-LIMITS/MapServer/WMSServer",{
-                layers: '15',  //Naturaleza del fondo Marino
+            var wms_reservasmarinas = L.tileLayer.wms("http://ideib.caib.es/pub_ideib/public/TEMATIC-LIMITS/MapServer/WMSServer", {
+                layers: '15', //Reservas marinas
                 format: 'image/png',
-                crs: crs25831,    //crs: crs25831,
-                transparent: false,
+                crs: crs25831, //crs: crs25831,
+                transparent: true,
                 continuousWorld: true,
                 version: '1.3.0',
-                attribution: 'IDEIB - reservas marinas'      
+                attribution: 'IDEIB - reservas marinas'
             });
 
             var Spain_IGNBase = L.tileLayer.wms('http://www.ign.es/wms-inspire/ign-base', {
                 layers: 'IGNBaseTodo',
                 format: 'image/png',
                 transparent: false,
-                continuousWorld : true,
+                continuousWorld: true,
                 attribution: '© <a href="http://www.ign.es/ign/main/index.do" target="_blank">Instituto Geográfico Nacional de España</a>'
             });
 
@@ -576,60 +574,72 @@ NCWMSGridTimeseriesViewer.prototype.createMap = function(map) {
                 layers: 'IGNBaseTodo',
                 format: 'image/png',
                 transparent: false,
-                continuousWorld : true,
+                continuousWorld: true,
                 attribution: '© <a href="http://www.ign.es/ign/main/index.do" target="_blank">Instituto Geográfico Nacional de España</a>'
             });
-     
+
+            var ggls = new L.Google('SATELLITE');
+            var gglr = new L.Google('ROADMAP');
+            var gglh = new L.Google('HYBRID');
+            var gglt = new L.Google('TERRAIN');
+
 
             var icon_station_Andratx = L.icon({
                 iconUrl: '../static/images/sea_level.png',
                 iconSize: [30, 30],
                 popupAnchor: [-3, -5],
                 iconAnchor: [10, 10],
-                labelAnchor: [6, 0] 
-               //conSize: [38, 95], // size of the icon
+                labelAnchor: [6, 0]
+                   
             });
 
             var labelDirection = 'right';
             var label_Andratx = 'Andratx';
-            var station_Andratx = L.marker([39.54419, 2.378461], {icon: icon_station_Andratx}).bindLabel(label_Andratx, {
+            var station_Andratx = L.marker([39.54419, 2.378461], {
+                icon: icon_station_Andratx
+            }).bindLabel(label_Andratx, {
                 noHide: true,
                 direction: labelDirection
-            }); 
+            });
 
             station_Andratx.addTo(this.map).showLabel();
 
-           // station_Andratx.bindPopup('');
-           // station_Andratx._popup.station = station;
+           
 
             var icon_station_BP = L.icon({
                 iconUrl: '../static/images/buoy.png',
                 iconSize: [30, 30],
                 popupAnchor: [-3, -5],
                 iconAnchor: [10, 10],
-                labelAnchor: [6, 0] 
-               //conSize: [38, 95], // size of the icon
+                labelAnchor: [6, 0]
+                    //conSize: [38, 95], // size of the icon
             });
 
             var label_BahiaPalma = 'Bahia de Palma';
-            var station_BahiaPalma = L.marker([39.492848, 2.700405], {icon: icon_station_BP}).bindLabel(label_BahiaPalma, {
+            var station_BahiaPalma = L.marker([39.492848, 2.700405], {
+                icon: icon_station_BP
+            }).bindLabel(label_BahiaPalma, {
                 noHide: true,
                 direction: labelDirection
-            }); 
+            });
 
             station_BahiaPalma.addTo(this.map).showLabel();
 
 
-            var baseGroupLayer = L.layerGroup([bathymetryLayer,wmsieo,wmsideib]);     //bathymetryLayer, wmsideib  osmLayer
+            var baseGroupLayer = L.layerGroup([ggls,gglr,gglh,gglt]); //,wmsieo   //bathymetryLayer, wmsideib  osmLayer
             baseGroupLayer.addTo(this.map);
             this.baseMaps = {
 
-               // "Emodnet bathymetry": bathymetryLayer, 
-               // "OSM": osmLayer,
-               // "IEO": wmsieo,
-                "IDEIB-MDT": wmsideib,
-                "IGN":Spain_IGNBase,
-                "IDEIB-General":ideib_general
+                "Google Satellite": ggls,
+                "Google Roadmap": gglr,
+                "Google Hybrid": gglh,
+                "Google Terrain": gglt
+                // "Emodnet bathymetry": bathymetryLayer, 
+                // "OSM": osmLayer,
+                // "IEO": wmsieo,
+                //"IDEIB-MDT": wmsideib,
+                //"IGN": Spain_IGNBase,
+                //"IDEIB-General": ideib_general
             };
         } else {
 
@@ -647,59 +657,62 @@ NCWMSGridTimeseriesViewer.prototype.createMap = function(map) {
             enableUserInput: false
         }).addTo(this.map);
     }
-   // var overlayMaps = {"Emodnet bathymetry":bathymetryLayer,"IEO -Isobatas": wmsieo,"IEO-Naturaleza del fondo Marino": wmsieo_naturalezamarino ,"IDEIB-E020M  Batimètric":wmsideib20M};
-    var overlayMaps = {"Emodnet bathymetry":bathymetryLayer,"IEO -Isobatas": wmsieo,"IDEIB-E020M  Batimètric":wmsideib20M,"IDEIB-Reservas marinas":wms_reservasmarinas, "IDEIB_CAIB Batimètric":wms_batimetric50};
-   // var overlayMaps = {};
-    this.layerControl = L.control.layers(this.baseMaps,overlayMaps);
+    // var overlayMaps = {"Emodnet bathymetry":bathymetryLayer,"IEO -Isobatas": wmsieo,"IEO-Naturaleza del fondo Marino": wmsieo_naturalezamarino ,"IDEIB-E020M  Batimètric":wmsideib20M,"IDEIB_CAIB Batimètric":wms_batimetric50};
+    var overlayMaps = {};
+   /* var overlayMaps = {
+        "Emodnet bathymetry": bathymetryLayer
+    };*/
+    // var overlayMaps = {};
+    this.layerControl = L.control.layers(this.baseMaps, overlayMaps);
 
     this.layerControl.addTo(this.map);
 
-    var sidebar = L.control.sidebar('sidebar');
+   /* var sidebar = L.control.sidebar('sidebar');
 
-    this.map.addControl(sidebar);
+    this.map.addControl(sidebar);*/
 
 
 
     this.map.on('layeradd', function(eventLayer) {
-        if (eventLayer.layer.legend) { 
+        if (eventLayer.layer.legend) {
             eventLayer.layer.legend.addTo(this);
-           //this.removeLayer(eventLayer.layer.legend);
-           //eventLayer.layer.legend.onRemove();
-       }
-   });
-
-   /* this.map.on('overlayremove', function (eventLayer) {
-        if (eventLayer.name != "Wave height") {
-            this.removelayer(eventLayer.layer.legend);
-            eventLayer.layer.legend.onRemove();
+            //this.removeLayer(eventLayer.layer.legend);
+            //eventLayer.layer.legend.onRemove();
         }
-    });*/
-
- this.map.on('layerremove', function(eventLayer) {
-    if (eventLayer.layer.legend) {
-        this.removeLayer(eventLayer.layer.legend);
-        eventLayer.layer.legend.onRemove();
-           // eventLayer.layer.legend.onRemoveOutside();
-       }
-   });
-
- this.map.doubleClickZoom.disable();
- this.map.on('layeradd', (function() {
-    this.map.doubleClickZoom.disable();
-}).bind(this));
- this.map.on('dblclick', (function(e) {
-    this.addPositionMarker({
-        position: [e.latlng.lat, e.latlng.lng]
     });
-    return false;
-}).bind(this));
 
- if (!this.map.timeDimension) {
-    this.map.timeDimension = L.timeDimension({});
-}
-this.map.timeDimension.on('availabletimeschanged', (function() {
-    this.addDefaultMarkers();
-}).bind(this));
+    /* this.map.on('overlayremove', function (eventLayer) {
+         if (eventLayer.name != "Wave height") {
+             this.removelayer(eventLayer.layer.legend);
+             eventLayer.layer.legend.onRemove();
+         }
+     });*/
+
+    this.map.on('layerremove', function(eventLayer) {
+        if (eventLayer.layer.legend) {
+            this.removeLayer(eventLayer.layer.legend);
+            eventLayer.layer.legend.onRemove();
+            // eventLayer.layer.legend.onRemoveOutside();
+        }
+    });
+
+    this.map.doubleClickZoom.disable();
+    this.map.on('layeradd', (function() {
+        this.map.doubleClickZoom.disable();
+    }).bind(this));
+    this.map.on('dblclick', (function(e) {
+        this.addPositionMarker({
+            position: [e.latlng.lat, e.latlng.lng]
+        });
+        return false;
+    }).bind(this));
+
+    if (!this.map.timeDimension) {
+        this.map.timeDimension = L.timeDimension({});
+    }
+    this.map.timeDimension.on('availabletimeschanged', (function() {
+        this.addDefaultMarkers();
+    }).bind(this));
 
 
 };
@@ -707,15 +720,15 @@ this.map.timeDimension.on('availabletimeschanged', (function() {
 
 NCWMSGridTimeseriesViewer.prototype.addLegend = function(layer, map) {
     //if (layer.legendOutside){
-        this._addLegendOutside(layer);   //ver el error de ClassList Pendiente
-      //  return;
+    this._addLegendOutside(layer); //ver el error de ClassList Pendiente
+    //  return;
     //}
     var div_wrapper = L.DomUtil.get('legend-wrapper');
     if (!div_wrapper) {
         div_wrapper = L.DomUtil.create('div', 'legend-wrapper-outside');
         /* div_wrapper.id = "legend-wrapper";*/
     }
-    var div = L.DomUtil.create('div', 'info legend-div', div_wrapper);  
+    var div = L.DomUtil.create('div', 'info legend-div', div_wrapper);
     div.id = "legend-" + layer.params.layers;
     div.innerHTML = this._getLegendInnerHTML(layer);
     return div_wrapper;
@@ -733,43 +746,43 @@ NCWMSGridTimeseriesViewer.prototype._getLegendInnerHTML = function(layer) {
         var innerHTML;
 
         innerHTML = layer.legendHTML.apply();
-       //console.log(innerHTML);
-   } else {
-    var innerHTML;
+        //console.log(innerHTML);
+    } else {
+        var innerHTML;
 
-    var styles = layer.params.styles;
-    var palette = styles.substring(styles.indexOf('/') + 1);
-    var colorscalerange = layer.params.colorscalerange || 'default';  
+        var styles = layer.params.styles;
+        var palette = styles.substring(styles.indexOf('/') + 1);
+        var colorscalerange = layer.params.colorscalerange || 'default';
 
-       // console.log(layer.url);
+        // console.log(layer.url);
 
 
-       var src = layer.url + "?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetLegendGraphic&TRANSPARENT=true&LAYER=" + layer.params.layers + "&PALETTE=" + palette + "&COLORSCALERANGE=" + colorscalerange;
-       //console.log(palette);
+        var src = layer.url + "?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetLegendGraphic&TRANSPARENT=true&LAYER=" + layer.params.layers + "&PALETTE=" + palette + "&COLORSCALERANGE=" + colorscalerange;
+        //console.log(palette);
 
-       if (colorscalerange == 'auto') {
-        // TODO: get colorscalerange
-        div_wrapper = $('#legend-wrapper-outside');
-       // return;
-       return div_wrapper;
-   }
+        if (colorscalerange == 'auto') {
+            // TODO: get colorscalerange
+            div_wrapper = $('#legend-wrapper-outside');
+            // return;
+            return div_wrapper;
+        }
 
-   if (layer.params.numcolorbands) {
-    src += '&numcolorbands=' + layer.params.numcolorbands;
-}
-innerHTML =            
-'<img class="legend-img" src="' + src + '" alt="legend" style="height: 220px;">';
+        if (layer.params.numcolorbands) {
+            src += '&numcolorbands=' + layer.params.numcolorbands;
+        }
+        innerHTML =
+            '<img class="legend-img" src="' + src + '" alt="legend" style="height: 220px;">';
 
-}
-return innerHTML;
+    }
+    return innerHTML;
 };
 
 NCWMSGridTimeseriesViewer.prototype.removeLegend = function(layer, map) {
- this._removeLegendOutside(layer);
- var div = L.DomUtil.get("legend-" + layer.params.layers);
- div.remove();
+    this._removeLegendOutside(layer);
+    var div = L.DomUtil.get("legend-" + layer.params.layers);
+    div.remove();
 
- return;
+    return;
 };
 
 
@@ -783,7 +796,7 @@ NCWMSGridTimeseriesViewer.prototype.removeLegend = function(layer, map) {
 
 NCWMSGridTimeseriesViewer.prototype._removeLegendOutside = function(layer) {
     var div_wrapper = $('#legend-wrapper-outside');
-    div_wrapper.remove();  
+    div_wrapper.remove();
     return;
 };
 
@@ -796,10 +809,10 @@ NCWMSGridTimeseriesViewer.prototype.createChart = function(layer) {
         chart_wrapper = $('#' + this.container).parent().find('.chart-wrapper');
     }
     var chart_container = chart_wrapper.find('.chart-' + layer.params.layers);
-    if (!chart_container.length) {  // antes C
-        chart_wrapper.append("<div class='chart chart-" + layer.params.layers + "' style='height:275px;'></div>");  /* 200px */
+    if (!chart_container.length) { // antes C
+        chart_wrapper.append("<div class='chart chart-" + layer.params.layers + "' style='height:275px;'></div>"); /* 200px */
         chart_container = chart_wrapper.find('.chart-' + layer.params.layers);
-    }   //antes C
+    } //antes C
 
     var options = {
         legend: {
@@ -809,8 +822,8 @@ NCWMSGridTimeseriesViewer.prototype.createChart = function(layer) {
         chart: {
             zoomType: 'x'
         },
-        navigator : {
-            enabled : false
+        navigator: {
+            enabled: false
         },
         rangeSelector: {
             enabled: false,
@@ -1053,10 +1066,10 @@ NCWMSGridTimeseriesViewer.prototype.updateSerie = function(serie, time, variable
 NCWMSGridTimeseriesViewer.prototype.removeLayer = function(layerName) {
     for (var i = 0, l = this.layers.length; i < l; i++) {
         var layer = this.layers[i];
-        if (layer.name != layerName){
+        if (layer.name != layerName) {
             continue;
         }
-        if (layer.timeLayer){
+        if (layer.timeLayer) {
             this.map.removeLayer(layer.timeLayer);
         }
         break;
@@ -1065,21 +1078,21 @@ NCWMSGridTimeseriesViewer.prototype.removeLayer = function(layerName) {
 };
 
 
-var ELTORO_POSITION = [39.6145, 1.99363];   
-var diving = function( layers, container) {
-//var Sorrento = function(wms_server, layers, container) {
-   // this.wms_server = wms_server;
-   var currentTime = new Date();
-   currentTime.setUTCMinutes(0, 0, 0);
-   var endDate = new Date(currentTime.getTime());
-   L.TimeDimension.Util.addTimeDuration(endDate, "P3D", true);
+var ELTORO_POSITION = [39.6145, 1.99363];
+var diving = function(layers, container) {
+    //var Sorrento = function(wms_server, layers, container) {
+    // this.wms_server = wms_server;
+    var currentTime = new Date();
+    currentTime.setUTCMinutes(0, 0, 0);
+    var endDate = new Date(currentTime.getTime());
+    L.TimeDimension.Util.addTimeDuration(endDate, "P3D", true);
 
-   this.options = {
-    container: container,
-    layers: layers,
-    mapOptions: {
-        center:  [39.47, 2.45],  
-            zoom: 13,  //9
+    this.options = {
+        container: container,
+        layers: layers,
+        mapOptions: {
+            center: [39.47, 2.45],
+            zoom: 13, //9
             scrollWheelZoom: false,
             timeDimensionOptions: {
                 timeInterval: "P5D/" + endDate.toISOString(),
@@ -1102,15 +1115,13 @@ var diving = function( layers, container) {
         default_range_selector: 0,
         default_markers: [{
             name: 'El Toro',
-            position: [39.46, 2.47]  //ELTORO_POSITION
+            position: [39.46, 2.47] //ELTORO_POSITION
         }]
     };
     //this.gridViewer = new MapGT(this.options); 
-    this.gridViewer = new NCWMSGridTimeseriesViewer(this.options); 
+    this.gridViewer = new NCWMSGridTimeseriesViewer(this.options);
     var map = this.gridViewer.getMap();
 };
-
-
 
 
 
@@ -1121,8 +1132,7 @@ function wmop() {
 
 
 
-    var sapo_wmop_layers2 = [
-    {
+    var sapo_wmop_layers2 = [{
         name: "Average wave direction",
         url: wms_sapo,
         params: {
@@ -1138,138 +1148,90 @@ function wmop() {
             styles: 'prettyvec/greyscale'
         },
         visible: true,
-     //   legendOutside: true,
-     singleTile: true,
-     autoExtent: false,
-     timeseries: false,
-     legendHTML: function() {
-      var innerHTML = '<img src="/static/images/black-arrow.png" /> mean direction';
-      return innerHTML;
-  }
-},
-{
-    name: "Wave height",
-    url: wms_sapo,
-    params: {
-        layers: "significant_wave_height",
-        styles: 'areafill/scb_bugnylorrd',
-        transparent: true,
-        colorscalerange: '0,2',
-        abovemaxcolor: "extend",
-        belowmincolor: "extend",
-        numcolorbands: 100
-  
-    },
-    visible: false,
-    legendOutside: true,
-    singleTile: false,
-    autoExtent: false,
-    timeseriesWhenNotVisible: true
-},{
-    name: "Sea Surface Temperature",
-    url: wms_wmop,
-    params: {
-        layers: "temp",
-        colorscalerange: "auto",
-        abovemaxcolor: "extend",
-        belowmincolor: "extend",
-        numcolorbands: 100,
-            styles: 'areafill/mpl_gnbu' // areafill/mpl_gnbu  boxfill/spectral
-        }, 
-        visible: false,
-      //  legendOutside: true,
-      singleTile: true,
-      autoExtent: false,
-      TimeDimensionOptions: {
-        updateTimeDimension: true
-    }
-},{
-        name: "Sensibilidad ambiental de la costa",  //Sensibilidad ambiental de la costa-2012
-        url: wms_sensibilidad,
-        params: {
-            layers: 'sa:bal_sa_costa_2012',  //sa:
-            format: 'image/png',
-            transparent: true,
-            styles: 'sa_illes_balears_2011'
-        },
-        visible: true ,
-        // legendOutside: true,
+        //   legendOutside: true,
+        singleTile: true,
+        autoExtent: false,
+        timeseries: false,
         legendHTML: function() {
-         // var innerHTML = '<img src= "http://gis.socib.es/geoserver/ows?service=WMS&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=bal_sa_costa_2012" />';                      
-         var innerHTML = "<iframe src='"+ "http://gis.socib.es/geoserver/ows?service=WMS&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=bal_sa_costa_2012" +"' width='260' height='80' frameborder='0' class='resizable' ></iframe>" 
-         return innerHTML;
-     }
- },{
-    name: "Uso humano de la costa", 
-    url: wms_sensibilidad,
-    params: {
-        layers: "sa:bal_uso_humano",  
-        format: 'image/png',
-        styles: 'uso_humano_new'
-    },
-    visible: true,
-      // legendOutside: true,
-      singleTile: false,
-      autoExtent: false,
-      legendHTML: function() {                                                                                                                 
-           var innerHTML = "<iframe src='"+"http://gis.socib.es/geoserver/ows?TRANSPARENT=true&SERVICE=WMS&VERSION=1.1.1&REQUEST=GetLegendGraphic&EXCEPTIONS=application%2Fvnd.ogc.se_xml&LAYER=sa%3Abal_uso_humano&SCALE=2183916.2728723255&FORMAT=image%2Fgif"+ "' width='260' height='80' frameborder='0' class='resizable' ></iframe>";  //Zones de fondeig
-          // var innerHTML = '<div class="resizable" style="width:200px; height:200px;"'>'+'<'iframe src="http://gis.socib.es/geoserver/ows?TRANSPARENT=true&SERVICE=WMS&VERSION=1.1.1&REQUEST=GetLegendGraphic&EXCEPTIONS=application%2Fvnd.ogc.se_xml&LAYER=sa%3Abal_uso_humano&SCALE=2183916.2728723255&FORMAT=image%2Fgif"+ frameborder="0"></iframe>'+'</div>';  //Zones de fondeig
-          return innerHTML;
-      }
-  },{
-    name: "Zonas de Fondeo", 
-    url: wms_sensibilidad,
-    params: {
-        layers: "bal_zones_fondeig",  
-        format: 'image/png',
-        styles: 'sailing'
-    },
-    visible: true,
-      //  legendOutside: true,
-      legendHTML: function() {
-           var innerHTML = '<img src="/static/images/zones_fondeig.png" /> Anchoring areas';  //Zones de fondeig
-           return innerHTML;
-       }
-   }];
-   
-   var sapoMap2 = new diving(sapo_wmop_layers2 , 'map-wmop'); 
+            var innerHTML = '<img src="/static/images/black-arrow.png" /> mean direction';
+            return innerHTML;
+        }
+    }, {
+        name: "Wave height",
+        url: wms_sapo,
+        params: {
+            layers: "significant_wave_height",
+            styles: 'areafill/scb_bugnylorrd',
+            transparent: true,
+            colorscalerange: '0,2',
+            abovemaxcolor: "extend",
+            belowmincolor: "extend",
+            numcolorbands: 100
+
+        },
+        visible: false,
+        legendOutside: true,
+        singleTile: false,
+        autoExtent: false,
+        timeseriesWhenNotVisible: true
+    }, {
+        name: "Sea Surface Temperature",
+        url: wms_wmop,
+        params: {
+            layers: "temp",
+            colorscalerange: "auto",
+            abovemaxcolor: "extend",
+            belowmincolor: "extend",
+            numcolorbands: 100,
+            styles: 'areafill/mpl_gnbu' // areafill/mpl_gnbu  boxfill/spectral
+        },
+        visible: false,
+        //  legendOutside: true,
+        singleTile: true,
+        autoExtent: false,
+        TimeDimensionOptions: {
+            updateTimeDimension: true
+        }
+     }];
+
+    var sapoMap2 = new diving(sapo_wmop_layers2, 'map-wmop');
 }
 
 
-var load_moorings = function(){  // + Moorings.units, function(jsonData)
+var load_moorings = function() { 
 
-    $.getJSON( '/services/dd/list-moorings?', function(data) {
+    $.getJSON('/services/dd/list-moorings?', function(data) {
 
-        var id_platform = 26;   
-        platform = {} ;
+        var id_platform = 26;
+        platform = {};
         var items = [];
         list_moorings = data;
 
-            for (var i = 0, l = list_moorings.length; i < l; i++) {
-                if (list_moorings[i].id == id_platform) {
-                    platform.index = i;
-                    platform.id = list_moorings[i].id;
-                    platform.lat = (parseFloat(list_moorings[i].boundingBox[1]) + parseFloat(list_moorings[i].boundingBox[0])) / 2;
-                    platform.lon = (parseFloat(list_moorings[i].boundingBox[3]) + parseFloat(list_moorings[i].boundingBox[2])) / 2;
-                    platform.name = list_moorings[i].name
+        for (var i = 0, l = list_moorings.length; i < l; i++) {
+            if (list_moorings[i].id == id_platform) {
+                platform.index = i;
+                platform.id = list_moorings[i].id;
+                platform.lat = (parseFloat(list_moorings[i].boundingBox[1]) + parseFloat(list_moorings[i].boundingBox[0])) / 2;
+                platform.lon = (parseFloat(list_moorings[i].boundingBox[3]) + parseFloat(list_moorings[i].boundingBox[2])) / 2;
+                platform.name = list_moorings[i].name
                     .replace("Station", "")
                     .replace("Buoy", "")
                     .replace("Mobims", "")
                     .trim();
 
-                    platform.platformType = list_moorings[i].platformType;
-                    platform.state = list_moorings[i].state;
-                    platform.icon = list_moorings[i].icon;
-                    platform.lastTimeSampleReceived = list_moorings[i].lastTimeSampleReceived;
+                platform.platformType = list_moorings[i].platformType;
+                platform.state = list_moorings[i].state;
+                platform.icon = list_moorings[i].icon;
+                platform.lastTimeSampleReceived = list_moorings[i].lastTimeSampleReceived;
 
-                    if (platform.variables)
-                        delete platform.variables;
+                if (platform.variables)
+                    delete platform.variables;
 
-                    platform.variables = {};
-                    var value;
-                    for (var j = 0, lj = list_moorings[i].jsonInstrumentList.length; j < lj; j++) {
-                        var variables = list_moorings[i].jsonInstrumentList[j].jsonVariableList;
-                        for (var k = 0, lk = variables.length; k < lk; k++) {
+                platform.variables = {};
+                var value;
+                for (var j = 0, lj = list_moorings[i].jsonInstrumentList.length; j < lj; j++) {
+                    var variables = list_moorings[i].jsonInstrumentList[j].jsonVariableList;
+                    for (var k = 0, lk = variables.length; k < lk; k++) {
                         // Remove gust direction
                         if (variables[k].displayName.indexOf(' gust ') > 0) {
                             continue;
@@ -1290,13 +1252,13 @@ var load_moorings = function(){  // + Moorings.units, function(jsonData)
                                 'name': list_moorings[i].jsonInstrumentList[j].displayName
                             }
                         });
-                        if (variables[k].id == '11075' ){
-                         items.push(variables[k].displayName +':'+' '+ variables[k].lastValue +' '+'°'+variables[k].inputUnits);
-                          //items.push("<li id='" + list.jsonInstrumentList[j].jsonVariableList[j].id + "'>" + variables1[k].displayName + ' '+':'+ ' '+ variables1[k].lastValue + ' '+variables1[k].inputUnits +"</li>");
-                      }
-                       // el.innerHTML= '<li>'+'<i '+ variables1[k].id +'"></i>'+'</li>';  
-                       document.getElementById("id_station").innerHTML = items;
-                   }
+                        if (variables[k].id == '11075') {
+                            items.push(variables[k].displayName + ':' + ' ' + variables[k].lastValue + ' ' + '°' + variables[k].inputUnits);
+                            //items.push("<li id='" + list.jsonInstrumentList[j].jsonVariableList[j].id + "'>" + variables1[k].displayName + ' '+':'+ ' '+ variables1[k].lastValue + ' '+variables1[k].inputUnits +"</li>");
+                        }
+                        // el.innerHTML= '<li>'+'<i '+ variables1[k].id +'"></i>'+'</li>';  
+                        document.getElementById("id_station").innerHTML = items;
+                    }
                 }
 
             }
@@ -1305,224 +1267,16 @@ var load_moorings = function(){  // + Moorings.units, function(jsonData)
 }
 
 
-function processData(){
-
-    $.get('/static/js/profile_test.csv', function(data){ 
-        
-        list = data
-        //console.log(list);
-
-    data =[];
-
-        var lines = list.split('\n');
-
-        for (var i=1; i<lines.length; i++) {
-            var items = lines[i].split(',');
-            
-            data.push(items[0],items[1]);
-              /*  var tarr = [];
-                for (var j=0; j<list.length; j++) {
-                    tarr.push(list[j]+":"+data[items]);
-                }
-                lines.push(tarr);*/
-           
-        }
-        console.log(data);
-        return data;
-    });
-
-}
-
-function crearChart(){
-
-//processData(variable);
-//var data;
-
-// sStage1 = tempStage1.Replace("-9999", " ");
-
-      /*  data.push(variable);
-        return data;
-        console.log(data);*/
-    
-
-       //variable = tdp;
-        $('#chart_climatology').highcharts({
-            //custom_variable: variable,
-
-            chart: {
-                renderTo: 'chart_climatology',
-                type: 'spline',
-                inverted: true,
-                zoomType: 'x'
-
-            },
-
-            rangeSelector: {
-                selected: 1
-            },
-
-            title: {
-                text: 'Temperature profile'
-            },
-
-            xAxis: {
-                reversed: true,
-                title: {
-                    enabled: true,
-                    text: 'Depth (m)'
-                }/*,
-                labels: {
-                    formatter: function() {
-                        return this.value + ' m';
-                    }
-                },
-                maxPadding: 0.05,
-                showLastLabel: true,
-                gridLineWidth: 2*/
-
-            },
-            yAxis: {
-                title: {
-                   // text: variable.standardName.replace(/_/g, ' ') + ' (' + variable.inputUnits + ')'
-                    text:'Temperature'
-                },
-              /*  labels: {
-                    formatter: function() {
-                        return this.value;
-                    }
-                },*/
-                lineWidth: 2
-            },
-            
-            legend: {
-                enabled: false
-            },
-            tooltip: {
-                //headerFormat: '<b><span style="color: {series.color};">{series.name}</span></b><br/>',
-               // pointFormat: '{point.x} m: {point.y} ' + variable.inputUnits
-            },
-            plotOptions: {
-                spline: {
-                    marker: {
-                        enabled: true,
-                        radius: 1.5,
-                        symbol: 'circle'
-
-                    },
-                    lineWidth: 2,
-                    connectNulls: false
-                }
-            },
-            series: [{
-                name: 'All visits',
-                lineWidth: 4,
-                marker: {
-                    radius: 4
-                }
-            }, {
-                name: 'New visitors'
-            }]
-        });
-
-    
-}
-
-
-
-
-function _addNewSerie(chart, time) {
-    // verify this serie does not exist in the chartv
-    var found = false;
-    var length = chart.series.length;
-    for (var i = 0; i < length; i++) {
-        var serie = chart.series[i];
-        if (serie.options.custom_time == time) {
-            found = true;
-            break;
-        }
-    }
-
-    if (!found) {
-        var currentProfileIndex = time.toString();
-        var variable_name = chart.options.custom_variable.name;
-        var new_serie = {
-            type: 'spline',
-            name: variable_name + '<br/>at ' + _epochToDate(time * 1000).format('default', true),
-            color: profiles[currentProfileIndex].color,
-            data: (function() {
-                if (max_points == 0) {
-                    return _.zip(profiles[currentProfileIndex].data.DEPTH,
-                        profiles[currentProfileIndex].data[variable_name]);
-                } else {
-                    var length = profiles[currentProfileIndex].data.DEPTH.length - 1;
-                    var step = Math.floor(length / max_points);
-                    return _.zip(_.filter(profiles[currentProfileIndex].data.DEPTH, function(num, index) {
-                        return (index % step == 0 || index == length);
-                    }),
-                        _.filter(profiles[currentProfileIndex].data[variable_name], function(num, index) {
-                        return (index % step == 0 || index == length);
-                    }));
-                }
-            })(),
-            custom_time: time
-        };
-        chart.addSeries(new_serie, false, false);
-    }
-}
-
-
-
-
-
-function _getNewSerie(chart, time) {
-        // verify this serie does not exist in the chart
-        var found = false;
-        var length = chart.series.length;
-        for (var i = 0; i < length; i++) {
-            var serie = chart.series[i];
-            if (serie.options.custom_time == time) {
-                found = true;
-                return null;
-            }
-        }
-
-        //var currentProfileIndex = time.toString();
-        var variable_name = chart.options.custom_variable.name;
-        var new_serie = {
-            type: 'spline',
-            name: variable_name + '<br/>at ' + _epochToDate(time * 1000).format('default', true),
-            color: profiles[currentProfileIndex].color,
-            data: (function() {
-                if (max_points == 0) {
-                    return _.zip(profiles[currentProfileIndex].data.DEPTH,
-                        profiles[currentProfileIndex].data[variable_name]);
-                } else {
-                    var length = profiles[currentProfileIndex].data.DEPTH.length - 1;
-                    var step = Math.floor(length / max_points);
-                    return _.zip(_.filter(profiles[currentProfileIndex].data.DEPTH, function(num, index) {
-                        return (index % step == 0 || index == length);
-                    }),
-                        _.filter(profiles[currentProfileIndex].data[variable_name], function(num, index) {
-                        return (index % step == 0 || index == length);
-                    }));
-                }
-            })(),
-            custom_time: time
-        };
-        return new_serie;
-    }
 
 
 $(function() {
     wmop();
     load_moorings();
-   // processData();
-    crearChart();
+    processData();
+
 
 });
 
 
-var leyenda_wms = "<img src='"+ "http://gis.socib.es/geoserver/ows?service=WMS&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=bal_sa_costa_2012" +"' width='750' ></img>" ;
-document.getElementById('id_legend').innerHTML = leyenda_wms; 
-
-
+var leyenda_wms = "<img src='" + "http://gis.socib.es/geoserver/ows?service=WMS&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=bal_sa_costa_2012" + "' width='750' ></img>";
+//document.getElementById('id_legend').innerHTML = leyenda_wms;
