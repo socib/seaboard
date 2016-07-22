@@ -1078,6 +1078,12 @@ NCWMSGridTimeseriesViewer.prototype.removeLayer = function(layerName) {
 };
 
 
+ var maxBounds = [
+        [-90, -180], //Southwest  //2º 30' 11"  39º 26' 11"
+        [90, 180] //Northeast   //2º 30' 50"  39º 30' 06"
+    ];
+
+
 var ELTORO_POSITION = [39.6145, 1.99363];
 var diving = function(layers, container) {
     //var Sorrento = function(wms_server, layers, container) {
@@ -1091,8 +1097,9 @@ var diving = function(layers, container) {
         container: container,
         layers: layers,
         mapOptions: {
-            center: [39.47, 2.45],
+           center: [39.47, 2.45],
             zoom: 13, //9
+           // maxBounds: maxBounds,
             scrollWheelZoom: false,
             timeDimensionOptions: {
                 timeInterval: "P5D/" + endDate.toISOString(),
@@ -1257,7 +1264,7 @@ var load_moorings = function() {
                             //items.push("<li id='" + list.jsonInstrumentList[j].jsonVariableList[j].id + "'>" + variables1[k].displayName + ' '+':'+ ' '+ variables1[k].lastValue + ' '+variables1[k].inputUnits +"</li>");
                         }
                         // el.innerHTML= '<li>'+'<i '+ variables1[k].id +'"></i>'+'</li>';  
-                        document.getElementById("id_station").innerHTML = items;
+                        //document.getElementById("id_station").innerHTML = items;
                     }
                 }
 
@@ -1272,11 +1279,10 @@ var load_moorings = function() {
 $(function() {
     wmop();
     load_moorings();
-    processData();
 
 
 });
 
 
-var leyenda_wms = "<img src='" + "http://gis.socib.es/geoserver/ows?service=WMS&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=bal_sa_costa_2012" + "' width='750' ></img>";
+//var leyenda_wms = "<img src='" + "http://gis.socib.es/geoserver/ows?service=WMS&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=bal_sa_costa_2012" + "' width='750' ></img>";
 //document.getElementById('id_legend').innerHTML = leyenda_wms;

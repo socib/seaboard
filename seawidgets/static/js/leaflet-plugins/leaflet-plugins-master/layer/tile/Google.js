@@ -1,4 +1,4 @@
-/*
+/* 
  * Google layer using Google Maps API
  */
 
