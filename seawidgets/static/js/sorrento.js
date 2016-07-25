@@ -37,7 +37,7 @@ var Sorrento = function(wms_server, layers, container) {
             position: SORRENTO_POSITION
         }]
     };
-    this.gridViewer = new MapGT(this.options);
+    this.gridViewer = new NCWMSGridTimeseriesViewer(this.options);
     var map = this.gridViewer.getMap();
 };
 
