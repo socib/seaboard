@@ -446,137 +446,7 @@ NCWMSGridTimeseriesViewer.prototype.createMap = function(map) {
 
             // Add baselayers to map
 
-            var crs25831 = new L.Proj.CRS('EPSG:25831',
-                '+proj=utm +zone=31 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs', {
-                    resolutions: [1100, 550, 275, 100, 50, 25, 10, 5, 2, 1, 0.5, 0.25]
-                }
-            );
-
-            var bathymetryLayer = L.tileLayer.wms("http://ows.emodnet-bathymetry.eu/wms", {
-                layers: 'emodnet:contours', //emodnet:contours Depth contours  emodnet:mean_atlas_land
-                format: 'image/png',
-                transparent: true,
-                attribution: "<a href='http://www.emodnet-bathymetry.eu/'>EMODnet Bathymetry</a>",
-                opacity: 0.8
-            });
-            var namesLayer = L.tileLayer.wms("http://ows.emodnet-bathymetry.eu/wms", {
-                layers: 'world:sea_names',
-                format: 'image/png',
-                transparent: true,
-                opacity: 0.3
-            });
-            var underseaLayer = L.tileLayer.wms("http://ows.emodnet-bathymetry.eu/wms", {
-                layers: 'gebco:undersea_features',
-                format: 'image/png',
-                transparent: true,
-                opacity: 0.3
-            });
-            var coastlinesLayer = L.tileLayer.wms("http://ows.emodnet-bathymetry.eu/wms", {
-                layers: 'coastlines',
-                format: 'image/png',
-                transparent: true,
-                opacity: 0.8
-            });
-
-            var osmLayer = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-            });
-
-            var wmsideib = L.tileLayer.wms("http://ideib.caib.es/pub_ideib/public/MTIB/MapServer/WMSServer?", {
-                layers: '0', //layers: '0',MDE Hipsográfic
-                format: 'image/png',
-                crs: crs25831, //crs: crs25831,
-                transparent: true,
-                continuousWorld: true,
-                version: '1.3.0',
-                attribution: 'Base -IDEIB MDE'
-            });
-
-
-            var wms_batimetric50 = L.tileLayer.wms("http://ideib.caib.es/pub_ideib/public/MDE/MapServer/WMSServer?", {
-                layers: '38', //Batimétric 50.000
-                format: 'image/png',
-                crs: crs25831, //crs: crs25831,
-                transparent: true,
-                continuousWorld: true,
-                version: '1.3.0',
-                attribution: 'IDEIB CAIB Batimètric'
-            });
-
-            var wmsideib20M = L.tileLayer.wms("http://ideib.caib.es/pub_ideib/public/MTIB/MapServer/WMSServer?", {
-                layers: '36', //E020M  Batimètric  
-                format: 'image/png',
-                crs: crs25831, //crs: crs25831,
-                transparent: true,
-                continuousWorld: true,
-                version: '1.3.0',
-                attribution: 'Base -E020M  Batimètric'
-            });
-
-            var wmsideib300M = L.tileLayer.wms("http://ideib.caib.es/pub_ideib/public/MTIB/MapServer/WMSServer?", {
-                layers: '37', // E300M Batimètric
-                format: 'image/png',
-                crs: crs25831, //crs: crs25831,
-                transparent: true,
-                continuousWorld: true,
-                version: '1.3.0',
-                attribution: 'Base -IDEIB E300M Batimètric'
-            });
-
-            var ideib_general = L.tileLayer.wms("http://ideib.caib.es/pub_ideib/public/MTIB/MapServer/WMSServer?", {
-                layers: '56,55,54,52,51,50,47,46,45,43,42,41,39,38,37,36',
-                format: 'image/png',
-                crs: crs25831, //crs: crs25831,
-                transparent: true,
-                continuousWorld: true,
-                version: '1.3.0',
-                attribution: 'Base -IDEIB General'
-            });
-
-            var wmsieo = L.tileLayer.wms("http://barreto.md.ieo.es/arcgis/services/wms/wmsBase/MapServer/WMSServer?", {
-                layers: '10', //Isobatas
-                format: 'image/png',
-                crs: crs25831, //crs: crs25831,
-                transparent: true,
-                continuousWorld: true,
-                version: '1.3.0',
-                attribution: 'Base - IEO'
-            });
-            var wmsieo_naturalezamarino = L.tileLayer.wms("http://barreto.md.ieo.es/arcgis/services/wms/wmsBase/MapServer/WMSServer?", {
-                layers: '0', //Naturaleza del fondo Marino
-                format: 'image/png',
-                crs: crs25831, //crs: crs25831,
-                transparent: false,
-                continuousWorld: true,
-                version: '1.3.0',
-                attribution: 'Base - IEO-Naturaleza del fondo Marino'
-            });
-
-            var wms_reservasmarinas = L.tileLayer.wms("http://ideib.caib.es/pub_ideib/public/TEMATIC-LIMITS/MapServer/WMSServer", {
-                layers: '15', //Reservas marinas
-                format: 'image/png',
-                crs: crs25831, //crs: crs25831,
-                transparent: true,
-                continuousWorld: true,
-                version: '1.3.0',
-                attribution: 'IDEIB - reservas marinas'
-            });
-
-            var Spain_IGNBase = L.tileLayer.wms('http://www.ign.es/wms-inspire/ign-base', {
-                layers: 'IGNBaseTodo',
-                format: 'image/png',
-                transparent: false,
-                continuousWorld: true,
-                attribution: '© <a href="http://www.ign.es/ign/main/index.do" target="_blank">Instituto Geográfico Nacional de España</a>'
-            });
-
-            var Spain_IGNBase = L.tileLayer.wms('http://www.ign.es/wms-inspire/ign-base', {
-                layers: 'IGNBaseTodo',
-                format: 'image/png',
-                transparent: false,
-                continuousWorld: true,
-                attribution: '© <a href="http://www.ign.es/ign/main/index.do" target="_blank">Instituto Geográfico Nacional de España</a>'
-            });
+            
 
             var ggls = new L.Google('SATELLITE');
             var gglr = new L.Google('ROADMAP');
@@ -634,12 +504,6 @@ NCWMSGridTimeseriesViewer.prototype.createMap = function(map) {
                 "Google Roadmap": gglr,
                 "Google Hybrid": gglh,
                 "Google Terrain": gglt
-                // "Emodnet bathymetry": bathymetryLayer, 
-                // "OSM": osmLayer,
-                // "IEO": wmsieo,
-                //"IDEIB-MDT": wmsideib,
-                //"IGN": Spain_IGNBase,
-                //"IDEIB-General": ideib_general
             };
         } else {
 
@@ -657,20 +521,12 @@ NCWMSGridTimeseriesViewer.prototype.createMap = function(map) {
             enableUserInput: false
         }).addTo(this.map);
     }
-    // var overlayMaps = {"Emodnet bathymetry":bathymetryLayer,"IEO -Isobatas": wmsieo,"IEO-Naturaleza del fondo Marino": wmsieo_naturalezamarino ,"IDEIB-E020M  Batimètric":wmsideib20M,"IDEIB_CAIB Batimètric":wms_batimetric50};
+   
     var overlayMaps = {};
-   /* var overlayMaps = {
-        "Emodnet bathymetry": bathymetryLayer
-    };*/
-    // var overlayMaps = {};
+   
     this.layerControl = L.control.layers(this.baseMaps, overlayMaps);
 
     this.layerControl.addTo(this.map);
-
-   /* var sidebar = L.control.sidebar('sidebar');
-
-    this.map.addControl(sidebar);*/
-
 
 
     this.map.on('layeradd', function(eventLayer) {
@@ -1079,8 +935,8 @@ NCWMSGridTimeseriesViewer.prototype.removeLayer = function(layerName) {
 
 
  var maxBounds = [
-        [-90, -180], //Southwest  //2º 30' 11"  39º 26' 11"
-        [90, 180] //Northeast   //2º 30' 50"  39º 30' 06"
+        [39.437, 2.386], //Southwest  
+        [39.500, 2.513] //Northeast   
     ];
 
 
@@ -1097,9 +953,9 @@ var diving = function(layers, container) {
         container: container,
         layers: layers,
         mapOptions: {
-           center: [39.47, 2.45],
+           //center: [39.47, 2.45],
             zoom: 13, //9
-           // maxBounds: maxBounds,
+            maxBounds: maxBounds,
             scrollWheelZoom: false,
             timeDimensionOptions: {
                 timeInterval: "P5D/" + endDate.toISOString(),
@@ -1280,9 +1136,6 @@ $(function() {
     wmop();
     load_moorings();
 
-
 });
 
 
-//var leyenda_wms = "<img src='" + "http://gis.socib.es/geoserver/ows?service=WMS&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=bal_sa_costa_2012" + "' width='750' ></img>";
-//document.getElementById('id_legend').innerHTML = leyenda_wms;
