@@ -1,0 +1,124 @@
+{% extends "layout-empty.html" %}
+{% load i18n %}
+{% load static %}
+{% load qr_tags %}
+{% load compress %}
+
+{% block title %}{{ location.name }}{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="span12">
+      <header>
+         <div style="position:right; top: 0px;">  
+            <div class="header_language">
+            <a href="" ><img src="/static/images/flags/es.gif" width=16 height=10 alt="" /></a>
+            <a href="" ><img src="/static/images/flags/eng.gif" width=16 height=10 alt="" /></a></div>                
+          </div>
+    	  <div class="logo-socib"><img src="/static/images/logo_Socib.png" /></div>
+    	  <div data-id="proud" data-view="Text" data-title="Maritime state for underwater activities" ></div>   
+    	  <div style="clear: both;"></div>      
+      </header>
+    </div>
+  </div>
+  <div class="row">
+    <div class="span7"> 
+      <section class="status">
+    	  <h1 class="section" style="font-size: 28px;">Wave and water temperature forecast </h1>  
+    	  <h3 >El Toro area </h3> 
+    		<div id="map-wmop" style="width: 100%; height: 500px;">
+    	  </div>
+     </section>
+  	</div>
+    <div class="span5">
+      <section class="prediction">
+          <div data-id="forecast" data-view="WeatherForecastDiving" data-location="{{ location.code }}" data-days="3" data-title="Weather forecast"></div>
+          <div data-id="beamon" data-view="Beamon" data-location="{{ location.zone.code }}" data-type="photogallery" data-title="Diving photography"></div>  
+          
+      </section>
+    </div> 
+  </div>
+<div class="row">
+</div>
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="span7">
+        <div class="logos">
+          <img src="{% get_static_prefix %}images/logo_ministerio.png" />
+          <img src="{% get_static_prefix %}images/logo_govern.png" />
+        </div>
+      </div>
+      <div class="span2 custom-clock">
+        <div data-id="clock2" data-view="Clock"></div>
+      </div>
+    </div>
+  </div>
+</footer>
+{% endblock content %}
+
+
+
+{% block page_js %}
+
+<script src="{% static "js/d3.v3.min.js" %}"></script>
+<script src="{% static "js/jquery-ui-1.10.2.min.js" %}"></script>
+<script src="{% static "js/leaflet-0.7.3/leaflet.js" %}"></script>
+<script src="{% static "js/jquery.backstretch.js" %}" ></script>
+<script src="{% static "widgets/text/text.js" %}" ></script>
+<script src="{% static "widgets/clockutc/clockutc.js" %}" ></script>
+<script src="{% static "widgets/beamon/beamon.js" %}" ></script>
+<script src="{% static "js/modernizr.custom.js" %}"></script>
+<script src="{% static "js/jquery.bookblock.js" %}"></script>
+<script src="{% static "widgets/clock/clock.js" %}" ></script>
+<script src="{% static "widgets/station_info/station_info.js" %}" ></script>
+<script src="{% static "widgets/weather_station/weather_station.js" %}" ></script>
+<script src="{% static "widgets/weather_forecast_diving/weather_forecast_diving.js" %}" ></script>
+<script src="{% static "widgets/weather_forecast/weather_forecast.js" %}" ></script>
+<script src="{% static "widgets/weather_station_variable/weather_station_variable.js" %}" ></script>
+<script src="{% static "widgets/rss/rss.js" %}" ></script>
+<script src="{% static "js/Highstock-2.0.4/highstock.js" %}"></script>
+
+
+<script type="text/javascript" src="{% static "js/leaflet-plugins/Control.FullScreen.js" %}"></script>
+<script type="text/javascript" src="{% static "js/leaflet-plugins/Leaflet.Coordinates-0.1.3.min.js" %}"></script>
+<script type="text/javascript" src="{% static "js/leaflet-plugins/NonTiledLayer.js" %}"></script>
+<script type="text/javascript" src="{% static "js/leaflet-plugins/NonTiledLayer.WMS.js" %}"></script>
+<script type="text/javascript" src="{% static "js/leaflet-plugins/leaflet.timedimension.min.js" %}"></script>
+<script type="text/javascript" src="{% static "js/iso8601.min.js" %}"></script>
+<script type="text/javascript" src="{% static "js/date.format.js" %}"></script>
+<script type="text/javascript" src="{% static "js/ncgridtimeseries/leaflet.timedimension.circlelabelmarker.js" %}"></script>
+<script type="text/javascript" src="{% static "js/leaflet-0.6.2/leaflet.label.js" %}"></script>
+<script type="text/javascript" src="{% static "js/leaflet-plugins/leaflet-sidebar.js" %}"></script>
+<script type="text/javascript" src="{% static "js/leaflet-plugins/proj4-compressed.js" %}"></script>
+<script type="text/javascript" src="{% static "js/leaflet-plugins/proj4leaflet.js" %}"></script>
+<script src="{% static "js/diving.js" %}" ></script>
+<script src="http://maps.google.com/maps/api/js?v=3&sensor=false"></script>
+<script type="text/javascript" src="{% static "js/leaflet-plugins/leaflet-plugins-master/layer/tile/Google.js" %}"></script>
+
+
+<script src="{% static "js/seawidgets.application.js" %}" ></script>
+
+
+{% endblock page_js %}
+
+
+{% block page_css %}
+  <link rel="stylesheet" href="{% static "js/leaflet-0.7.3/leaflet.css" %}" />
+  <link rel="stylesheet" href="{% static "js/leaflet-plugins/Control.FullScreen.css" %}" />
+  <link rel="stylesheet" href="{% static "js/leaflet-plugins/Leaflet.Coordinates-0.1.3.css" %}" />
+  <link rel="stylesheet" href="{% static "js/leaflet-plugins/leaflet.timedimension.control.css" %}" />
+  <link rel="stylesheet" href="{% static "js/leaflet-plugins/leaflet.label.css" %}"/>
+  <link rel="stylesheet" href="{% static "js/leaflet-plugins/leaflet-sidebar.css" %}"/>
+  <link rel="stylesheet" href="{% static "css/font-awesome.min.css" %}"/>
+
+  {% compress css %}
+    <link type="text/less" href="{% static "css/seawidgets-dash.less" %}" rel="stylesheet" />
+  {% endcompress %}
+
+{% endblock page_css %}
+
+{% block jquery %}
+<script type="text/javascript" src="{% static "js/jquery-2.0.0.min.js" %}"></script>
+{% endblock jquery %}
