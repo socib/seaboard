@@ -7,7 +7,7 @@ import seawidgets.functions.utils as _utils
 from os import listdir
 from os.path import isfile, isdir, join, getmtime
 import re
-import datetime
+from datetime import datetime, date
 import time
 from random import choice
 from seawidgets.models import Zone
@@ -87,6 +87,7 @@ def latest(request, location, cameras, folder_suffix='', images_folder='latest_i
 
     results = []
     cameras = cameras.split(",")
+    today = datetime.today()
 
     for location in locations:
         try:
@@ -94,35 +95,49 @@ def latest(request, location, cameras, folder_suffix='', images_folder='latest_i
         except Zone.DoesNotExist:
             raise Http404
 
-        end_stations = False
-        station = 0
         images = []
+        sirenapath = '/home/mobims/imageData/' + location + '/sirena/'
 
-        while not end_stations:
-            station_str = str(station) if station > 0 else ''
-
-            imagespath = '/home/mobims/imageData/' + location + '/sirena/' + location + station_str + folder_suffix + '/' + images_folder + '/'
-
+        for folder in listdir(sirenapath):
+            if not isdir(join(sirenapath, folder)):
+                continue
+            pattern = location + "[0-9]*" + folder_suffix + "$"
+            m = re.match(pattern, folder)
+            if not m:
+                continue
+            imagespath = sirenapath + folder + '/' + images_folder + '/'
             if isdir(imagespath):
-                images.extend([{
-                    'image': f,
-                    'station': station_str,
-                    'path': imagespath,
-                    'mtime': image_mtime_from_file(join(imagespath, f))}
-                    for f in listdir(imagespath) if f.endswith(('_snap.png', '_snap.jpeg', '_snap.jpg')) and isfile(join(imagespath, f)) and in_cameras(f, cameras) and _utils.isimage(join(imagespath, f))])
-            else:
-                if station != 0:
-                    end_stations = True
-            station = station + 1
+                for f in listdir(imagespath):
+                    if not f.endswith(('_snap.png', '_snap.jpeg', '_snap.jpg')):
+                        continue
+                    filepath = join(imagespath, f)
+                    if not isfile(filepath):
+                        continue
+                    if not in_cameras(f, cameras):
+                        continue
+                    if not _utils.isimage(filepath):
+                        continue
+                    mtime = image_mtime_from_file(filepath)
+                    dt = datetime.fromtimestamp(mtime)
+                    if (today - dt).days > 7:
+                        continue
+                    images.append({
+                        'image': f,
+                        'folder': folder,
+                        'path': imagespath,
+                        'mtime': mtime})
 
         for image in sorted(images):
             result = {}
-            dt = datetime.datetime.fromtimestamp(image['mtime'])
-            result['image'] = 'http://www.socib.es/users/mobims/imageArchive/' + location + '/sirena/' + location + image['station'] + folder_suffix + '/' + images_folder + '/' + image['image']
+            dt = datetime.fromtimestamp(image['mtime'])
+            result['image'] = 'http://www.socib.es/users/mobims/imageArchive/' + location + '/sirena/' + image['folder'] + '/' + images_folder + '/' + image['image']
             result['title'] = image_title_from_filename(zone, image['image'], image['path'], dt)
             result['timestamp'] = image['mtime'] * 1000
             result['time'] = dt.strftime('%d/%m/%Y %H:%M')
-            result['image_tn'] = 'http://www.socib.es/users/mobims/imageArchive/' + location + '/sirena/' + location + image['station'] + '_tn/' + images_folder + '/' + image['image'].replace('.png', '.jpeg')
+            tn_folder = image['folder']
+            if '_tn' not in tn_folder:
+                tn_folder = tn_folder + "_tn"
+            result['image_tn'] = 'http://www.socib.es/users/mobims/imageArchive/' + location + '/sirena/' + tn_folder + '/' + images_folder + '/' + image['image'].replace('.png', '.jpeg')
             result['camera'] = location + "_" + image['image'][0:image['image'].find('_')]
             results.append(result)
 
@@ -186,8 +201,8 @@ def today(request, location, cameras, folder_suffix=''):
     # Default return list
     results = []
 
-    today = datetime.datetime.today()
-    yesterday = datetime.date.fromordinal(today.toordinal() - 1)
+    today = datetime.today()
+    yesterday = date.fromordinal(today.toordinal() - 1)
 
     logger.info('Enter beamon_today. Cameras %s' % cameras)
 
@@ -225,7 +240,7 @@ def image_title(zone, image, camera):
         date_search = re.search('([0-9]{4}(-[0-9]{2}){4})', image, re.IGNORECASE)
         if date_search:
             date = date_search.group(1)
-            date_object = _utils.utc_to_local(datetime.datetime.strptime(date, '%Y-%m-%d-%H-%M'))
+            date_object = _utils.utc_to_local(datetime.strptime(date, '%Y-%m-%d-%H-%M'))
             title = '%s - Cam %s: %s' % (zone.name,
                 camera.replace('c', ''),
                 date_object.strftime('%d/%m/%Y %H:%M'))
